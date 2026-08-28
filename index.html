@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 17 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
+<meta name="author" content="Daniel Steinbach">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F6F4E7'/%3E%3Crect x='6' y='18' width='52' height='28' fill='none' stroke='%23000' stroke-width='4'/%3E%3Ctext x='32' y='39' font-family='Helvetica,Arial' font-size='17' font-weight='bold' text-anchor='middle' fill='%23000'%3ECO2%3C/text%3E%3C/svg%3E">
+<title>Werkstoffbilanz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --cream:#F6F4E7; --paper:#FBFAF1; --sunk:#EEEBDA;
+  --ink:#000000; --muted:#85868A; --bar:#D8D8DA;
+  --rule:#000000; --rule-thin:#C9C7B6;
+  --co2:#000000; --preis:#85868A;
+  --mark:#8C6A12;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --cream:#15140E; --paper:#1D1C15; --sunk:#100F0A;
+    --ink:#F6F4E7; --muted:#8B8C82; --bar:#2A2922;
+    --rule:#F6F4E7; --rule-thin:#3A392F;
+    --co2:#F6F4E7; --preis:#8B8C82;
+    --mark:#D9AE4A;
+  }
+}
+:root[data-theme="dark"]{
+  --cream:#15140E; --paper:#1D1C15; --sunk:#100F0A;
+  --ink:#F6F4E7; --muted:#8B8C82; --bar:#2A2922;
+  --rule:#F6F4E7; --rule-thin:#3A392F;
+  --co2:#F6F4E7; --preis:#8B8C82;
+  --mark:#D9AE4A;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--cream); color:var(--ink);
+  font-family:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px; margin:0 auto; padding:0 22px}
+
+/* ---- Band-Motiv ---- */
+.band{border-top:2px solid var(--rule); border-bottom:2px solid var(--rule); margin-top:-2px}
+.band-h{
+  padding:11px 0; text-align:center; font-size:clamp(19px,2.6vw,27px);
+  font-weight:400; letter-spacing:-.012em; margin:0
+}
+.band.solid{background:var(--ink); color:var(--cream)}
+.band.solid .band-h{color:var(--cream)}
+
+/* ---- Kopf ---- */
+.hero{padding:46px 0 28px}
+.first{border-top:2px solid var(--rule); padding-top:30px}
+.logo{
+  display:inline-block; border:2.5px solid var(--ink); padding:5px 15px 7px;
+  font-size:23px; font-weight:700; letter-spacing:-.01em; transform:rotate(-2deg);
+  margin-bottom:26px; line-height:1
+}
+h1{
+  font-size:clamp(31px,5.6vw,58px); line-height:1.03; font-weight:700;
+  letter-spacing:-.03em; margin:0 0 4px; text-wrap:balance; max-width:19ch
+}
+.h1sub{
+  font-size:clamp(23px,3.8vw,38px); line-height:1.08; font-weight:400;
+  letter-spacing:-.026em; margin:0; color:var(--muted); max-width:24ch
+}
+.lede{margin:0; max-width:60ch; font-size:17.5px; line-height:1.55}
+.lede + .lede{margin-top:13px}
+
+/* ---- Schritte ---- */
+.steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); gap:0; padding:0}
+.step{padding:22px 26px 26px; border-left:1px solid var(--rule-thin)}
+.step:first-child{border-left:0; padding-left:0}
+.step .no{
+  font-size:13px; font-weight:600; letter-spacing:.02em; margin-bottom:9px;
+  display:inline-block; border-bottom:2px solid var(--ink); padding-bottom:2px
+}
+.step h3{font-size:19px; font-weight:600; margin:0 0 7px; letter-spacing:-.015em}
+.step p{margin:0; font-size:14.5px; color:var(--muted); line-height:1.5}
+
+/* ---- Abschnitte ---- */
+section{padding:34px 0}
+.shead{margin:0 0 6px; font-size:26px; font-weight:700; letter-spacing:-.024em}
+.snote{margin:0 0 22px; color:var(--muted); font-size:15.5px; max-width:66ch}
+
+/* ---- Eingabefelder ---- */
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(212px,1fr)); gap:24px 30px}
+.f label{display:block; font-size:15px; font-weight:600; margin-bottom:3px; letter-spacing:-.008em}
+.f .hint{font-size:13px; color:var(--muted); line-height:1.42; margin-bottom:7px; min-height:37px}
+.f .row{display:flex; align-items:baseline; gap:8px; border-bottom:2px solid var(--ink); padding-bottom:2px}
+.f .row:focus-within{border-bottom-color:var(--mark)}
+.f .unit{font-size:13.5px; color:var(--muted); white-space:nowrap}
+input[type=number]{
+  font:inherit; font-variant-numeric:tabular-nums; background:transparent; border:0;
+  color:var(--ink); font-size:21px; font-weight:500; padding:2px 0; width:100%; min-width:0
+}
+input[type=number]:focus{outline:none}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+
+.toggle{display:flex; border:2px solid var(--ink); width:fit-content}
+.toggle button{
+  font:inherit; font-size:15px; font-weight:500; background:transparent; color:var(--ink);
+  border:0; padding:8px 20px; cursor:pointer
+}
+.toggle button + button{border-left:2px solid var(--ink)}
+.toggle button[aria-pressed="true"]{background:var(--ink); color:var(--cream)}
+.toggle button:focus-visible{outline:2px solid var(--mark); outline-offset:-4px}
+
+.btn{
+  font:inherit; font-size:14.5px; font-weight:500; background:transparent; color:var(--ink);
+  border:2px solid var(--ink); padding:8px 17px; cursor:pointer
+}
+.btn:hover{background:var(--ink); color:var(--cream)}
+.btn:focus-visible{outline:2px solid var(--mark); outline-offset:2px}
+.btnrow{display:flex; gap:11px; flex-wrap:wrap; align-items:center; margin-bottom:18px}
+.hinweis{font-size:13.5px; color:var(--muted); line-height:1.45; max-width:46ch}
+.hinweis b{color:var(--ink); font-weight:600}
+
+/* ---- Tabelle ---- */
+.tscroll{overflow-x:auto; border-top:2px solid var(--rule); border-bottom:2px solid var(--rule)}
+table{border-collapse:collapse; width:100%; min-width:760px}
+th,td{text-align:right; white-space:nowrap; padding:0 11px}
+thead th{
+  font-size:12px; font-weight:600; letter-spacing:.01em; color:var(--muted);
+  padding-top:9px; padding-bottom:8px; border-bottom:1px solid var(--rule-thin);
+  vertical-align:bottom; line-height:1.25
+}
+thead th.on{color:var(--ink)}
+tbody td{height:41px; border-bottom:1px solid var(--rule-thin); font-size:15px}
+tbody tr:last-child td{border-bottom:0}
+th.nm,td.nm{
+  text-align:left; position:sticky; left:0; background:var(--cream);
+  font-weight:500; padding-left:0; min-width:174px; z-index:2
+}
+tbody tr:hover td{background:var(--sunk)}
+tbody tr:hover td.nm{background:var(--sunk)}
+td.in{padding:0 3px}
+td.in input{text-align:right; font-size:15px; font-weight:400; padding:4px 7px; background:var(--paper)}
+td.in input:hover{background:var(--sunk)}
+td.in input:focus{background:var(--sunk); outline:2px solid var(--mark); outline-offset:-2px}
+.tot{font-weight:700; font-variant-numeric:tabular-nums; font-size:15.5px}
+.dt{font-variant-numeric:tabular-nums; color:var(--muted); font-size:13.5px}
+.own{color:var(--mark) !important; font-weight:600 !important}
+.hide{display:none !important}
+
+/* ---- Diagramm: je Material zwei Balken untereinander ---- */
+.mrow{display:grid; grid-template-columns:168px 1fr; gap:18px; align-items:center;
+  padding:12px 0; border-bottom:1px solid var(--rule-thin)}
+.mrow:first-child{border-top:2px solid var(--rule)}
+.mrow:last-child{border-bottom:2px solid var(--rule)}
+.mname{font-size:15px; font-weight:600; text-align:right; letter-spacing:-.012em;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.mbars{display:flex; flex-direction:column; gap:6px; min-width:0}
+.brow{display:flex; align-items:center; gap:11px}
+.bfill{display:flex; height:17px; flex:0 0 auto; border:1.5px solid var(--ink);
+  min-width:7px; transition:width .35s cubic-bezier(.4,0,.2,1)}
+.bfill i{display:block; height:100%; border-right:1px solid var(--ink); transition:width .35s cubic-bezier(.4,0,.2,1)}
+.bfill i:last-child{border-right:0}
+.sg-h{background:var(--ink)}
+.sg-t{background:repeating-linear-gradient(120deg,var(--ink) 0 2.5px,transparent 2.5px 6.5px)}
+.sg-e{background:var(--muted)}
+.sg-g{background:transparent}
+.blab{font-size:13px; font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--muted)}
+.blab b{color:var(--ink); font-weight:700; font-size:14px}
+.legend{display:flex; flex-wrap:wrap; gap:9px 22px; margin-top:20px; font-size:13.5px; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.legend i{width:19px; height:12px; display:inline-block; border:1.5px solid var(--ink); flex:none}
+
+/* ---- Glossar ---- */
+.gloss{border-top:2px solid var(--rule)}
+.gitem{border-bottom:1px solid var(--rule-thin); padding:16px 0; display:grid;
+  grid-template-columns:230px 1fr; gap:10px 30px}
+.gitem dt{font-weight:600; font-size:16.5px; letter-spacing:-.012em}
+.gitem dd{margin:0; color:var(--muted); font-size:15px; line-height:1.55; max-width:62ch}
+.gitem dd strong{color:var(--ink); font-weight:600}
+
+/* ---- Quellen ---- */
+.srcs{display:grid; grid-template-columns:repeat(auto-fit,minmax(252px,1fr)); gap:0}
+.src{padding:20px 24px 24px; border-left:1px solid var(--rule-thin)}
+.src:first-child{border-left:0; padding-left:0}
+.src h3{font-size:15px; font-weight:600; margin:0 0 9px; letter-spacing:-.01em}
+.src p{margin:0 0 9px; font-size:14px; color:var(--muted); line-height:1.5}
+.src p:last-child{margin:0}
+.src a{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--muted)}
+.src a:hover{border-bottom-color:var(--ink); border-bottom-width:2px}
+.src strong{color:var(--ink); font-weight:600}
+
+/* ---- Kontakt / Fuß ---- */
+.kontakt{border:2px solid var(--ink); padding:26px 28px}
+.kontakt h3{margin:0 0 9px; font-size:23px; font-weight:700; letter-spacing:-.022em}
+.kontakt p{margin:0 0 12px; font-size:15.5px; max-width:60ch; line-height:1.55}
+.kdaten{display:flex; flex-wrap:wrap; gap:9px 26px; align-items:baseline; margin-top:16px}
+.kdaten .who{font-weight:700; font-size:17px}
+.kdaten a{color:var(--ink); text-decoration:none; border-bottom:2px solid var(--ink); font-size:16px}
+.kdaten a:hover{color:var(--mark); border-bottom-color:var(--mark)}
+.haftung{margin-top:20px; padding-top:16px; border-top:1px solid var(--rule-thin);
+  font-size:13.5px; color:var(--muted); line-height:1.5; max-width:74ch}
+
+footer.bar{background:var(--bar); margin-top:44px}
+footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding-top:11px; padding-bottom:11px; font-size:13px; color:var(--ink)}
+
+/* ---- Druck: eine Seite ---- */
+.printonly{display:none}
+@media print{
+  @page{size:A4 portrait; margin:11mm 12mm}
+  :root{--cream:#fff; --ink:#000; --muted:#555; --rule:#000; --rule-thin:#bbb;
+        --paper:#fff; --sunk:#fff; --co2:#000; --preis:#999; --bar:#fff; --mark:#000}
+  body{background:#fff; color:#000; font-size:8.4pt; line-height:1.32}
+  .noprint{display:none !important}
+  .printonly{display:block}
+  .wrap{max-width:none; padding:0}
+  .p-head{display:flex; justify-content:space-between; align-items:flex-end;
+    border-bottom:1.6pt solid #000; padding-bottom:4pt; margin-bottom:7pt}
+  .p-head h2{font-size:16pt; margin:0; font-weight:700; letter-spacing:-.02em}
+  .p-head .p-meta{font-size:7.4pt; text-align:right; color:#333; line-height:1.35}
+  .p-set{display:flex; flex-wrap:wrap; gap:3pt 15pt; font-size:7.6pt; margin-bottom:7pt;
+    padding-bottom:5pt; border-bottom:.5pt solid #bbb}
+  .p-set b{font-weight:600}
+  table.p-tbl{width:100%; border-collapse:collapse; font-size:7.7pt; min-width:0; table-layout:fixed}
+  table.p-tbl th{font-size:6.4pt; text-transform:uppercase; letter-spacing:.03em;
+    border-bottom:1pt solid #000; padding:2pt 3pt; text-align:right; color:#000; font-weight:600}
+  table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left; white-space:normal}
+  table.p-tbl td{padding:2.1pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+    font-variant-numeric:tabular-nums}
+  table.p-tbl tr.best td{font-weight:700}
+  table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
+  .pwrap{display:block; width:100%}
+  .pbar{display:flex; height:5.5pt; border:.5pt solid #000; min-width:1pt}
+  .pbar i{display:block; height:100%; border-right:.4pt solid #000}
+  .pbar i:last-child{border-right:0}
+  .ps-h{background:#000}
+  .ps-t{background:repeating-linear-gradient(120deg,#000 0 1pt,#fff 1pt 2.6pt)}
+  .ps-e{background:#999}
+  .ps-g{background:#fff}
+  .p-leg{display:flex; gap:11pt; font-size:6.4pt; margin-top:4pt; color:#333; align-items:center}
+  .p-leg span{display:inline-flex; align-items:center; gap:3pt}
+  .p-leg i{width:9pt; height:5pt; border:.5pt solid #000; display:inline-block}
+  .p-foot{margin-top:8pt; padding-top:5pt; border-top:1pt solid #000;
+    font-size:6.9pt; color:#333; line-height:1.4; display:flex; gap:14pt; justify-content:space-between}
+  .p-foot div{max-width:64%}
+  .p-foot b{color:#000}
+}
+
+@media (max-width:760px){
+  .mrow{grid-template-columns:1fr; gap:8px}
+  .mname{text-align:left}
+  .step{border-left:0; border-top:1px solid var(--rule-thin); padding-left:0; padding-right:0}
+  .step:first-child{border-top:0}
+  .src{border-left:0; border-top:1px solid var(--rule-thin); padding-left:0; padding-right:0}
+  .src:first-child{border-top:0}
+  .gitem{grid-template-columns:1fr; gap:4px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="noprint">
+
+<div class="wrap hero">
+  <div class="logo">CO₂</div>
+  <h1>Werkstoffbilanz für Schilder und Platten</h1>
+  <p class="h1sub">Materialvergleichsrechner</p>
+</div>
+
+<div class="wrap">
+
+<section class="first">
+  <div class="grid" id="grund">
+    <div class="f">
+      <label for="flaeche">Wie groß ist die Fläche?</label>
+      <p class="hint">Die sichtbare Fläche des fertigen Schildes. Bei beidseitiger Bedruckung trotzdem nur einmal zählen.</p>
+      <div class="row"><input type="number" id="flaeche" step="0.1" min="0" value="3"><span class="unit">m²</span></div>
+    </div>
+    <div class="f">
+      <label for="verschnitt">Wie viel Verschnitt?</label>
+      <p class="hint">Beim Zuschneiden bleibt Abfall übrig. 10 % ist ein üblicher Wert, 0 % wenn du exakt planst.</p>
+      <div class="row"><input type="number" id="verschnitt" step="1" min="0" value="10"><span class="unit">%</span></div>
+    </div>
+    <div class="f">
+      <label>Womit wird transportiert?</label>
+      <p class="hint">Ein Diesel-Kleintransporter stößt pro Kilometer rund zehnmal so viel CO₂ aus wie ein elektrischer.</p>
+      <div class="toggle" role="group" aria-label="Antriebsart">
+        <button type="button" id="bDiesel" aria-pressed="true">Diesel</button>
+        <button type="button" id="bElektro" aria-pressed="false">Elektro</button>
+      </div>
+    </div>
+    <div class="f fd">
+      <label for="lVerbrauch">Dieselverbrauch</label>
+      <p class="hint">Was dein Transporter auf 100 km braucht. Ein Kastenwagen liegt meist bei 9 bis 14 Litern.</p>
+      <div class="row"><input type="number" id="lVerbrauch" step="0.5" min="0" value="12"><span class="unit">l/100 km</span></div>
+    </div>
+    <div class="f fd">
+      <label for="lPreis">Dieselpreis</label>
+      <p class="hint">Der Preis an der Zapfsäule. Wird nur für die Transportkosten gebraucht, nicht für das CO₂.</p>
+      <div class="row"><input type="number" id="lPreis" step="0.01" min="0" value="1.65"><span class="unit">€/l</span></div>
+    </div>
+    <div class="f fe hide">
+      <label for="kwhVerbrauch">Stromverbrauch</label>
+      <p class="hint">Was dein E-Transporter auf 100 km zieht. Aktuelle Modelle liegen real bei 22 bis 30 kWh.</p>
+      <div class="row"><input type="number" id="kwhVerbrauch" step="0.5" min="0" value="25"><span class="unit">kWh/100 km</span></div>
+    </div>
+    <div class="f fe hide">
+      <label for="kwhPreis">Strompreis</label>
+      <p class="hint">Dein Arbeitspreis je Kilowattstunde. Wird nur für die Transportkosten gebraucht.</p>
+      <div class="row"><input type="number" id="kwhPreis" step="0.01" min="0" value="0.25"><span class="unit">€/kWh</span></div>
+    </div>
+    <div class="f fe hide">
+      <label for="stromFaktor">Wie sauber ist dein Strom?</label>
+      <p class="hint">152 g ist der österreichische Strommix. Zertifizierter Ökostrom oder eigene PV liegen bei 30 bis 45 g.</p>
+      <div class="row"><input type="number" id="stromFaktor" step="1" min="0" value="152"><span class="unit">g CO₂/kWh</span></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="band solid"><p class="band-h">Der Vergleich</p></div>
+
+<div class="wrap">
+
+<section>
+  <h2 class="shead">Alle Materialien nebeneinander</h2>
+  <p class="snote">Die Startwerte sind übliche Stärken und Marktpreise. Ändere, was für dein Projekt gilt —
+  alles rechnet sofort mit. Was die Spalten bedeuten, steht weiter unten unter „Die Begriffe“.</p>
+  <div class="btnrow">
+    <button class="btn" type="button" id="bDetail">Einzelposten zeigen</button>
+    <button class="btn" type="button" id="bResetIn">Eingaben zurücksetzen</button>
+    <button class="btn" type="button" id="bPrint">Ergebnis als PDF</button>
+    <span class="hinweis" id="druckHinweis"></span>
+  </div>
+  <div class="tscroll">
+    <table id="tbl">
+      <thead><tr>
+        <th class="nm">Material</th>
+        <th>Stärke<br>mm</th>
+        <th>Preis<br>€/m²</th>
+        <th>Rezyklat<br>%</th>
+        <th>Verwertung<br>%</th>
+        <th>Weg<br>km</th>
+        <th class="on">CO₂<br>kg</th>
+        <th class="on">Kosten<br>€</th>
+        <th class="dc">Masse<br>kg</th>
+        <th class="dc">Herstel-<br>lung</th>
+        <th class="dc">Trans-<br>port</th>
+        <th class="dc">Lebens-<br>ende</th>
+        <th class="dc">Gut-<br>schrift</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="shead">Rangfolge</h2>
+  <p class="snote">Jedes Material bekommt zwei Balken untereinander. Der obere ist das CO₂ und zeigt in
+  seinen Abschnitten, woher es kommt — Herstellung, Transport, Lebensende. Der untere ist der Preis,
+  unterteilt in Material und Transport. Die Balkenlänge entspricht immer der Zahl daneben. CO₂ und Preis
+  haben jeweils einen eigenen Maßstab: vergleichbar sind die oberen Balken untereinander und die unteren
+  untereinander, nicht ein oberer mit einem unteren.</p>
+  <div class="btnrow">
+    <div class="toggle" role="group" aria-label="Sortierung">
+      <button type="button" id="sCo2" aria-pressed="true">Sortiert nach CO₂</button>
+      <button type="button" id="sPreis" aria-pressed="false">Sortiert nach Preis</button>
+    </div>
+  </div>
+  <div id="bars"></div>
+  <div class="legend">
+    <span><i class="sg-h"></i>Herstellung, abzüglich Recycling-Gutschrift</span>
+    <span><i class="sg-t"></i>Transport</span>
+    <span><i class="sg-e"></i>Lebensende</span>
+    <span>Beim Preisbalken: Material und Transport.</span>
+  </div>
+</section>
+
+</div>
+
+<div class="band"><p class="band-h">Die Begriffe</p></div>
+
+<div class="wrap">
+<section>
+  <h2 class="shead">Was die Zahlen bedeuten</h2>
+  <p class="snote">Kurz erklärt, ohne Fachjargon. Wer nur schnell vergleichen will, kann diesen Teil überspringen.</p>
+  <dl class="gloss">
+    <div class="gitem">
+      <dt>Kilogramm CO₂</dt>
+      <dd>Genauer: CO₂-Äquivalent. Neben Kohlendioxid entstehen bei der Produktion auch Methan und Lachgas.
+      Deren Wirkung wird in Kohlendioxid umgerechnet, damit alles eine einzige Zahl ergibt.
+      <strong>Zum Gefühl: 100 km mit einem Diesel-Transporter sind rund 32 kg.</strong></dd>
+    </div>
+    <div class="gitem">
+      <dt>Herstellung</dt>
+      <dd>Alles vom Rohstoff bis zur fertigen Platte am Werkstor: Gewinnung, Transport zur Fabrik, Produktion.
+      In der Fachsprache heißt das „Module A1 bis A3“. Was danach passiert — Zuschnitt, Bedruckung, Montage —
+      ist <strong>nicht</strong> enthalten.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Rezyklatanteil</dt>
+      <dd>Wie viel Recyclingmaterial schon im Produkt steckt, das du <strong>kaufst</strong>. Aluminium aus
+      Altmetall verursacht nur ein Zwölftel des CO₂ von neuem Aluminium. Wenn du es nicht weißt, lass 0 stehen —
+      dann rechnet die Seite konservativ mit Neuware.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Verwertungsquote</dt>
+      <dd>Was mit dem Material passiert, <strong>nachdem</strong> das Schild ausgedient hat. 0 % heißt: alles
+      wird verbrannt. 100 % heißt: alles wird wiederverwendet oder stofflich recycelt. Bei Metallen liegt die
+      reale Quote hoch, bei beschichteten Kunststoffen niedrig.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Gutschrift</dt>
+      <dd>Was du recycelst, erspart jemand anderem die Neuproduktion. Dafür wird dir CO₂ gutgeschrieben —
+      die Zahl ist negativ. Gutgeschrieben wird nur, was über den bereits eingekauften Rezyklatanteil
+      hinausgeht, sonst würde derselbe Kreislauf doppelt gezählt.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Warum Holz beim Lebensende auf null steht</dt>
+      <dd>Der Kohlenstoff im Holz stammt aus der Luft — der Baum hat ihn beim Wachsen aufgenommen. Verbrennt
+      man das Holz, geht er dorthin zurück. In der Standardbilanzierung gilt das als klimaneutral. Bei Erdöl-
+      Kunststoffen ist es anders: dort kommt der Kohlenstoff aus dem Boden und bleibt in der Luft.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Die größte Lücke</dt>
+      <dd>Die Seite vergleicht <strong>Materialmengen, keine Haltbarkeit</strong>. Ein Blechschild, das
+      fünfzehn Jahre hält, ist pro Nutzungsjahr besser als ein Kartonschild, das dreimal ersetzt wird — auch
+      wenn die Herstellungszahl das Gegenteil nahelegt. Wenn Standzeit eine Rolle spielt: CO₂-Wert durch die
+      erwarteten Jahre teilen und diese Zahlen vergleichen.</dd>
+    </div>
+  </dl>
+</section>
+
+<section>
+  <h2 class="shead">Kennwerte korrigieren</h2>
+  <p class="snote">Hier stehen die hinterlegten Werte je Material. Wenn du bessere Zahlen hast — etwa aus dem
+  Umweltdatenblatt deines Lieferanten — trag sie ein. Die ganze Rechnung folgt sofort, geänderte Felder
+  werden farbig markiert.</p>
+  <div class="btnrow"><button class="btn" type="button" id="bResetBase">Auf Ausgangswerte zurücksetzen</button></div>
+  <div class="tscroll">
+    <table id="tblBase">
+      <thead><tr>
+        <th class="nm">Material</th>
+        <th>Dichte<br>kg/dm³</th>
+        <th>Neuware<br>kg CO₂/kg</th>
+        <th>Rezyklat<br>kg CO₂/kg</th>
+        <th>Verbrennung<br>kg CO₂/kg</th>
+        <th>Richtpreis<br>€/dm³</th>
+      </tr></thead>
+      <tbody id="tbodyBase"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="shead">Woher die Zahlen kommen</h2>
+  <p class="snote">Alle Angaben sind belegt und verlinkt. Keine davon ist eine Schätzung ins Blaue —
+  aber alle sind Durchschnittswerte.</p>
+  <div class="srcs">
+    <div class="src">
+      <h3>Treibhauspotenzial</h3>
+      <p>Kunststoffe aus den <a href="https://plasticseurope.org/wp-content/uploads/2021/12/PlasticsEurope-Ecoprofiles-program-and-methodology_V3.0.pdf">PlasticsEurope Eco-Profiles</a>, dem europäischen Branchendurchschnitt. PVC zusätzlich aus der <a href="https://www.americanchemistry.com/content/download/10045/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polyvinyl-PVC-Resin.pdf">Cradle-to-Gate-Studie des American Chemistry Council</a>.</p>
+      <p>Metalle, Glas und Holzwerkstoffe aus <a href="https://www.oekobaudat.de/">ÖKOBAUDAT</a> und <a href="https://www.ibo.at/fileadmin/ibo/materialoekologie/OI-Berechnungsleitfaden_V5_Sept2023.pdf">baubook / IBO</a>.</p>
+      <p>Europäische Mittelwerte, typische Streuung <strong>±30 %</strong>.</p>
+    </div>
+    <div class="src">
+      <h3>Strom und Diesel</h3>
+      <p>152 g CO₂/kWh ist die Stromaufbringung Österreich laut <a href="https://www.umweltbundesamt.at/fileadmin/site/publikationen/rep0989.pdf">Umweltbundesamt Österreich</a> — 123 g direkt plus 29 g vorgelagert, Bezugsjahr 2023, inklusive Importanteil.</p>
+      <p>Diesel mit 2,64 kg CO₂ je Liter, reine Verbrennung. Mit Förderung und Raffinerie wären es rund 3,2 kg.</p>
+      <p>Der Startwert 25 kWh/100 km orientiert sich am Praxisverbrauch; ein eSprinter kam im TÜV-begleiteten Test auf 21,9 kWh.</p>
+    </div>
+    <div class="src">
+      <h3>Preise</h3>
+      <p>Richtpreise aus <a href="https://kunststoffplattenonline.de/">kunststoffplattenonline.de</a>, <a href="https://www.s-polytec.de/kunststoffplatten/pvc-platten.html">S-Polytec</a>, <a href="https://acrylglas-shop.com/acrylglas-plexiglas">acrylglas-shop.com</a> und <a href="https://stahlog.de/produkt/2mm-aluminiumblech/">stahlog.de</a> — netto ohne Umsatzsteuer.</p>
+      <p>Gerechnet für haushaltsübliche Zuschnittmengen. Großmengen liegen darunter, Kleinzuschnitte um ein Vielfaches darüber. <strong>Die Preise sind der unsicherste Teil dieser Seite.</strong></p>
+    </div>
+    <div class="src">
+      <h3>Nicht enthalten</h3>
+      <p>Bedruckung, Kaschierung, Beschläge, Montage, Reinigung, Nutzungsdauer.</p>
+      <p>Der Transport gilt je Material als volle Fahrt über die eingetragene Strecke, unabhängig vom Gewicht. Wer eine Sammelfahrt auf mehrere Positionen aufteilt, trägt entsprechend weniger Kilometer ein.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kontakt">
+    <h3>Stimmt eine Zahl nicht? Bitte melden.</h3>
+    <p>Die Emissionsfaktoren sind Branchendurchschnitte, die Preise Momentaufnahmen. Wer für ein bestimmtes
+    Material eine belastbarere Quelle hat — ein Umweltdatenblatt, ein Lieferantendatenblatt, einen realen
+    Einkaufspreis — dem bin ich für die Korrektur dankbar. Genauso für Materialien, die hier noch fehlen.</p>
+    <div class="kdaten">
+      <span class="who">Daniel Steinbach</span>
+      <a href="mailto:danielsteinbach@gmx.net?subject=Korrekturvorschlag%20Werkstoffbilanz">danielsteinbach@gmx.net</a>
+      <a href="tel:+436644217082">+43 664 421 70 82</a>
+    </div>
+    <p class="haftung">Für die Richtigkeit, Vollständigkeit und Aktualität der hier berechneten Werte wird
+    keine Gewährleistung und keine Garantie übernommen. Die Nutzung des Rechners erfolgt auf eigene
+    Verantwortung; eine Haftung für Entscheidungen, die auf Grundlage dieser Ergebnisse getroffen werden,
+    ist ausgeschlossen.</p>
+  </div>
+</section>
+
+</div>
+
+<footer class="bar"><div class="wrap">
+  <span>Werkstoffbilanz · Stand August 2026</span>
+  <span>Eingaben bleiben in diesem Browser gespeichert</span>
+</div></footer>
+
+</div><!-- /noprint -->
+
+<!-- ================= Druckansicht ================= -->
+<div class="printonly">
+  <div class="p-head">
+    <div>
+      <h2>Werkstoffbilanz</h2>
+      <div style="font-size:8pt">CO₂- und Kostenvergleich von Plattenwerkstoffen</div>
+    </div>
+    <div class="p-meta">
+      Daniel Steinbach · danielsteinbach@gmx.net · +43 664 421 70 82<br>
+      <span id="pDatum"></span>
+    </div>
+  </div>
+  <div class="p-set" id="pSet"></div>
+  <table class="p-tbl">
+    <colgroup>
+      <col style="width:20%"><col style="width:6.5%"><col style="width:6%"><col style="width:6.5%">
+      <col style="width:4.5%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:16%">
+      <col style="width:8%"><col style="width:19.5%">
+    </colgroup>
+    <thead><tr>
+      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Verw.</th><th>km</th>
+      <th>Masse kg</th><th>CO₂ kg</th><th class="pb">CO₂</th><th>Kosten €</th><th class="pb">Kosten</th>
+    </tr></thead>
+    <tbody id="pBody"></tbody>
+  </table>
+  <div class="p-leg">
+    <span><i class="ps-h"></i>Herstellung abzüglich Recycling-Gutschrift, bzw. Materialkosten</span>
+    <span><i class="ps-t"></i>Transport</span>
+    <span><i class="ps-e"></i>Lebensende</span>
+  </div>
+  <div class="p-foot">
+    <div><b>Datengrundlage:</b> PlasticsEurope Eco-Profiles, ÖKOBAUDAT, baubook/IBO, American Chemistry
+    Council (Treibhauspotenzial, Module A1–A3) · Umweltbundesamt Österreich (Strom, 152 g CO₂/kWh) ·
+    Diesel 2,64 kg CO₂/l · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
+    Mittelwerte mit typisch ±30 % Streuung. Nicht enthalten: Bedruckung, Montage, Nutzungsdauer.</div>
+    <div><b>Haftungsausschluss:</b> Für Richtigkeit, Vollständigkeit und Aktualität wird keine
+    Gewährleistung und keine Garantie übernommen. Nutzung auf eigene Verantwortung; eine Haftung für
+    Entscheidungen auf Grundlage dieser Ergebnisse ist ausgeschlossen.</div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const BASE = [
+  {id:"acryl", n:"Acrylglas (PMMA)",        d:1.19, p:7.00,  s:2.50, e:2.20, mm:4.00,  pr:8.50,  q:20},
+  {id:"alu",   n:"Aluminiumblech",          d:2.70, p:10.70, s:0.90, e:0.00, mm:2.00,  pr:23.00, q:90},
+  {id:"glas",  n:"Glas (Floatglas)",        d:2.50, p:1.30,  s:1.00, e:0.00, mm:4.00,  pr:5.50,  q:80},
+  {id:"holz",  n:"Holz (Nadelholz massiv)", d:0.47, p:0.20,  s:0.05, e:0.00, mm:16.00, pr:1.40,  q:20},
+  {id:"kart",  n:"Karton / Vollpappe",      d:0.83, p:0.80,  s:0.60, e:0.00, mm:2.00,  pr:1.50,  q:85},
+  {id:"pap",   n:"Papier",                  d:0.80, p:1.40,  s:1.00, e:0.00, mm:0.20,  pr:2.25,  q:80},
+  {id:"pehd",  n:"PE-HD",                   d:0.96, p:2.00,  s:0.60, e:3.14, mm:3.00,  pr:7.00,  q:40},
+  {id:"peld",  n:"PE-LD",                   d:0.92, p:2.10,  s:0.60, e:3.14, mm:3.00,  pr:6.50,  q:30},
+  {id:"pet",   n:"PET",                     d:1.34, p:3.00,  s:1.20, e:2.29, mm:2.00,  pr:9.50,  q:60},
+  {id:"pc",    n:"Polycarbonat (PC)",       d:1.20, p:7.00,  s:2.50, e:2.77, mm:3.00,  pr:14.00, q:20},
+  {id:"pp",    n:"Polypropylen PP",         d:0.91, p:1.90,  s:0.60, e:3.14, mm:3.00,  pr:6.00,  q:35},
+  {id:"ps",    n:"Polystyrol (PS/HIPS)",    d:1.05, p:3.20,  s:1.40, e:3.38, mm:2.00,  pr:6.50,  q:20},
+  {id:"forex", n:"PVC (Forex)",             d:0.50, p:3.30,  s:1.60, e:1.41, mm:3.00,  pr:4.50,  q:15},
+  {id:"folie", n:"PVC (Klebefolie)",        d:1.25, p:3.40,  s:1.60, e:1.30, mm:0.08,  pr:90.00, q:0},
+  {id:"pvc",   n:"PVC (massiv)",            d:1.38, p:2.80,  s:1.20, e:1.41, mm:2.00,  pr:6.50,  q:30},
+  {id:"span",  n:"Spanplatten",             d:0.70, p:0.60,  s:0.35, e:0.00, mm:16.00, pr:0.70,  q:30},
+  {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:90}
+];
+const KEYS = ["d","p","s","e","pr"];
+const DIESEL = 2.64;
+const KM0 = 10;
+const STORE = "werkstoffbilanz.v2";
+
+const st = {
+  flaeche:3, verschnitt:10, antrieb:"diesel",
+  lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
+  detail:false, sort:"co2", rows:{}, base:{}
+};
+BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0}; });
+
+function save(){
+  try{ localStorage.setItem(STORE, JSON.stringify(st)); }catch(err){ /* ohne Speicher weiterlaufen */ }
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE); if(!raw) return;
+    const o = JSON.parse(raw); if(!o || typeof o !== "object") return;
+    ["flaeche","verschnitt","lVerbrauch","lPreis","kwhVerbrauch","kwhPreis","stromFaktor"]
+      .forEach(k => { if(typeof o[k] === "number" && isFinite(o[k])) st[k] = o[k]; });
+    if(o.antrieb === "elektro" || o.antrieb === "diesel") st.antrieb = o.antrieb;
+    if(o.sort === "preis" || o.sort === "co2") st.sort = o.sort;
+    st.detail = !!o.detail;
+    if(o.rows) BASE.forEach(m => {
+      const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
+      ["mm","rez","quote","km"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
+      t.preis = isFinite(r.preis) ? r.preis : null;
+    });
+    if(o.base) BASE.forEach(m => {
+      const b = o.base[m.id]; if(!b) return; const keep = {};
+      KEYS.forEach(k => { if(isFinite(b[k])) keep[k] = b[k]; });
+      if(Object.keys(keep).length) st.base[m.id] = keep;
+    });
+  }catch(err){ /* beschädigter Speicher wird ignoriert */ }
+}
+
+const val = (m,k) => (st.base[m.id] && st.base[m.id][k] !== undefined) ? st.base[m.id][k] : m[k];
+const nz = v => isFinite(v) ? v : 0;
+const trCO2 = km => st.antrieb === "diesel"
+  ? km * (st.lVerbrauch/100) * DIESEL : km * (st.kwhVerbrauch/100) * (st.stromFaktor/1000);
+const trKost = km => st.antrieb === "diesel"
+  ? km * (st.lVerbrauch/100) * st.lPreis : km * (st.kwhVerbrauch/100) * st.kwhPreis;
+
+function calc(){
+  const fl = nz(st.flaeche), vs = 1 + nz(st.verschnitt)/100;
+  return BASE.map(m => {
+    const r = st.rows[m.id];
+    const prim = val(m,"p"), sek = val(m,"s");
+    const rez = nz(r.rez)/100, quote = nz(r.quote)/100;
+    const masse = fl * vs * (nz(r.mm)/1000) * val(m,"d") * 1000;
+    const gwp = prim*(1-rez) + sek*rez;
+    const herst = masse * gwp;
+    const trans = trCO2(nz(r.km));
+    const eol = masse * (1-quote) * val(m,"e");
+    const gut = -masse * Math.max(0, quote - rez) * (prim - sek);
+    const matC = herst + eol + gut;
+    const vorschlag = val(m,"pr") * nz(r.mm);
+    const preisM2 = (r.preis === null) ? vorschlag : nz(r.preis);
+    const matK = fl * vs * preisM2, trK = trKost(nz(r.km));
+    return {m, masse, gwp, herst, trans, eol, gut, matC,
+            co2: matC + trans, vorschlag, preisM2, matK, trK, kost: matK + trK};
+  });
+}
+
+const f1 = v => v.toLocaleString("de-AT",{minimumFractionDigits:1,maximumFractionDigits:1});
+const f2 = v => v.toLocaleString("de-AT",{minimumFractionDigits:2,maximumFractionDigits:2});
+const f0 = v => Math.round(v).toLocaleString("de-AT");
+// Zahlenfelder verlangen den Punkt als Dezimaltrenner – ein Komma würde das Feld leeren.
+const ns = (v,d) => String(Math.round(v*Math.pow(10,d))/Math.pow(10,d));
+
+function cell(id, field, v, step){
+  return '<td class="in"><input type="number" step="' + step + '" min="0" data-id="' + id +
+         '" data-field="' + field + '" value="' + v + '"></td>';
+}
+function buildTable(){
+  const tb = document.getElementById("tbody");
+  BASE.forEach(m => {
+    const r = st.rows[m.id], tr = document.createElement("tr");
+    tr.dataset.id = m.id;
+    tr.innerHTML = '<td class="nm">' + m.n + '</td>' +
+      cell(m.id,"mm",r.mm,"0.01") + cell(m.id,"preis","","0.01") +
+      cell(m.id,"rez",r.rez,"1") + cell(m.id,"quote",r.quote,"1") + cell(m.id,"km",r.km,"5") +
+      '<td class="tot" data-co2></td><td class="tot" data-kost></td>' +
+      '<td class="dt dc" data-masse></td><td class="dt dc" data-herst></td>' +
+      '<td class="dt dc" data-trans></td><td class="dt dc" data-eol></td><td class="dt dc" data-gut></td>';
+    tb.appendChild(tr);
+  });
+  tb.addEventListener("input", ev => {
+    const el = ev.target; if(el.tagName !== "INPUT") return;
+    const {id, field} = el.dataset; if(!id) return;
+    const v = parseFloat(el.value);
+    if(field === "preis") st.rows[id].preis = (el.value.trim() === "" || !isFinite(v)) ? null : v;
+    else if(isFinite(v)) st.rows[id][field] = v;
+    render(); save();
+  });
+}
+function buildBase(){
+  const tb = document.getElementById("tbodyBase");
+  BASE.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td class="nm">' + m.n + '</td>' + KEYS.map(k =>
+      '<td class="in" data-c="' + m.id + '.' + k + '"><input type="number" step="0.01" min="0" data-bid="' +
+      m.id + '" data-bk="' + k + '"></td>').join("");
+    tb.appendChild(tr);
+  });
+  tb.addEventListener("input", ev => {
+    const el = ev.target; if(el.tagName !== "INPUT") return;
+    const id = el.dataset.bid, k = el.dataset.bk; if(!id) return;
+    const m = BASE.find(x => x.id === id), v = parseFloat(el.value);
+    if(!st.base[id]) st.base[id] = {};
+    if(el.value.trim() === "" || !isFinite(v) || Math.abs(v - m[k]) < 1e-9) delete st.base[id][k];
+    else st.base[id][k] = v;
+    if(!Object.keys(st.base[id]).length) delete st.base[id];
+    render(); save();
+  });
+}
+
+// Zwei Balken je Material, untereinander. Die Balkenlänge ist immer der Wert, der auch
+// danebensteht und nach dem sortiert wird. Die Recycling-Gutschrift wird von der Herstellung
+// abgezogen – dort entsteht sie –, damit die Abschnitte genau die Gesamtsumme ergeben.
+const MAXW = 74;   // längster Balken in % der Zeilenbreite, der Rest bleibt für die Beschriftung
+
+function posten(r){
+  let h = r.herst + r.gut;            // gut ist negativ
+  let e = Math.max(0, r.eol);
+  if(h < 0){ e = Math.max(0, e + h); h = 0; }
+  return {h:h, t:Math.max(0, r.trans), e:e, summe:h + Math.max(0, r.trans) + e};
+}
+
+function buildBars(rows){
+  const sorted = rows.slice().sort((a,b) => st.sort === "co2" ? a.co2 - b.co2 : a.kost - b.kost);
+  const mc = Math.max(...rows.map(r => posten(r).summe), .001);
+  const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
+  const seg = (v, ganz, cls) => v <= 0 ? "" :
+    '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
+  document.getElementById("bars").innerHTML = sorted.map(r => {
+    const p = posten(r), gC = Math.max(p.summe, .0001), gK = Math.max(r.matK + r.trK, .0001);
+    const balken = (breite, inhalt, wert, einheit) =>
+      '<div class="brow"><div class="bfill" style="width:' + breite.toFixed(2) + '%">' + inhalt +
+      '</div><span class="blab"><b>' + wert + '</b> ' + einheit + '</span></div>';
+    return '<div class="mrow"><div class="mname">' + r.m.n + '</div><div class="mbars">' +
+      balken(gC/mc*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
+             f1(r.co2), "kg CO₂") +
+      balken(gK/mk*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
+             f2(r.kost), "€") +
+      '</div></div>';
+  }).join("");
+}
+
+function buildPrint(rows){
+  const sorted = rows.slice().sort((a,b) => st.sort === "co2" ? a.co2 - b.co2 : a.kost - b.kost);
+  const mc = Math.max(...rows.map(r => posten(r).summe), .001);
+  const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
+  const sg = (v, ganz, cls) => v <= 0 ? "" :
+    '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
+  const bar = (breite, inhalt) => '<span class="pwrap"><span class="pbar" style="width:' +
+    breite.toFixed(1) + '%">' + inhalt + '</span></span>';
+  document.getElementById("pBody").innerHTML = sorted.map((r,i) => {
+    const p = posten(r), gC = Math.max(p.summe, .0001);
+    const gK = Math.max(r.matK + r.trK, .0001), q = st.rows[r.m.id];
+    return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + r.m.n + '</td><td>' + f2(q.mm) +
+      '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
+      f1(r.masse) + '</td><td>' + f1(r.co2) + '</td><td class="pb">' +
+      bar(gC/mc*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
+      '</td><td>' + f2(r.kost) + '</td><td class="pb">' +
+      bar(gK/mk*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
+  }).join("");
+
+  const antrieb = st.antrieb === "diesel"
+    ? "Diesel, " + f1(st.lVerbrauch) + " l/100 km zu " + f2(st.lPreis) + " €/l (2,64 kg CO₂/l)"
+    : "Elektro, " + f1(st.kwhVerbrauch) + " kWh/100 km zu " + f2(st.kwhPreis) + " €/kWh (" +
+      f0(st.stromFaktor) + " g CO₂/kWh)";
+  document.getElementById("pSet").innerHTML =
+    '<span><b>Projektfläche:</b> ' + f2(st.flaeche) + ' m²</span>' +
+    '<span><b>Verschnitt:</b> ' + f0(st.verschnitt) + ' %</span>' +
+    '<span><b>Transport:</b> ' + antrieb + '</span>' +
+    '<span><b>Sortierung:</b> ' + (st.sort === "co2" ? "nach CO₂" : "nach Preis") + '</span>';
+  document.getElementById("pDatum").textContent =
+    "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
+}
+
+function render(){
+  const rows = calc();
+  rows.forEach(r => {
+    const tr = document.querySelector('tr[data-id="' + r.m.id + '"]'); if(!tr) return;
+    const set = (s,t) => { tr.querySelector(s).textContent = t; };
+    set("[data-co2]", f1(r.co2));
+    set("[data-kost]", f2(r.kost));
+    set("[data-masse]", f1(r.masse));
+    set("[data-herst]", f1(r.herst));
+    set("[data-trans]", f1(r.trans));
+    set("[data-eol]", f1(r.eol));
+    set("[data-gut]", f1(r.gut));
+    const pi = tr.querySelector("input[data-field=preis]");
+    const own = st.rows[r.m.id].preis !== null;
+    if(document.activeElement !== pi) pi.value = ns(own ? st.rows[r.m.id].preis : r.vorschlag, 2);
+    pi.classList.toggle("own", own);
+    pi.title = own ? "Dein eigener Preis. Feld leeren, um zum Vorschlag zurückzukehren."
+                   : "Vorschlag: " + f2(val(r.m,"pr")) + " €/dm³ × " + f2(st.rows[r.m.id].mm) +
+                     " mm. Einfach überschreiben.";
+  });
+  BASE.forEach(m => KEYS.forEach(k => {
+    const c = document.querySelector('[data-c="' + m.id + "." + k + '"]'); if(!c) return;
+    const el = c.querySelector("input");
+    const ch = !!(st.base[m.id] && st.base[m.id][k] !== undefined);
+    if(document.activeElement !== el) el.value = ns(val(m,k), 3);
+    el.classList.toggle("own", ch);
+    el.title = ch ? "Ausgangswert " + f2(m[k]) + " — Feld leeren zum Zurücksetzen." : "Ausgangswert aus der Quellenlage.";
+  }));
+  document.querySelectorAll(".dc").forEach(e => e.classList.toggle("hide", !st.detail));
+  document.getElementById("bDetail").textContent = st.detail ? "Einzelposten ausblenden" : "Einzelposten zeigen";
+  buildBars(rows);
+  buildPrint(rows);
+}
+
+/* ---- PDF-Ausgabe ----------------------------------------------------------
+   Direkt eingebettet (Vorschaurahmen) unterdrücken Browser den Druckdialog.
+   Deshalb dort der Umweg über ein eigenes Fenster; klappt auch das nicht,
+   bekommt man einen Hinweis statt eines Knopfes, der scheinbar nichts tut.    */
+const imRahmen = (() => { try{ return window.self !== window.top; }catch(err){ return true; } })();
+
+function sagen(html){ document.getElementById("druckHinweis").innerHTML = html; }
+
+function druckDokument(){
+  const css = Array.prototype.map.call(document.querySelectorAll("style"), s => s.textContent).join("\n");
+  return '<!doctype html><html lang="de"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>Werkstoffbilanz</title>' +
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">' +
+    '<style>' + css + '</style>' +
+    '<style>body{background:#fff;color:#000;font-size:8.4pt;line-height:1.32;padding:14px}' +
+    '.printonly{display:block}.noprint{display:none}' +
+    '@media screen{.p-tbl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}' +
+    '.p-tbl th{border-bottom:1.5px solid #000;padding:3px 4px;text-align:right;font-size:9px;' +
+    'text-transform:uppercase;letter-spacing:.04em}' +
+    '.p-tbl th:first-child,.p-tbl td:first-child{text-align:left}' +
+    '.p-tbl td{padding:3px 4px;border-bottom:1px solid #ddd;text-align:right}' +
+    '.pwrap{display:block;width:100%}.pbar{display:flex;height:9px;border:1px solid #000}' +
+    '.pbar i{display:block;height:100%;border-right:1px solid #000}' +
+    '.ps-h{background:#000}.ps-e{background:#999}.ps-g{background:#fff}' +
+    '.ps-t{background:repeating-linear-gradient(120deg,#000 0 2px,#fff 2px 5px)}' +
+    '.p-head{display:flex;justify-content:space-between;align-items:flex-end;' +
+    'border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:10px}' +
+    '.p-head h2{margin:0;font-size:22px}.p-set,.p-leg,.p-foot{display:flex;flex-wrap:wrap;' +
+    'gap:6px 18px;font-size:11px;margin:8px 0}.p-foot{border-top:1.5px solid #000;padding-top:8px}' +
+    '.p-leg i{width:14px;height:8px;border:1px solid #000;display:inline-block;margin-right:4px}' +
+    '.p-leg span{display:inline-flex;align-items:center}}</style></head><body>' +
+    document.querySelector(".printonly").outerHTML + '</body></html>';
+}
+
+function drucken(){
+  render();
+  sagen("");
+  if(!imRahmen){
+    setTimeout(() => window.print(), 80);
+    return;
+  }
+  let w = null;
+  try{ w = window.open("", "_blank"); }catch(err){ w = null; }
+  if(w && w.document){
+    w.document.open();
+    w.document.write(druckDokument());
+    w.document.close();
+    setTimeout(() => { try{ w.focus(); w.print(); }catch(err){ /* Nutzer druckt selbst */ } }, 450);
+    sagen("Das Ergebnis öffnet sich in einem neuen Tab. Dort im Druckdialog <b>„Als PDF sichern“</b> wählen.");
+    return;
+  }
+  setTimeout(() => { try{ window.print(); }catch(err){ /* siehe Hinweis */ } }, 80);
+  sagen("Öffnet sich kein Druckdialog, blockiert ihn der Vorschaurahmen. Seite in einem eigenen " +
+        "Tab öffnen, dann <b>Strg+P</b> bzw. <b>Cmd+P</b> und dort <b>„Als PDF sichern“</b> wählen.");
+}
+
+function bind(){
+  ["flaeche","verschnitt","lVerbrauch","lPreis","kwhVerbrauch","kwhPreis","stromFaktor"].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = st[id];
+    el.addEventListener("input", () => {
+      const v = parseFloat(el.value);
+      if(isFinite(v)){ st[id] = v; render(); save(); }
+    });
+  });
+  const bd = document.getElementById("bDiesel"), be = document.getElementById("bElektro");
+  const setAntrieb = a => {
+    st.antrieb = a;
+    bd.setAttribute("aria-pressed", a === "diesel");
+    be.setAttribute("aria-pressed", a === "elektro");
+    document.querySelectorAll(".fd").forEach(e => e.classList.toggle("hide", a !== "diesel"));
+    document.querySelectorAll(".fe").forEach(e => e.classList.toggle("hide", a !== "elektro"));
+    render(); save();
+  };
+  bd.onclick = () => setAntrieb("diesel");
+  be.onclick = () => setAntrieb("elektro");
+
+  const sc = document.getElementById("sCo2"), sp = document.getElementById("sPreis");
+  const setSort = s => {
+    st.sort = s;
+    sc.setAttribute("aria-pressed", s === "co2");
+    sp.setAttribute("aria-pressed", s === "preis");
+    render(); save();
+  };
+  sc.onclick = () => setSort("co2");
+  sp.onclick = () => setSort("preis");
+
+  document.getElementById("bDetail").onclick = () => { st.detail = !st.detail; render(); save(); };
+  document.getElementById("bResetIn").onclick = () => {
+    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0}; });
+    document.querySelectorAll("#tbody input").forEach(el => {
+      const f = el.dataset.field;
+      if(f !== "preis") el.value = st.rows[el.dataset.id][f];
+    });
+    render(); save();
+  };
+  document.getElementById("bResetBase").onclick = () => { st.base = {}; render(); save(); };
+  document.getElementById("bPrint").onclick = drucken;
+
+  setAntrieb(st.antrieb);
+  setSort(st.sort);
+}
+
+load();
+buildTable();
+buildBase();
+bind();
+render();
+</script>
+</body>
+</html>

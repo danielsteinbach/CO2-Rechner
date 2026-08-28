@@ -6,17 +6,16 @@ und **Euro**.
 
 Eine einzige HTML-Datei. Kein Build, kein Framework, kein Server, keine Datenbank.
 
-## Veröffentlichen auf GitHub Pages
+**Live: https://danielsteinbach.github.io/CO2-Rechner/**
 
-1. Neues Repository anlegen, zum Beispiel `werkstoffbilanz`.
-2. `index.html` hochladen (Web-Oberfläche: *Add file → Upload files*).
-3. *Settings → Pages → Build and deployment*: als Source **Deploy from a branch** wählen,
-   Branch `main`, Ordner `/ (root)`, speichern.
-4. Nach ein bis zwei Minuten liegt die Seite unter
-   `https://<dein-benutzername>.github.io/werkstoffbilanz/`
+## Veröffentlichung
+
+Die Seite wird über GitHub Pages aus dem Branch `main`, Ordner `/ (root)` ausgeliefert
+(*Settings → Pages → Build and deployment*). Eine geänderte `index.html` ist nach dem Commit
+in ein bis zwei Minuten online — es gibt keinen Build-Schritt dazwischen.
 
 Für eine eigene Domain im selben Menü unter *Custom domain* eintragen und beim Domain-Anbieter
-einen CNAME auf `<dein-benutzername>.github.io` setzen.
+einen CNAME auf `danielsteinbach.github.io` setzen.
 
 ## Was die Seite kann
 

@@ -79,10 +79,19 @@ Werkstoffen wäre eine Vorbelegung aus einem von zwei Gründen falsch:
 
 - Bei **Stahl, Glas, Span-, MDF- und HDF-Platten** enthält der Neuware-Faktor der Datenquelle
   den branchenüblichen Schrott-, Scherben- und Altholzanteil bereits. Ein zusätzlicher Eintrag
-  hier würde denselben Vorteil doppelt zählen. Die Umweltdeklarationen weisen die Mischung
-  ausdrücklich aus: Spanplatte 67 % Nadel-Frischholz, 13 % Laub-Frischholz, **20 % Altholz**
-  (einzelne Werke bis 50 %); MDF und HDF **„kein Altholz enthalten"** — Altholzfasern lassen sich
-  bisher nicht zu neuen Faserplatten verarbeiten. Daher liegt Spanplatte im GWP deutlich unter MDF.
+  hier würde denselben Vorteil doppelt zählen. Bei Stahl und Glas legt die Datenquelle den Anteil
+  nicht offen, er lässt sich also nicht herausrechnen — Nebenwirkung: die Gutschrift fällt für diese
+  beiden etwas zu großzügig aus. Bewusste Wahl: lieber die Herstellung richtig als die Gutschrift.
+
+  Bei **Spanplatte** geht es besser, weil die Deklaration ihre Mischung offenlegt (67 % Nadel-Frischholz,
+  13 % Laub-Frischholz, **20 % Altholz**; einzelne Werke bis 50 %). Der Anteil ist deshalb
+  herausgerechnet: `p` ist mit **0,30** der Frischholzwert, `rz` steht auf 20, und
+  `0,30 × 0,80 + 0,15 × 0,20 = 0,27` ergibt wieder genau den ÖKOBAUDAT-Marktwert. Angezeigt wird
+  dasselbe wie zuvor, aber die Gutschrift zählt ab 20 % statt ab null.
+
+  **MDF und HDF** deklarieren **„kein Altholz enthalten"** — Altholzfasern lassen sich bisher nicht zu
+  neuen Faserplatten verarbeiten. Dort ist die 0 keine Behelfslösung, sondern die Wirklichkeit. Genau
+  darum liegt Spanplatte im GWP deutlich unter MDF.
 - Bei **Aluminium und den Kunststoffen** gibt es keinen belastbaren Durchschnitt. Der
   Environmental Profile Report von European Aluminium nennt für Walzprodukte bewusst keinen
   Rezyklatanteil, weil er je Werk und Charge zwischen praktisch 0 und über 75 % liegt.
@@ -149,7 +158,7 @@ Unsicherheit des Herstellungswerts selbst).
 
 **Holzwerkstoffe** stammen aus den generischen ÖKOBAUDAT-Datensätzen „Durchschnitt DE" nach EN 15804+A2,
 bei denen der fossile Anteil getrennt ausgewiesen ist: Spanplatte 171,2 kg CO₂e/m³ bei 633 kg/m³
-(0,270 kg/kg), MDF 323,1 bei 738 (0,438), HDF 345,8 bei 850 (0,407), Nadelschnittholz 57,2 bei 485
+(0,270 kg/kg Marktmix, siehe Rückrechnung oben), MDF 323,1 bei 738 (0,438), HDF 345,8 bei 850 (0,407), Nadelschnittholz 57,2 bei 485
 (0,118). Ältere Datensätze verrechnen die biogene CO₂-Aufnahme negativ in Modul A1 und ergeben in Summe
 Minuswerte — die sind bewusst nicht verwendet. Die Spanne ist beträchtlich: zwei Hersteller-EPDs für
 Spanplatte (Egger 0,224, Pfleiderer ≈0,196) liegen 20–25 % unter dem Branchenschnitt, baubook nennt für

@@ -124,7 +124,11 @@ input[type=number]{-moz-appearance:textfield}
 
 /* ---- Tabelle ---- */
 .tscroll{overflow-x:auto; border-top:2px solid var(--rule); border-bottom:2px solid var(--rule)}
-table{border-collapse:collapse; width:100%; min-width:760px}
+table{border-collapse:collapse; width:100%; min-width:1140px}
+thead tr.grp th{font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink);
+  font-weight:700; border-bottom:1px solid var(--rule-thin); padding-bottom:4px; text-align:center}
+thead tr.grp th.g-in{color:var(--muted)}
+thead th.b{color:var(--ink); font-weight:700}
 th,td{text-align:right; white-space:nowrap; padding:0 11px}
 thead th{
   font-size:12px; font-weight:600; letter-spacing:.01em; color:var(--muted);
@@ -146,6 +150,7 @@ td.in input:hover{background:var(--sunk)}
 td.in input:focus{background:var(--sunk); outline:2px solid var(--mark); outline-offset:-2px}
 .tot{font-weight:700; font-variant-numeric:tabular-nums; font-size:15.5px}
 .dt{font-variant-numeric:tabular-nums; color:var(--muted); font-size:13.5px}
+.dt.gut{font-style:italic}
 .own{color:var(--mark) !important; font-weight:600 !important}
 .hide{display:none !important}
 
@@ -209,26 +214,30 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 /* ---- Druck: eine Seite ---- */
 .printonly{display:none}
 @media print{
-  @page{size:A4 portrait; margin:11mm 12mm}
+  @page{size:A4 landscape; margin:10mm 12mm}
   :root{--cream:#fff; --ink:#000; --muted:#555; --rule:#000; --rule-thin:#bbb;
         --paper:#fff; --sunk:#fff; --co2:#000; --preis:#999; --bar:#fff; --mark:#000}
-  body{background:#fff; color:#000; font-size:8.4pt; line-height:1.32}
+  body{background:#fff; color:#000; font-size:8pt; line-height:1.22}
   .noprint{display:none !important}
   .printonly{display:block}
   .wrap{max-width:none; padding:0}
   .p-head{display:flex; justify-content:space-between; align-items:flex-end;
-    border-bottom:1.6pt solid #000; padding-bottom:4pt; margin-bottom:7pt}
+    border-bottom:1.6pt solid #000; padding-bottom:3pt; margin-bottom:5pt}
   .p-head h2{font-size:16pt; margin:0; font-weight:700; letter-spacing:-.02em}
   .p-head .p-meta{font-size:7.4pt; text-align:right; color:#333; line-height:1.35}
-  .p-set{display:flex; flex-wrap:wrap; gap:3pt 15pt; font-size:7.6pt; margin-bottom:7pt;
-    padding-bottom:5pt; border-bottom:.5pt solid #bbb}
+  .p-set{display:flex; flex-wrap:wrap; gap:2pt 15pt; font-size:7.4pt; margin-bottom:5pt;
+    padding-bottom:3.5pt; border-bottom:.5pt solid #bbb}
   .p-set b{font-weight:600}
-  table.p-tbl{width:100%; border-collapse:collapse; font-size:7.7pt; min-width:0; table-layout:fixed}
-  table.p-tbl th{font-size:6.4pt; text-transform:uppercase; letter-spacing:.03em;
-    border-bottom:1pt solid #000; padding:2pt 3pt; text-align:right; color:#000; font-weight:600}
+  table.p-tbl{width:100%; border-collapse:collapse; font-size:7.5pt; min-width:0; table-layout:fixed}
+  table.p-tbl th{font-size:6.6pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
+    border-bottom:1pt solid #000; padding:2pt 3pt; text-align:right; color:#000; font-weight:600;
+    vertical-align:bottom}
   table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left; white-space:normal}
-  table.p-tbl td{padding:2.1pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
-    font-variant-numeric:tabular-nums}
+  /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
+  table.p-tbl td{padding:1.5pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+    font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
+  table.p-tbl tr{height:auto}
+  table.p-tbl td.bil{font-weight:700}
   table.p-tbl tr.best td{font-weight:700}
   table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
   .pwrap{display:block; width:100%}
@@ -239,10 +248,10 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .ps-t{background:repeating-linear-gradient(120deg,#000 0 1pt,#fff 1pt 2.6pt)}
   .ps-e{background:#999}
   .ps-g{background:#fff}
-  .p-leg{display:flex; gap:11pt; font-size:6.4pt; margin-top:4pt; color:#333; align-items:center}
+  .p-leg{display:flex; gap:11pt; font-size:6.4pt; margin-top:3pt; color:#333; align-items:center}
   .p-leg span{display:inline-flex; align-items:center; gap:3pt}
   .p-leg i{width:9pt; height:5pt; border:.5pt solid #000; display:inline-block}
-  .p-foot{margin-top:8pt; padding-top:5pt; border-top:1pt solid #000;
+  .p-foot{margin-top:5pt; padding-top:4pt; border-top:1pt solid #000;
     font-size:6.9pt; color:#333; line-height:1.4; display:flex; gap:14pt; justify-content:space-between}
   .p-foot div{max-width:64%}
   .p-foot b{color:#000}
@@ -328,7 +337,10 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 <section>
   <h2 class="shead">Alle Materialien nebeneinander</h2>
   <p class="snote">Die Startwerte sind übliche Stärken und Marktpreise. Ändere, was für dein Projekt gilt —
-  alles rechnet sofort mit. Was die Spalten bedeuten, steht weiter unten unter „Die Begriffe“.</p>
+  alles rechnet sofort mit. <strong>CO₂ vor Gutschrift</strong> ist die Last aus Herstellung, Transport und
+  Lebensende; die <strong>CO₂-Bilanz</strong> zieht davon die Recycling-Gutschrift ab. Bei Metallen liegen
+  zwischen beiden Zahlen Welten — deshalb stehen sie nebeneinander. Was die Spalten bedeuten, steht weiter
+  unten unter „Die Begriffe“.</p>
   <div class="btnrow">
     <button class="btn" type="button" id="bDetail">Einzelposten zeigen</button>
     <button class="btn" type="button" id="bResetIn">Eingaben zurücksetzen</button>
@@ -337,20 +349,29 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   </div>
   <div class="tscroll">
     <table id="tbl">
-      <thead><tr>
-        <th class="nm">Material</th>
+      <thead>
+      <tr class="grp">
+        <th class="nm" rowspan="2">Material</th>
+        <th colspan="6" class="g-in">Eingaben</th>
+        <th colspan="5" class="g-res">Ergebnis</th>
+        <th colspan="4" class="dc g-det">Einzelposten CO₂ (kg)</th>
+      </tr>
+      <tr>
         <th>Stärke<br>mm</th>
         <th>Preis<br>€/m²</th>
         <th>Rezyklat<br>%</th>
-        <th>Verwertung<br>%</th>
+        <th>Recycling<br>%</th>
         <th>Weg<br>km</th>
-        <th class="on">CO₂<br>kg</th>
-        <th class="on">Kosten<br>€</th>
+        <th>Nutzung<br>Jahre</th>
+        <th class="on">CO₂ vor<br>Gutschrift</th>
+        <th class="on">Recycling-<br>Gutschrift</th>
+        <th class="on b">CO₂-Bilanz<br>kg</th>
+        <th class="on">kg CO₂<br>je Jahr</th>
+        <th class="on b">Kosten<br>€</th>
         <th class="dc">Masse<br>kg</th>
         <th class="dc">Herstel-<br>lung</th>
         <th class="dc">Trans-<br>port</th>
         <th class="dc">Lebens-<br>ende</th>
-        <th class="dc">Gut-<br>schrift</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -366,8 +387,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   untereinander, nicht ein oberer mit einem unteren.</p>
   <div class="btnrow">
     <div class="toggle" role="group" aria-label="Sortierung">
-      <button type="button" id="sCo2" aria-pressed="true">Sortiert nach CO₂</button>
-      <button type="button" id="sPreis" aria-pressed="false">Sortiert nach Preis</button>
+      <button type="button" id="sCo2" aria-pressed="true">nach CO₂</button>
+      <button type="button" id="sJahr" aria-pressed="false">nach CO₂ je Nutzungsjahr</button>
+      <button type="button" id="sPreis" aria-pressed="false">nach Preis</button>
     </div>
   </div>
   <div id="bars"></div>
@@ -408,16 +430,26 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       dann rechnet die Seite konservativ mit Neuware.</dd>
     </div>
     <div class="gitem">
-      <dt>Verwertungsquote</dt>
-      <dd>Was mit dem Material passiert, <strong>nachdem</strong> das Schild ausgedient hat. 0 % heißt: alles
-      wird verbrannt. 100 % heißt: alles wird wiederverwendet oder stofflich recycelt. Bei Metallen liegt die
-      reale Quote hoch, bei beschichteten Kunststoffen niedrig.</dd>
+      <dt>Recyclingquote am Lebensende</dt>
+      <dd>Wie viel des Materials <strong>nachdem</strong> das Schild ausgedient hat stofflich weiterverwendet
+      wird — wiederverwendet oder zu neuem Material verarbeitet. Gemeint ist ausdrücklich <strong>nicht</strong>
+      die „Verwertung“ im abfallrechtlichen Sinn, die auch das Verbrennen mit Energierückgewinnung einschließt.
+      Was hier nicht eingetragen ist, rechnet die Seite vereinfachend als verbrannt — Deponierung, Export oder
+      Zwischenlagerung bildet sie nicht ab. Bei Metallen liegt die reale Quote hoch, bei beschichteten
+      Kunststoffen niedrig.</dd>
     </div>
     <div class="gitem">
-      <dt>Gutschrift</dt>
-      <dd>Was du recycelst, erspart jemand anderem die Neuproduktion. Dafür wird dir CO₂ gutgeschrieben —
-      die Zahl ist negativ. Gutgeschrieben wird nur, was über den bereits eingekauften Rezyklatanteil
-      hinausgeht, sonst würde derselbe Kreislauf doppelt gezählt.</dd>
+      <dt>Gutschrift — und warum sie die Bilanz stark verändert</dt>
+      <dd>Was du recycelst, erspart jemand anderem die Neuproduktion. Dafür wird CO₂ gutgeschrieben, die Zahl ist
+      negativ. Gutgeschrieben wird nur, was über den eingekauften Rezyklatanteil hinausgeht, sonst zählte man
+      denselben Kreislauf doppelt.
+      <strong>Achtung bei der Auslegung:</strong> Die Gutschrift ist eine Annahme über die Zukunft, keine
+      bereits eingesparte Emission. Bei Aluminium mit 90 % Recyclingquote stehen 57,8 kg Herstellung einer
+      Gutschrift von 47,6 kg gegenüber — die Bilanz zeigt 10,2 kg. Deshalb stehen beide Zahlen getrennt in der
+      Tabelle. Wer konservativ rechnen will, liest die Spalte <em>CO₂ vor Gutschrift</em>.
+      Methodisch ist das ein <strong>vereinfachter Ansatz in Anlehnung an die Nettofluss-Logik von Modul D nach
+      EN 15804</strong>; Recyclingverluste, Aufbereitungsaufwand und materialspezifische Substitutionsfaktoren
+      werden nicht eigens modelliert.</dd>
     </div>
     <div class="gitem">
       <dt>Warum Holz beim Lebensende auf null steht</dt>
@@ -428,11 +460,27 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       Kunststoffen ist es anders: dort kommt der Kohlenstoff aus dem Boden und bleibt in der Luft.</dd>
     </div>
     <div class="gitem">
-      <dt>Die größte Lücke</dt>
-      <dd>Die Seite vergleicht <strong>Materialmengen, keine Haltbarkeit</strong>. Ein Blechschild, das
-      fünfzehn Jahre hält, ist pro Nutzungsjahr besser als ein Kartonschild, das dreimal ersetzt wird — auch
-      wenn die Herstellungszahl das Gegenteil nahelegt. Wenn Standzeit eine Rolle spielt: CO₂-Wert durch die
-      erwarteten Jahre teilen und diese Zahlen vergleichen.</dd>
+      <dt>Nutzungsdauer</dt>
+      <dd>Die wichtigste Spalte, die man leicht übersieht. Ein Blechschild, das fünfzehn Jahre hält, ist pro
+      Nutzungsjahr besser als ein Kartonschild, das dreimal ersetzt werden muss — auch wenn die reine
+      Herstellungszahl das Gegenteil nahelegt. Voreingestellt ist überall <strong>1 Jahr</strong>, dann
+      entspricht die Spalte <em>kg CO₂ je Jahr</em> genau der Bilanz. Trag ein, wie lange das Schild aus dem
+      jeweiligen Material bei dir realistisch hält, und sortiere danach — oft dreht sich die Rangfolge um.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Transport</dt>
+      <dd>Der Weg gilt je Material als <strong>eigene volle Fahrt</strong>, unabhängig vom Gewicht. 10 km
+      Diesel sind 3,8 kg CO₂ — egal ob 200 g Papier oder 20 kg Aluminium mitfahren. Bei kleinen Schildern kann
+      der Transport dadurch den ganzen Materialunterschied überdecken. Wer eine Sammelfahrt auf mehrere
+      Positionen aufteilt, trägt anteilig weniger Kilometer ein.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Wofür die Seite nicht taugt</dt>
+      <dd>Sie ist eine Entscheidungshilfe für die Materialwahl, <strong>keine Ökobilanz</strong>. Für eine
+      vollständige LCA fehlen detaillierte Entsorgungsszenarien, Recyclingprozesse, Qualitäts- und
+      Substitutionsfaktoren — und die Bilanz zieht Herstellung, Lebensende und Gutschrift zu einer Zahl
+      zusammen, was eine EPD getrennt ausweisen würde. Für Ausschreibungen und Kundenkommunikation gehören
+      die Umweltdatenblätter der tatsächlichen Lieferanten herangezogen.</dd>
     </div>
   </dl>
 </section>
@@ -485,6 +533,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <h3>Nicht enthalten</h3>
       <p>Bedruckung, Kaschierung, Beschläge, Montage, Reinigung, Nutzungsdauer.</p>
       <p>Der Transport gilt je Material als volle Fahrt über die eingetragene Strecke, unabhängig vom Gewicht. Wer eine Sammelfahrt auf mehrere Positionen aufteilt, trägt entsprechend weniger Kilometer ein.</p>
+      <p><strong>Aktualität:</strong> PlasticsEurope hat die Eco-Profiles für Polyolefine und PVC im März 2026 überarbeitet und an neuere Öl- und Gas-Vorkettendaten angeglichen; für die Polymere gehen die Werte dadurch tendenziell nach oben. Das aktuelle PVC-Profil weist 2,08 kg CO₂e/kg Harz aus — mit dem Verarbeitungsaufschlag deckt sich das mit den hier hinterlegten 2,80 für die Hartplatte. Die Polyolefin-Werte sind noch gegen die neuen Datensätze abzugleichen.</p>
     </div>
   </div>
 </section>
@@ -531,13 +580,15 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-set" id="pSet"></div>
   <table class="p-tbl">
     <colgroup>
-      <col style="width:20%"><col style="width:6.5%"><col style="width:6%"><col style="width:6.5%">
-      <col style="width:4.5%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:16%">
-      <col style="width:8%"><col style="width:19.5%">
+      <col style="width:16.5%"><col style="width:5%"><col style="width:4.5%"><col style="width:5%">
+      <col style="width:3.5%"><col style="width:4%"><col style="width:7%"><col style="width:6.5%">
+      <col style="width:6.5%"><col style="width:13%"><col style="width:6%"><col style="width:6.5%">
+      <col style="width:16%">
     </colgroup>
     <thead><tr>
-      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Verw.</th><th>km</th>
-      <th>Masse kg</th><th>CO₂ kg</th><th class="pb">CO₂</th><th>Kosten €</th><th class="pb">Kosten</th>
+      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Jahre</th>
+      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb"></th>
+      <th>CO₂/Jahr</th><th>Kosten €</th><th class="pb"></th>
     </tr></thead>
     <tbody id="pBody"></tbody>
   </table>
@@ -551,7 +602,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     Council (Treibhauspotenzial, Module A1–A3) · Umweltbundesamt Österreich (Strom, 152 g CO₂/kWh) ·
     Diesel 3,2 kg CO₂/l (Well-to-Wheel, inkl. Förderung und Raffinerie – gleiche Systemgrenze wie Strom und
     Materialdaten) · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
-    Mittelwerte mit typisch ±30 % Streuung. Nicht enthalten: Bedruckung, Montage, Nutzungsdauer.</div>
+    Mittelwerte mit typisch ±30 % Streuung. Gutschrift = vereinfachter Ansatz in Anlehnung an Modul D nach
+    EN 15804. Nicht stofflich recycelter Anteil wird als Verbrennung gerechnet. Transport je Material als
+    eigene Fahrt. Nicht enthalten: Bedruckung, Montage. Keine vollständige Ökobilanz.</div>
     <div><b>Haftungsausschluss:</b> Für Richtigkeit, Vollständigkeit und Aktualität wird keine
     Gewährleistung und keine Garantie übernommen. Nutzung auf eigene Verantwortung; eine Haftung für
     Entscheidungen auf Grundlage dieser Ergebnisse ist ausgeschlossen.</div>
@@ -592,7 +645,7 @@ const st = {
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
   detail:false, sort:"co2", rows:{}, base:{}
 };
-BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0}; });
+BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1}; });
 
 function save(){
   try{ localStorage.setItem(STORE, JSON.stringify(st)); }catch(err){ /* ohne Speicher weiterlaufen */ }
@@ -604,11 +657,11 @@ function load(){
     ["flaeche","verschnitt","lVerbrauch","lPreis","kwhVerbrauch","kwhPreis","stromFaktor"]
       .forEach(k => { if(typeof o[k] === "number" && isFinite(o[k])) st[k] = o[k]; });
     if(o.antrieb === "elektro" || o.antrieb === "diesel") st.antrieb = o.antrieb;
-    if(o.sort === "preis" || o.sort === "co2") st.sort = o.sort;
+    if(o.sort === "preis" || o.sort === "co2" || o.sort === "jahr") st.sort = o.sort;
     st.detail = !!o.detail;
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
-      ["mm","rez","quote","km"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
+      ["mm","rez","quote","km","jahre"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
       t.preis = isFinite(r.preis) ? r.preis : null;
     });
     if(o.base) BASE.forEach(m => {
@@ -642,8 +695,12 @@ function calc(){
     const vorschlag = val(m,"pr") * nz(r.mm);
     const preisM2 = (r.preis === null) ? vorschlag : nz(r.preis);
     const matK = fl * vs * preisM2, trK = trKost(nz(r.km));
-    return {m, masse, gwp, herst, trans, eol, gut, matC,
-            co2: matC + trans, vorschlag, preisM2, matK, trK, kost: matK + trK};
+    const co2 = matC + trans;
+    const jahre = Math.max(nz(r.jahre), 0.01);
+    return {m, masse, gwp, herst, trans, eol, gut, matC, co2,
+            brutto: herst + trans + Math.max(0, eol),   // vor Abzug der Gutschrift
+            proJahr: co2 / jahre,
+            vorschlag, preisM2, matK, trK, kost: matK + trK};
   });
 }
 
@@ -665,9 +722,11 @@ function buildTable(){
     tr.innerHTML = '<td class="nm">' + m.n + '</td>' +
       cell(m.id,"mm",r.mm,"0.01") + cell(m.id,"preis","","0.01") +
       cell(m.id,"rez",r.rez,"1") + cell(m.id,"quote",r.quote,"1") + cell(m.id,"km",r.km,"5") +
-      '<td class="tot" data-co2></td><td class="tot" data-kost></td>' +
+      cell(m.id,"jahre",r.jahre,"1") +
+      '<td class="dt" data-brutto></td><td class="dt gut" data-gut></td>' +
+      '<td class="tot" data-bilanz></td><td class="dt" data-projahr></td><td class="tot" data-kost></td>' +
       '<td class="dt dc" data-masse></td><td class="dt dc" data-herst></td>' +
-      '<td class="dt dc" data-trans></td><td class="dt dc" data-eol></td><td class="dt dc" data-gut></td>';
+      '<td class="dt dc" data-trans></td><td class="dt dc" data-eol></td>';
     tb.appendChild(tr);
   });
   tb.addEventListener("input", ev => {
@@ -712,20 +771,27 @@ function posten(r){
   return {h:h, t:Math.max(0, r.trans), e:e, summe:h + Math.max(0, r.trans) + e};
 }
 
+const schluessel = r => st.sort === "preis" ? r.kost : st.sort === "jahr" ? r.proJahr : r.co2;
+
 function buildBars(rows){
-  const sorted = rows.slice().sort((a,b) => st.sort === "co2" ? a.co2 - b.co2 : a.kost - b.kost);
-  const mc = Math.max(...rows.map(r => posten(r).summe), .001);
+  const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
+  const proJahr = st.sort === "jahr";
+  // Die CO₂-Balkenlänge ist immer der Bilanzwert daneben; bei Sortierung nach Nutzungsjahr
+  // sind alle Abschnitte durch dieselbe Jahreszahl geteilt, die Anteile bleiben also gleich.
+  const teiler = r => proJahr ? Math.max(nz(st.rows[r.m.id].jahre), 0.01) : 1;
+  const mc = Math.max(...rows.map(r => posten(r).summe / teiler(r)), .001);
   const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
   const seg = (v, ganz, cls) => v <= 0 ? "" :
     '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
   document.getElementById("bars").innerHTML = sorted.map(r => {
-    const p = posten(r), gC = Math.max(p.summe, .0001), gK = Math.max(r.matK + r.trK, .0001);
+    const p = posten(r), t = teiler(r);
+    const gC = Math.max(p.summe, .0001), gK = Math.max(r.matK + r.trK, .0001);
     const balken = (breite, inhalt, wert, einheit) =>
       '<div class="brow"><div class="bfill" style="width:' + breite.toFixed(2) + '%">' + inhalt +
       '</div><span class="blab"><b>' + wert + '</b> ' + einheit + '</span></div>';
     return '<div class="mrow"><div class="mname">' + r.m.n + '</div><div class="mbars">' +
-      balken(gC/mc*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
-             f1(r.co2), "kg CO₂") +
+      balken((p.summe/t)/mc*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
+             f1(proJahr ? r.proJahr : r.co2), proJahr ? "kg CO₂ je Jahr" : "kg CO₂") +
       balken(gK/mk*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
              f2(r.kost), "€") +
       '</div></div>';
@@ -733,7 +799,7 @@ function buildBars(rows){
 }
 
 function buildPrint(rows){
-  const sorted = rows.slice().sort((a,b) => st.sort === "co2" ? a.co2 - b.co2 : a.kost - b.kost);
+  const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
   const mc = Math.max(...rows.map(r => posten(r).summe), .001);
   const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
   const sg = (v, ganz, cls) => v <= 0 ? "" :
@@ -745,9 +811,10 @@ function buildPrint(rows){
     const gK = Math.max(r.matK + r.trK, .0001), q = st.rows[r.m.id];
     return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + r.m.n + '</td><td>' + f2(q.mm) +
       '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
-      f1(r.masse) + '</td><td>' + f1(r.co2) + '</td><td class="pb">' +
+      f0(q.jahre) + '</td><td>' + f1(r.brutto) + '</td><td>' + (r.gut === 0 ? "—" : f1(r.gut)) +
+      '</td><td class="bil">' + f1(r.co2) + '</td><td class="pb">' +
       bar(gC/mc*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
-      '</td><td>' + f2(r.kost) + '</td><td class="pb">' +
+      '</td><td>' + f1(r.proJahr) + '</td><td>' + f2(r.kost) + '</td><td class="pb">' +
       bar(gK/mk*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
   }).join("");
 
@@ -759,7 +826,8 @@ function buildPrint(rows){
     '<span><b>Projektfläche:</b> ' + f2(st.flaeche) + ' m²</span>' +
     '<span><b>Verschnitt:</b> ' + f0(st.verschnitt) + ' %</span>' +
     '<span><b>Transport:</b> ' + antrieb + '</span>' +
-    '<span><b>Sortierung:</b> ' + (st.sort === "co2" ? "nach CO₂" : "nach Preis") + '</span>';
+    '<span><b>Sortierung:</b> ' + (st.sort === "co2" ? "nach CO₂-Bilanz"
+      : st.sort === "jahr" ? "nach CO₂ je Nutzungsjahr" : "nach Preis") + '</span>';
   document.getElementById("pDatum").textContent =
     "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
 }
@@ -769,13 +837,15 @@ function render(){
   rows.forEach(r => {
     const tr = document.querySelector('tr[data-id="' + r.m.id + '"]'); if(!tr) return;
     const set = (s,t) => { tr.querySelector(s).textContent = t; };
-    set("[data-co2]", f1(r.co2));
+    set("[data-brutto]", f1(r.brutto));
+    set("[data-gut]", r.gut === 0 ? "—" : f1(r.gut));
+    set("[data-bilanz]", f1(r.co2));
+    set("[data-projahr]", f1(r.proJahr));
     set("[data-kost]", f2(r.kost));
     set("[data-masse]", f1(r.masse));
     set("[data-herst]", f1(r.herst));
     set("[data-trans]", f1(r.trans));
     set("[data-eol]", f1(r.eol));
-    set("[data-gut]", f1(r.gut));
     const pi = tr.querySelector("input[data-field=preis]");
     const own = st.rows[r.m.id].preis !== null;
     if(document.activeElement !== pi) pi.value = ns(own ? st.rows[r.m.id].preis : r.vorschlag, 2);
@@ -876,19 +946,22 @@ function bind(){
   bd.onclick = () => setAntrieb("diesel");
   be.onclick = () => setAntrieb("elektro");
 
-  const sc = document.getElementById("sCo2"), sp = document.getElementById("sPreis");
+  const sc = document.getElementById("sCo2"), sj = document.getElementById("sJahr"),
+        sp = document.getElementById("sPreis");
   const setSort = s => {
     st.sort = s;
     sc.setAttribute("aria-pressed", s === "co2");
+    sj.setAttribute("aria-pressed", s === "jahr");
     sp.setAttribute("aria-pressed", s === "preis");
     render(); save();
   };
   sc.onclick = () => setSort("co2");
+  sj.onclick = () => setSort("jahr");
   sp.onclick = () => setSort("preis");
 
   document.getElementById("bDetail").onclick = () => { st.detail = !st.detail; render(); save(); };
   document.getElementById("bResetIn").onclick = () => {
-    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0}; });
+    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1}; });
     document.querySelectorAll("#tbody input").forEach(el => {
       const f = el.dataset.field;
       if(f !== "preis") el.value = st.rows[el.dataset.id][f];

@@ -24,7 +24,7 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
 - **Diesel oder Elektro.** Bei Elektro ist der Strom-Emissionsfaktor frei einstellbar;
   voreingestellt sind 152 g CO₂/kWh, die österreichische Stromaufbringung.
 - **Sechs Eingaben je Material**: Stärke, Preis, Rezyklatanteil, Recyclingquote am Lebensende,
-  Transportweg, Anzahl der Nutzungen.
+  Transportweg, Anzahl Nutzungen. Jedes Feld hat einen erklärenden Tooltip.
 - **Preisvorschlag**, der sich aus Richtpreis je dm³ mal Materialstärke ergibt und daher
   automatisch mitwächst, wenn die Stärke geändert wird. Jederzeit überschreibbar.
 - **Alle Kennwerte korrigierbar**: Dichte, Treibhauspotenzial für Neuware und Rezyklat,
@@ -100,12 +100,23 @@ danebenstehenden Wert entspricht.
 - Diesel: 3,2 kg CO₂ je Liter, Well-to-Wheel — Verbrennung (2,64 kg) plus Förderung und Raffinerie
 - Preise: deutschsprachige Zuschnitt-Onlineshops, netto ohne Umsatzsteuer, Stand August 2026
 
-Strom- und Dieselfaktor liegen damit auf derselben Systemgrenze wie die Materialdaten (A1–A3, ab
-Rohstoffgewinnung). Ein Vergleich mit dem reinen Verbrennungswert des Diesels würde den
-Verbrenner systematisch besserstellen.
+Diesel- und Stromfaktor sind damit gleich abgegrenzt: beide enthalten die Energievorkette. Ein
+Vergleich mit dem reinen Verbrennungswert des Diesels würde den Verbrenner systematisch
+besserstellen. Bei den Materialdaten ist die Energievorkette ebenfalls enthalten — eine
+identische Systemgrenze wie bei einem Energieträger ist das aber nicht, A1–A3 umfasst die
+Herstellung eines Produkts, nicht die Bereitstellung eines Brennstoffs.
 
 Die Emissionsfaktoren sind europäische Mittelwerte mit einer typischen Streuung von ±30 %.
 Die Preise streuen je nach Menge und Lieferant deutlich stärker.
+
+**Nicht alle Werte sind gleich gut belegt.** Die Neuware-Faktoren (`p`) stammen aus den genannten
+Quellen. Die Rezyklat-Faktoren (`s`) sind bei mehreren Materialien Größenordnungs-Schätzungen; sie
+gehen über die Gutschrift direkt in die Bilanz ein und sind der unsicherste Teil der CO₂-Rechnung.
+Der Verbrennungsfaktor (`e`) ist rein stöchiometrisch aus dem fossilen Kohlenstoffanteil gerechnet,
+ohne Gutschrift für Energierückgewinnung — also bewusst konservativ. Bei Holz, Papier und Karton
+steht er auf 0, weil nur fossiles CO₂ bilanziert wird; die geringen Methan- und Lachgasmengen aus
+der Verbrennung sind nicht modelliert (bei Holz rund 0,06 kg CO₂e/kg und damit innerhalb der
+Unsicherheit des Herstellungswerts selbst).
 
 **Aktualitätshinweis:** PlasticsEurope hat die Eco-Profiles für Polyolefine und PVC im März 2026
 an neuere Öl- und Gas-Vorkettendaten angeglichen; für die Polymere gehen die Werte dadurch

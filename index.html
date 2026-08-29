@@ -322,7 +322,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </div>
     <div class="f fe hide">
       <label for="stromFaktor">Wie sauber ist dein Strom?</label>
-      <p class="hint">152 g ist der österreichische Strommix. Zertifizierter Ökostrom oder eigene PV liegen bei 30 bis 45 g.</p>
+      <p class="hint">152 g ist der österreichische Strommix. Einzelne Erzeugungsarten laut Umweltbundesamt: Wind 8 g, Wasserkraft 9 g, Biomasse 37 g, Photovoltaik 40 g.</p>
       <div class="row"><input type="number" id="stromFaktor" step="1" min="0" value="152"><span class="unit">g CO₂/kWh</span></div>
     </div>
   </div>
@@ -362,7 +362,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
         <th>Rezyklat<br>%</th>
         <th>Recycling<br>%</th>
         <th>Weg<br>km</th>
-        <th>Nutzun-<br>gen</th>
+        <th>Anzahl<br>Nutzungen</th>
         <th class="on">CO₂ vor<br>Gutschrift</th>
         <th class="on">Recycling-<br>Gutschrift</th>
         <th class="on b">CO₂-Bilanz<br>kg</th>
@@ -454,7 +454,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <div class="gitem">
       <dt>Warum Holz beim Lebensende auf null steht</dt>
       <dd>Der Kohlenstoff im Holz stammt aus der Luft — der Baum hat ihn beim Wachsen aufgenommen. Verbrennt
-      man das Holz, geht er dorthin zurück. In der Standardbilanzierung gilt das als klimaneutral — vorausgesetzt,
+      man das Holz, geht er dorthin zurück. Bilanziert wird deshalb <strong>nur fossiles CO₂</strong>; die geringen Methan- und Lachgasmengen, die bei der Verbrennung trotzdem entstehen, sind hier nicht modelliert — sie lägen bei Holz in der Größenordnung von 0,06 kg CO₂e je kg und damit innerhalb der Unsicherheit des Herstellungswerts selbst. In der Standardbilanzierung gilt biogener Kohlenstoff als klimaneutral — vorausgesetzt,
       es wächst nach, was geerntet wird; in Österreich schreibt das Forstgesetz die Wiederbewaldung verpflichtend
       vor. Bei Erdöl-
       Kunststoffen ist es anders: dort kommt der Kohlenstoff aus dem Boden und bleibt in der Luft.</dd>
@@ -529,12 +529,17 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <p>Kunststoffe aus den <a href="https://plasticseurope.org/wp-content/uploads/2021/12/PlasticsEurope-Ecoprofiles-program-and-methodology_V3.0.pdf">PlasticsEurope Eco-Profiles</a>, dem europäischen Branchendurchschnitt. PVC zusätzlich aus der <a href="https://www.americanchemistry.com/content/download/10045/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polyvinyl-PVC-Resin.pdf">Cradle-to-Gate-Studie des American Chemistry Council</a>.</p>
       <p>Metalle, Glas und Holzwerkstoffe aus <a href="https://www.oekobaudat.de/">ÖKOBAUDAT</a> und <a href="https://www.ibo.at/fileadmin/ibo/materialoekologie/OI-Berechnungsleitfaden_V5_Sept2023.pdf">baubook / IBO</a>.</p>
       <p>Europäische Mittelwerte, typische Streuung <strong>±30 %</strong>.</p>
+      <p><strong>Nicht alle Werte sind gleich gut belegt.</strong> Die Neuware-Faktoren stammen aus den
+      genannten Quellen. Die Rezyklat-Faktoren sind bei mehreren Materialien Größenordnungs-Schätzungen —
+      sie gehen über die Gutschrift direkt in die Bilanz ein und sind der unsicherste Teil der CO₂-Rechnung.
+      Der Verbrennungsfaktor ist rein stöchiometrisch aus dem fossilen Kohlenstoffanteil gerechnet, ohne
+      Gutschrift für Energierückgewinnung, also bewusst konservativ.</p>
     </div>
     <div class="src">
       <h3>Strom und Diesel</h3>
       <p>152 g CO₂/kWh ist die Stromaufbringung Österreich laut <a href="https://www.umweltbundesamt.at/fileadmin/site/publikationen/rep0989.pdf">Umweltbundesamt Österreich</a> — 123 g direkt plus 29 g vorgelagert, Bezugsjahr 2023, inklusive Importanteil.</p>
       <p>Diesel mit 3,2 kg CO₂ je Liter. Darin steckt nicht nur die Verbrennung (2,64 kg), sondern auch Förderung und Raffinerie.</p>
-      <p><strong>Beide Werte liegen damit auf derselben Systemgrenze:</strong> der Stromfaktor enthält die Vorkette (29 g) ebenso wie der Dieselfaktor — und wie die Materialdaten, die von der Rohstoffgewinnung an rechnen. Ein Vergleich mit dem reinen Verbrennungswert würde den Diesel systematisch besserstellen.</p>
+      <p><strong>Diesel und Strom sind damit gleich abgegrenzt:</strong> beide Faktoren enthalten die Energievorkette, beim Strom die 29 g, beim Diesel Förderung und Raffinerie. Ein Vergleich mit dem reinen Verbrennungswert würde den Diesel systematisch besserstellen. Bei den Materialdaten ist die Energievorkette ebenfalls enthalten — eine identische Systemgrenze wie bei einem Energieträger ist das aber nicht, A1–A3 umfasst die Herstellung eines Produkts, nicht die Bereitstellung eines Brennstoffs.</p>
       <p>Der Startwert 25 kWh/100 km orientiert sich am Praxisverbrauch; ein eSprinter kam im TÜV-begleiteten Test auf 21,9 kWh.</p>
     </div>
     <div class="src">
@@ -544,7 +549,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </div>
     <div class="src">
       <h3>Nicht enthalten</h3>
-      <p>Bedruckung, Kaschierung, Beschläge, Montage, Reinigung, Nutzungsdauer.</p>
+      <p>Bedruckung, Kaschierung, Beschläge, Montage, Reinigung.</p>
+      <p>Die Nutzungsdauer wird <strong>nicht angenommen</strong>, sondern über die Spalte <em>Anzahl Nutzungen</em> eingegeben. Ohne Eintrag rechnet die Seite mit einer Nutzung je Stück.</p>
       <p>Der Transport gilt je Material als volle Fahrt über die eingetragene Strecke, unabhängig vom Gewicht. Wer eine Sammelfahrt auf mehrere Positionen aufteilt, trägt entsprechend weniger Kilometer ein.</p>
       <p><strong>Aktualität:</strong> PlasticsEurope hat die Eco-Profiles für Polyolefine und PVC im März 2026 überarbeitet und an neuere Öl- und Gas-Vorkettendaten angeglichen; für die Polymere gehen die Werte dadurch tendenziell nach oben. Das aktuelle PVC-Profil weist 2,08 kg CO₂e/kg Harz aus — mit dem Verarbeitungsaufschlag deckt sich das mit den hier hinterlegten 2,80 für die Hartplatte. Die Polyolefin-Werte sind noch gegen die neuen Datensätze abzugleichen.</p>
     </div>
@@ -600,7 +606,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </colgroup>
     <thead><tr>
       <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
-      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb"></th>
+      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb" id="pBarKopf"></th>
       <th>CO₂ je<br>Nutzung</th><th>Kosten €</th><th class="pb"></th>
     </tr></thead>
     <tbody id="pBody"></tbody>
@@ -613,8 +619,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-foot">
     <div><b>Datengrundlage:</b> PlasticsEurope Eco-Profiles, ÖKOBAUDAT, baubook/IBO, American Chemistry
     Council (Treibhauspotenzial, Module A1–A3) · Umweltbundesamt Österreich (Strom, 152 g CO₂/kWh) ·
-    Diesel 3,2 kg CO₂/l (Well-to-Wheel, inkl. Förderung und Raffinerie – gleiche Systemgrenze wie Strom und
-    Materialdaten) · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
+    Diesel 3,2 kg CO₂/l (Well-to-Wheel, inkl. Förderung und Raffinerie – gleich abgegrenzt wie der Stromfaktor;
+    bei den Materialdaten ist die Energievorkette ebenfalls enthalten) · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
     Mittelwerte mit typisch ±30 % Streuung. Gutschrift = vereinfachter Ansatz in Anlehnung an Modul D nach
     EN 15804. Nicht stofflich recycelter Anteil wird als Verbrennung gerechnet. Transport je Material als
     eigene Fahrt. Nicht enthalten: Bedruckung, Montage. Keine vollständige Ökobilanz.</div>
@@ -647,8 +653,8 @@ const BASE = [
   {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:90}
 ];
 const KEYS = ["d","p","s","e","pr"];
-// Well-to-Wheel: Verbrennung (2,64) plus Förderung und Raffinerie. Gleiche Systemgrenze wie
-// beim Strom, der die Vorkette ebenfalls enthält, und wie bei den Materialdaten (A1–A3).
+// Well-to-Wheel: Verbrennung (2,64) plus Förderung und Raffinerie – gleich abgegrenzt wie der
+// Stromfaktor, der seine Vorkette ebenfalls enthält.
 const DIESEL = 3.2;
 const KM0 = 10;
 const STORE = "werkstoffbilanz.v2";
@@ -754,6 +760,19 @@ function buildTable(){
     else if(isFinite(v)) st.rows[id][field] = v;
     render(); save();
   });
+  const tipps = {
+    rez: "Wie viel Recyclingmaterial im gekauften Produkt steckt. Senkt den Herstellungswert. "
+       + "Eine Gutschrift entsteht nur, soweit am Lebensende MEHR Sekundärmaterial anfällt, als hier "
+       + "schon eingekauft wurde — sonst würde derselbe Kreislauf zweimal zählen.",
+    quote: "Wie viel nach dem Gebrauch stofflich weiterverwendet wird — nicht die abfallrechtliche "
+       + "„Verwertung“, die auch das Verbrennen einschließt. Der Rest wird vereinfachend als verbrannt "
+       + "gerechnet. Liegt dieser Wert unter dem Rezyklatanteil, gibt es keine Gutschrift.",
+    jahre: "Wie oft EIN Stück seinen Zweck erfüllt: Standjahre bei fester Beschilderung, Einsätze bei "
+       + "Film und Bühne. Kleinster Wert ist 1 — ein Stück kann nicht weniger als einmal genutzt werden."
+  };
+  Object.keys(tipps).forEach(f => {
+    tb.querySelectorAll('input[data-field=' + f + ']').forEach(el => { el.title = tipps[f]; });
+  });
 }
 function buildBase(){
   const tb = document.getElementById("tbodyBase");
@@ -817,20 +836,26 @@ function buildBars(rows){
 
 function buildPrint(rows){
   const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
-  const mc = Math.max(...rows.map(r => posten(r).summe), .001);
+  // Der CO₂-Balken muss dieselbe Größe zeigen, nach der sortiert wird — sonst steht im Druck
+  // eine nach Nutzung sortierte Liste neben Balken, die die ungeteilte Bilanz abbilden.
+  const proNutz = st.sort === "jahr";
+  const teiler = r => proNutz ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
+  const mc = Math.max(...rows.map(r => posten(r).summe / teiler(r)), .001);
   const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
+  const kopf = document.getElementById("pBarKopf");
+  if(kopf) kopf.textContent = proNutz ? "CO₂ je Nutzung" : "CO₂-Bilanz";
   const sg = (v, ganz, cls) => v <= 0 ? "" :
     '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
   const bar = (breite, inhalt) => '<span class="pwrap"><span class="pbar" style="width:' +
     breite.toFixed(1) + '%">' + inhalt + '</span></span>';
   document.getElementById("pBody").innerHTML = sorted.map((r,i) => {
-    const p = posten(r), gC = Math.max(p.summe, .0001);
+    const p = posten(r), gC = Math.max(p.summe, .0001), t = teiler(r);
     const gK = Math.max(r.matK + r.trK, .0001), q = st.rows[r.m.id];
     return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + r.m.n + '</td><td>' + f2(q.mm) +
       '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
       f0(q.jahre) + '</td><td>' + f1(r.brutto) + '</td><td>' + (r.gut === 0 ? "—" : f1(r.gut)) +
       '</td><td class="bil">' + f1(r.co2) + '</td><td class="pb">' +
-      bar(gC/mc*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
+      bar((p.summe/t)/mc*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
       '</td><td>' + f1(r.proJahr) + '</td><td>' + f2(r.kost) + '</td><td class="pb">' +
       bar(gK/mk*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
   }).join("");

@@ -178,7 +178,7 @@ tbody td.sk{font-weight:700}
 .hide{display:none !important}
 
 /* ---- Diagramm: je Material zwei Balken untereinander ---- */
-.mrow{display:grid; grid-template-columns:168px 1fr; gap:18px; align-items:center;
+.mrow{display:grid; grid-template-columns:196px 1fr; gap:18px; align-items:center;
   padding:12px 0; border-bottom:1px solid var(--rule-thin)}
 .mrow:first-child{border-top:2px solid var(--rule)}
 .mrow:last-child{border-bottom:2px solid var(--rule)}
@@ -405,6 +405,7 @@ footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
     <button class="btn" type="button" id="bDetail">Einzelposten zeigen</button>
     <button class="btn" type="button" id="bResetIn">Eingaben zurücksetzen</button>
     <button class="btn" type="button" id="bPrint">Ergebnis als PDF</button>
+    <span class="hinweis">Die Startwerte sind Vorschläge und können jederzeit angepasst werden.</span>
     <span class="hinweis" id="druckHinweis"></span>
     <span class="hinweis" id="sortHinweis"></span>
   </div>
@@ -442,11 +443,10 @@ footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
 
 <section>
   <h2 class="shead">Rangfolge</h2>
-  <p class="snote">Jedes Material bekommt zwei Balken untereinander. Der obere ist das CO₂ und zeigt in
-  seinen Abschnitten, woher es kommt — Herstellung, Transport, Lebensende. Der untere ist der Preis,
-  unterteilt in Material und Transport. Die Balkenlänge entspricht immer der Zahl daneben. CO₂ und Preis
-  haben jeweils einen eigenen Maßstab: vergleichbar sind die oberen Balken untereinander und die unteren
-  untereinander, nicht ein oberer mit einem unteren.</p>
+  <p class="snote">Das günstigste Material steht oben, sortiert nach dem gewählten Maßstab. Der obere
+  Balken zeigt in seinen Abschnitten, woher das CO₂ kommt — Herstellung, Transport, Lebensende; der untere
+  den Preis aus Material und Transport. Beide haben einen eigenen Maßstab: vergleichbar sind die oberen
+  Balken untereinander und die unteren untereinander, nicht ein oberer mit einem unteren.</p>
   <div class="btnrow">
     <div class="toggle" role="group" aria-label="Sortierung">
       <button type="button" id="sCo2" aria-pressed="false">nach CO₂</button>
@@ -454,6 +454,9 @@ footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
       <button type="button" id="sPreis" aria-pressed="false">nach Preis</button>
       <button type="button" id="sPreisn" aria-pressed="false">Preis je Nutzung</button>
     </div>
+    <button class="btn" type="button" id="bPrint2">Ergebnis als PDF</button>
+    <span class="hinweis" id="sortHinweis2"></span>
+    <span class="hinweis" id="druckHinweis2"></span>
   </div>
   <div id="bars"></div>
   <div class="legend">
@@ -710,7 +713,7 @@ footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
     <div class="src">
       <h3>Medieninhaber und Verantwortlicher</h3>
       <p><strong>Daniel Steinbach</strong><br>
-      <span class="tbd">[Wohnort ergänzen]</span>, Österreich<br>
+      A-2391 Kaltenleutgeben, Österreich<br>
       <a href="mailto:danielsteinbach@gmx.net">danielsteinbach@gmx.net</a><br>
       <a href="tel:+436644217082">+43 664 421 70 82</a></p>
       <p><strong>Gegenstand der Website:</strong> Kostenloser Vergleichsrechner für den CO₂-Fußabdruck und
@@ -802,7 +805,7 @@ footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
     Streuung typisch ±30 %. Gutschrift in Anlehnung an Modul D nach EN 15804; nicht stofflich verwerteter
     Anteil gilt als verbrannt. Transport je Material als eigene Fahrt. Ohne Bedruckung und Montage,
     keine vollständige Ökobilanz.</div>
-    <div><b>Haftungsausschluss und Offenlegung:</b> Medieninhaber Daniel Steinbach, Österreich · danielsteinbach@gmx.net · private, unentgeltliche Initiative ohne Erwerbsabsicht. Für Richtigkeit, Vollständigkeit und Aktualität wird keine
+    <div><b>Haftungsausschluss und Offenlegung:</b> Medieninhaber Daniel Steinbach, A-2391 Kaltenleutgeben · danielsteinbach@gmx.net · private, unentgeltliche Initiative ohne Erwerbsabsicht. Für Richtigkeit, Vollständigkeit und Aktualität wird keine
     Gewährleistung und keine Garantie übernommen. Nutzung auf eigene Verantwortung; eine Haftung für
     Entscheidungen auf Grundlage dieser Ergebnisse ist ausgeschlossen.</div>
   </div>
@@ -907,7 +910,6 @@ function load(){
       t.aus = !!r.aus;
       t.preis = isFinite(r.preis) ? r.preis : null;
     });
-    if(datenAlt && o.rows) st.datenHinweis = true;
     if(o.base) BASE.forEach(m => {
       const b = o.base[m.id]; if(!b) return; const keep = {};
       KEYS.forEach(k => { if(isFinite(b[k])) keep[k] = b[k]; });
@@ -1171,8 +1173,8 @@ function render(){
   document.getElementById("bDetail").textContent = st.detail ? "Einzelposten ausblenden" : "Einzelposten zeigen";
   const modus = {co2:"CO₂-Bilanz gesamt", co2n:"CO₂ je Nutzung",
                  preis:"Kosten gesamt", preisn:"Kosten je Nutzung"}[st.sort];
-  const sh = document.getElementById("sortHinweis");
-  if(sh) sh.innerHTML = "Das PDF übernimmt die Sortierung der Rangfolge: <b>" + modus + "</b>";
+  document.querySelectorAll("#sortHinweis, #sortHinweis2").forEach(sh => {
+    sh.innerHTML = "Das PDF übernimmt die Sortierung der Rangfolge: <b>" + modus + "</b>"; });
   buildBars(rows);
   buildPrint(rows);
   // Erst nach buildPrint: die Funktion schreibt den Tabellenkoerper neu und wuerde
@@ -1187,7 +1189,9 @@ function render(){
    bekommt man einen Hinweis statt eines Knopfes, der scheinbar nichts tut.    */
 const imRahmen = (() => { try{ return window.self !== window.top; }catch(err){ return true; } })();
 
-function sagen(html){ document.getElementById("druckHinweis").innerHTML = html; }
+function sagen(html){
+  document.querySelectorAll("#druckHinweis, #druckHinweis2").forEach(e => { e.innerHTML = html; });
+}
 
 function druckDokument(){
   const css = Array.prototype.map.call(document.querySelectorAll("style"), s => s.textContent).join("\n");
@@ -1293,6 +1297,7 @@ function bind(){
   };
   document.getElementById("bResetBase").onclick = () => { st.base = {}; render(); save(); };
   document.getElementById("bPrint").onclick = drucken;
+  document.getElementById("bPrint2").onclick = drucken;
 
   setAntrieb(st.antrieb);
   setSort(st.sort);
@@ -1303,12 +1308,6 @@ buildTable();
 buildBase();
 bind();
 render();
-// Nur wenn beim Laden tatsaechlich Werte ersetzt wurden — sonst bliebe unklar, warum sich
-// Recyclingquoten gegenueber dem letzten Besuch geaendert haben.
-if(st.datenHinweis){
-  sagen('Die Startwerte für Rezyklatanteil und Recyclingquote wurden überarbeitet und dabei neu gesetzt. ' +
-        'Fläche, Stärken, Transportwege und eigene Kennwerte sind unverändert.');
-}
 </script>
 </body>
 </html>

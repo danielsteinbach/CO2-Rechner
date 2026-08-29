@@ -1,6 +1,6 @@
 # Werkstoffbilanz
 
-Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 20 Plattenwerkstoffe
+Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 24 Plattenwerkstoffe
 nebeneinander und zeigt für ein konkretes Projekt zwei Zahlen je Material: **Kilogramm CO₂**
 und **Euro**.
 
@@ -68,7 +68,12 @@ Alle Materialdaten stehen im `<script>`-Block ganz unten in der Konstante `BASE`
 | `rz` | optional: voreingestellter Rezyklatanteil in Prozent, fehlt er, gilt 0 |
 
 Ein neues Material ist eine weitere Zeile in dieser Liste — sonst ist nichts anzupassen,
-Tabelle, Diagramm und PDF wachsen automatisch mit.
+Tabelle, Diagramm und PDF wachsen automatisch mit. Für das PDF gilt allerdings eine Grenze: Die
+Drucktabelle erzwingt Einzeiler (`white-space:nowrap` plus `overflow:hidden` bei `table-layout:fixed`),
+damit alles auf eine Seite passt. Ein zu langer Materialname wird dadurch mit Auslassungspunkten
+abgeschnitten statt umgebrochen — bei 24 Zeilen liegt die Grenze bei rund 22 Zeichen. Wer weitere
+Materialien ergänzt, sollte danach `td:first-child` in der Druckansicht auf `scrollWidth > clientWidth`
+prüfen und notfalls die Schriftgröße in `table.p-tbl` senken.
 
 ### Warum `rz` nur beim Karton gesetzt ist
 
@@ -163,6 +168,23 @@ bei denen der fossile Anteil getrennt ausgewiesen ist: Spanplatte 171,2 kg CO₂
 Minuswerte — die sind bewusst nicht verwendet. Die Spanne ist beträchtlich: zwei Hersteller-EPDs für
 Spanplatte (Egger 0,224, Pfleiderer ≈0,196) liegen 20–25 % unter dem Branchenschnitt, baubook nennt für
 MDF mit 0,641 kg/kg rund 46 % mehr als ÖKOBAUDAT.
+
+**Sperrholz** stammt aus dem ÖKOBAUDAT-Datensatz Furniersperrholz (362 kg CO₂e/m³ bei 700 kg/m³ →
+0,52 kg/kg); die Deklaration von Latvijas Finieris für rohes Birkensperrholz liegt mit 310 kg/m³ darunter.
+Sperrholz wird aus geschältem Rundholz gefertigt, `rz` bleibt also auf 0.
+
+**Wabenkarton** ist der einzige Werkstoff **ohne eigenes Umweltdatenblatt**. Der Rezyklatfaktor 0,55 ist
+zwischen zwei Quellen eingeordnet: FEFCO nennt für Wellpappe 0,35 kg CO₂e/kg (reine Altfaser, weitgehend
+biogene Energie), für grafischen Karton gelten 0,80. Auch die Dichte streut stark — 125 kg/m³ bei leichter
+Ware, 215 bei beschichteten Displayplatten; hinterlegt sind 150. Beides ist eine begründete Einordnung,
+keine Messung: der schwächste Datenpunkt der Seite.
+
+**XPS und EPS.** EPS aus der IVH-Branchendeklaration 2022 (3,12 kg/kg bei 15 kg/m³). Beim XPS
+widersprechen sich die Quellen deutlich — 2,74 kg/kg bei Austrotherm und der Fachvereinigung, 4,08 bei
+swisspor; hinterlegt ist mit 3,40 die Mitte, ausdrücklich nicht als belastbarer Mittelwert, sondern als
+Startwert innerhalb einer bekannten Spanne. Treibmittel ist heute CO₂ mit halogenfreien Zusätzen (bauXund
+2024: nur noch 4 von 39 gelisteten Produkten HFKW-haltig); dessen Klimawirkung entsteht ohnehin
+überwiegend durch Ausgasen in der Nutzung, also außerhalb von A1–A3.
 
 **Karton** ist in zwei Zeilen aufgeteilt, weil sich die Sorten in zwei Kennwerten unterscheiden:
 Recyclingkarton ist dichter (GD2: 400 g/m² bei 545 µm → 0,73 kg/dm³), Frischfaserkarton

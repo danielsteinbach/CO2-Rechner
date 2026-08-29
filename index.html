@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 20 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
+<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 24 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
 <meta name="author" content="Daniel Steinbach">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F6F4E7'/%3E%3Crect x='6' y='18' width='52' height='28' fill='none' stroke='%23000' stroke-width='4'/%3E%3Ctext x='32' y='39' font-family='Helvetica,Arial' font-size='17' font-weight='bold' text-anchor='middle' fill='%23000'%3ECO2%3C/text%3E%3C/svg%3E">
@@ -263,13 +263,17 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   /* Ohne diese Zeile erbt die Drucktabelle das nowrap der Bildschirmtabelle. Bei fester
      Spaltenbreite laeuft zu breiter Inhalt dann ueber den Seitenrand hinaus – Firefox
      schneidet dadurch rechts ab. */
-  table.p-tbl th,table.p-tbl td{white-space:normal; overflow-wrap:anywhere}
+  /* Kopfzeilen duerfen umbrechen, Datenzeilen nicht: 24 Materialien passen nur dann auf eine Seite,
+     wenn jede Zeile genau eine Zeile hoch ist. table-layout:fixed plus overflow:hidden sorgt dafuer,
+     dass ein zu langer Name abgeschnitten statt ueber den Seitenrand geschoben wird. */
+  table.p-tbl th{white-space:normal; overflow-wrap:anywhere}
+  table.p-tbl td{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
   table.p-tbl th{font-size:6.7pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
     border-bottom:1pt solid #000; padding:2pt 2.5pt; text-align:right; color:#000; font-weight:600;
     vertical-align:bottom}
   table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left}
   /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
-  table.p-tbl td{padding:1.2pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+  table.p-tbl td{padding:0.7pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
   table.p-tbl tr{height:auto}
   table.p-tbl th.sk::after{content:" \25B2"; font-size:.85em}
@@ -503,6 +507,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       Industrierestholz, weil sich Altholzfasern bisher nicht zu neuen Faserplatten verarbeiten lassen. Bei
       ihnen ist die 0 also keine Behelfslösung, sondern die Wirklichkeit — und genau darum liegt Spanplatte im
       Herstellungswert so deutlich unter MDF.</p>
+      <p>Beim <strong>Wabenkarton</strong> ist der Anteil wie beim Karton vorbelegt: Die Wabe besteht aus
+      Testliner und Schrenzpapier, also praktisch vollständig aus Altpapier. <strong>Sperrholz</strong> steht
+      dagegen auf 0 — es wird aus geschältem Rundholz gefertigt, Altholz kommt darin nicht vor.</p>
       <p>Bei <strong>Aluminium und den Kunststoffen</strong> gibt es schlicht keinen belastbaren Durchschnitt:
       der Umweltbericht des europäischen Aluminiumverbands nennt für Walzprodukte bewusst keinen
       Rezyklatanteil, weil er von Werk zu Werk und Charge zu Charge zwischen praktisch 0 und über 75 % liegt.
@@ -628,6 +635,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <p>Metalle, Glas und Holzwerkstoffe aus <a href="https://www.oekobaudat.de/">ÖKOBAUDAT</a> und <a href="https://www.ibo.at/fileadmin/ibo/materialoekologie/OI-Berechnungsleitfaden_V5_Sept2023.pdf">baubook / IBO</a>. Aluminium abgeglichen mit dem <a href="https://european-aluminium.eu/wp-content/uploads/2025/07/Environmental-Profile-Report_2024-V20.pdf">Environmental Profile Report</a> von European Aluminium: 10,1 kg für in Europa verwendetes Primärmetall plus 0,41 kg fürs Walzen.</p>
       <p><strong>Karton</strong> aus dem <a href="https://www.procarton.com/wp-content/uploads/2023/03/The-Carbon-Footprint-of-Carton-Packaging-2023_FINAL.pdf">Carbon Footprint of Carton Packaging</a> von Pro Carton (929 kg je Tonne im europäischen Mittel) und der <a href="https://www.papiernetz.de/wp-content/uploads/ifeu-studie_langfassung.pdf">IFEU-Studie zu Büropapieren</a>, die Frischfaser mit 1.116 kg und Recyclingfaser mit 933 kg je Tonne ausweist. Die Dichten stammen aus Lieferantendaten: Chromoduplex GD2 wiegt 400 g/m² bei 545 µm, Chromokarton GC1 dieselben 400 g/m² bei 605 µm — Frischfaserkarton ist voluminöser, also je Millimeter leichter. Wie bei Papier und Holz wird nur fossiles CO₂ gezählt; der biogene Kohlenstoff geht mit null ein.</p>
       <p><strong>Holzwerkstoffe</strong> aus den generischen ÖKOBAUDAT-Datensätzen „Durchschnitt DE“ nach EN 15804+A2, bei denen der fossile Anteil getrennt ausgewiesen ist: Spanplatte 171 kg CO₂e/m³ bei 633 kg/m³ (Marktmix mit 20 % Altholz, hier auf Frischholz zurückgerechnet), MDF 323 bei 738, HDF 346 bei 850, Nadelschnittholz 57 bei 485. Ältere Datensätze rechnen die biogene CO₂-Aufnahme negativ in die Herstellung ein und ergeben in Summe Minuswerte — die sind hier bewusst nicht verwendet. Zwei Hersteller-Deklarationen für Spanplatte (Egger, Pfleiderer) liegen 20 bis 25 % unter dem Branchenschnitt, baubook nennt für MDF 46 % mehr als ÖKOBAUDAT: die Spanne ist real, kein Rechenfehler.</p>
+      <p><strong>Sperrholz</strong> aus dem ÖKOBAUDAT-Datensatz Furniersperrholz (362 kg CO₂e/m³ bei 700 kg/m³); die produktspezifische Deklaration von Latvijas Finieris für rohes Birkensperrholz liegt mit 310 kg/m³ etwas darunter. Sperrholz wird aus geschältem Rundholz gefertigt, nicht aus Altholz — der Rezyklatanteil ist deshalb 0.</p>
+      <p><strong>Wabenkarton</strong> hat als einziger Werkstoff hier <strong>kein eigenes Umweltdatenblatt</strong>. Der Wert ist zwischen zwei Quellen eingeordnet: Die <a href="https://www.fefco.org/sites/default/files/documents/2022/FEFCO_LCA_2022.pdf">FEFCO-Datenbank für Wellpappe</a> nennt 0,35 kg CO₂e/kg — Wellpappenwerke arbeiten mit reiner Altfaser und weitgehend biogener Energie —, für grafischen Karton gelten die 0,86 von oben. Die Wabe besteht zu 80 bis 100 % aus Testliner und Schrenzpapier, also Altpapier. Auch die Dichte streut stark: von 125 kg/m³ bei leichter Ware bis 215 bei beschichteten Displayplatten; hinterlegt sind 150.</p>
+      <p><strong>XPS und EPS.</strong> Für EPS ist die Branchendeklaration des IVH von 2022 hinterlegt (3,12 kg CO₂e/kg bei 15 kg/m³). Beim XPS widersprechen sich die Quellen deutlich: 2,74 kg/kg bei Austrotherm und der Fachvereinigung, 4,08 bei swisspor — hinterlegt ist die Mitte. Treibmittel ist in Europa heute CO₂ mit halogenfreien Zusätzen; nach einer <a href="https://bauxund.at/wp-content/uploads/2024/12/bauXund_BunteListe_HFKW-haltiger_und-freier_XPS-Platten_Dezember2024.pdf">Marktübersicht von bauXund</a> enthalten nur noch 4 von 39 gelisteten Produkten HFKW. Deren Klimawirkung entsteht ohnehin überwiegend erst durch Ausgasen während der Nutzung, also außerhalb von A1–A3.</p>
       <p>Europäische Mittelwerte, typische Streuung <strong>±30 %</strong>.</p>
       <p><strong>Nicht alle Werte sind gleich gut belegt.</strong> Die Neuware-Faktoren stammen aus den
       genannten Quellen. Die Rezyklat-Faktoren sind bei mehreren Materialien Größenordnungs-Schätzungen —
@@ -713,10 +723,10 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-set" id="pSet"></div>
   <table class="p-tbl" id="pTbl">
     <colgroup>
-      <col style="width:14.5%"><col style="width:5.5%"><col style="width:4.5%"><col style="width:5%">
+      <col style="width:16.5%"><col style="width:5.5%"><col style="width:4.5%"><col style="width:5%">
       <col style="width:3.5%"><col style="width:4.5%"><col style="width:6.5%"><col style="width:6.5%">
-      <col style="width:6%"><col style="width:6%"><col style="width:11%"><col style="width:6.5%">
-      <col style="width:6.5%"><col style="width:13.5%">
+      <col style="width:6%"><col style="width:6%"><col style="width:10%"><col style="width:6.5%">
+      <col style="width:6.5%"><col style="width:12.5%">
     </colgroup>
     <thead><tr>
       <th>Material</th><th>Stärke<br>mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
@@ -754,6 +764,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 const BASE = [
   {id:"acryl", n:"Acrylglas (PMMA)",        d:1.19, p:7.00,  s:2.50, e:2.20, mm:4.00,  pr:8.50,  q:10},
   {id:"alu",   n:"Aluminiumblech",          d:2.70, p:10.70, s:0.90, e:0.00, mm:2.00,  pr:23.00, q:80},
+  {id:"eps",   n:"EPS-Hartschaum",          d:0.018,p:3.12,  s:1.40, e:3.38, mm:30.00, pr:0.12,  q:10},
   {id:"glas",  n:"Glas (Floatglas)",        d:2.50, p:1.30,  s:1.00, e:0.00, mm:4.00,  pr:5.50,  q:10},
   {id:"hdf",   n:"HDF-Platte",              d:0.85, p:0.41,  s:0.24, e:0.00, mm:6.00,  pr:1.60,  q:50},
   {id:"holz",  n:"Holz (Nadelholz massiv)", d:0.48, p:0.12,  s:0.04, e:0.00, mm:16.00, pr:1.40,  q:65},
@@ -763,7 +774,7 @@ const BASE = [
   {id:"kartP", n:"Karton Primärfaser (GC)", d:0.63, p:1.10, s:0.80, e:0.00, mm:3.00, pr:2.00, q:80, rz:0},
   {id:"kartR", n:"Karton Recycling (GD)",   d:0.75, p:1.10, s:0.80, e:0.00, mm:3.00, pr:1.50, q:80, rz:80},
   {id:"mdf",   n:"MDF-Platte",              d:0.74, p:0.44,  s:0.25, e:0.00, mm:16.00, pr:1.10,  q:50},
-  {id:"pap",   n:"Papier (Blueback 120 g)", d:0.96, p:1.40,  s:1.00, e:0.00, mm:0.125, pr:6.00,  q:80},
+  {id:"pap",   n:"Papier Blueback 120 g" , d:0.96, p:1.40,  s:1.00, e:0.00, mm:0.125, pr:6.00,  q:80},
   {id:"pehd",  n:"PE-HD",                   d:0.96, p:2.00,  s:0.60, e:3.14, mm:3.00,  pr:7.00,  q:15},
   {id:"peld",  n:"PE-LD",                   d:0.92, p:2.10,  s:0.60, e:3.14, mm:3.00,  pr:6.50,  q:10},
   {id:"pet",   n:"PET",                     d:1.34, p:3.00,  s:1.20, e:2.29, mm:2.00,  pr:9.50,  q:20},
@@ -777,7 +788,13 @@ const BASE = [
   // Marktmix mit 20 % Altholz. 0,30 mal 80 % plus 0,15 mal 20 % ergibt wieder exakt 0,27 —
   // die Anzeige aendert sich also nicht, aber die Gutschrift wird nicht mehr doppelt gezaehlt.
   {id:"span",  n:"Spanplatten",             d:0.63, p:0.30,  s:0.15, e:0.00, mm:16.00, pr:0.70,  q:65, rz:20},
-  {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:85}
+  {id:"sperr", n:"Sperrholz (Birke)",       d:0.70, p:0.52,  s:0.30, e:0.00, mm:12.00, pr:2.30,  q:50},
+  {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:85},
+  // Kein eigenes Umweltdatenblatt fuer Wabenkarton auffindbar. Der Rezyklatfaktor 0,55 liegt
+  // zwischen dem Wellpappenwert von FEFCO (0,35) und dem Kartonwert (0,80) — Wellpappenwerke
+  // arbeiten mit reiner Altfaser und weitgehend biogener Energie.
+  {id:"wabe",  n:"Wabenkarton",             d:0.15, p:1.10,  s:0.55, e:0.00, mm:10.00, pr:3.60,  q:80, rz:80},
+  {id:"xps",   n:"XPS-Hartschaum",          d:0.034,p:3.40,  s:1.50, e:3.38, mm:30.00, pr:0.17,  q:10}
 ];
 const KEYS = ["d","p","s","e","pr"];
 // Well-to-Wheel: Verbrennung (2,64) plus Förderung und Raffinerie – gleich abgegrenzt wie der
@@ -791,7 +808,7 @@ const st = {
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
   // datenV zaehlt hoch, sobald sich die hinterlegten Startwerte inhaltlich aendern. Nur dann werden
   // gespeicherte Quoten ueberschrieben — siehe load().
-  detail:false, sort:"co2n", nutzSort:true, datenV:4, rows:{}, base:{}
+  detail:false, sort:"co2n", nutzSort:true, datenV:5, rows:{}, base:{}
 };
 BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:(m.rz || 0), quote:m.q, km:KM0, jahre:1, aus:false}; });
 

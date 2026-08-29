@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 19 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
+<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 20 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
 <meta name="author" content="Daniel Steinbach">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F6F4E7'/%3E%3Crect x='6' y='18' width='52' height='28' fill='none' stroke='%23000' stroke-width='4'/%3E%3Ctext x='32' y='39' font-family='Helvetica,Arial' font-size='17' font-weight='bold' text-anchor='middle' fill='%23000'%3ECO2%3C/text%3E%3C/svg%3E">
@@ -242,7 +242,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
      Angabe – auf Mobilgeraeten kommt das vor – faellt die Ausgabe auf Hochformat zurueck und
      bleibt trotzdem vollstaendig: die Spalten sind in Prozent bemessen und die Zellen duerfen
      umbrechen, die Tabelle passt sich also jeder Seitenbreite an. */
-  @page{size:A4 landscape; margin:9mm 10mm}
+  @page{size:A4 landscape; margin:7.5mm 10mm}
   :root{--cream:#fff; --ink:#000; --muted:#555; --rule:#000; --rule-thin:#bbb;
         --paper:#fff; --sunk:#fff; --co2:#000; --preis:#999; --bar:#fff; --mark:#000}
   body{background:#fff; color:#000; font-size:8pt; line-height:1.22}
@@ -250,15 +250,15 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .printonly{display:block}
   .wrap{max-width:none; padding:0}
   .p-head{display:flex; flex-wrap:wrap; gap:4pt 12pt; justify-content:space-between; align-items:flex-end;
-    border-bottom:1.6pt solid #000; padding-bottom:3pt; margin-bottom:5pt}
-  .p-head h2{font-size:16pt; margin:0; font-weight:700; letter-spacing:-.02em}
+    border-bottom:1.6pt solid #000; padding-bottom:2.5pt; margin-bottom:4pt}
+  .p-head h2{font-size:15pt; margin:0; font-weight:700; letter-spacing:-.02em}
   .p-head .p-meta{font-size:7.4pt; text-align:right; color:#333; line-height:1.35}
   .p-set{display:flex; flex-wrap:wrap; gap:2pt 15pt; font-size:7.4pt; margin-bottom:5pt;
     padding-bottom:3.5pt; border-bottom:.5pt solid #bbb}
   .p-set b{font-weight:600}
   .p-set .p-sort{font-weight:700; border:.7pt solid #000; padding:1pt 4pt}
   .printonly{max-width:100%}
-  table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.8pt;
+  table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.4pt;
     min-width:0; table-layout:fixed}
   /* Ohne diese Zeile erbt die Drucktabelle das nowrap der Bildschirmtabelle. Bei fester
      Spaltenbreite laeuft zu breiter Inhalt dann ueber den Seitenrand hinaus – Firefox
@@ -269,7 +269,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     vertical-align:bottom}
   table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left}
   /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
-  table.p-tbl td{padding:1.8pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+  table.p-tbl td{padding:1.2pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
   table.p-tbl tr{height:auto}
   table.p-tbl th.sk::after{content:" \25B2"; font-size:.85em}
@@ -296,14 +296,14 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   table.p-tbl tr.aus .pbar i.ps-h{border-top-color:#D2D2D2; background:#D2D2D2}
   table.p-tbl tr.aus .pbar i.ps-t{border-top-color:#E2E2E2; background:#E2E2E2}
   table.p-tbl tr.aus .pbar i.ps-e{border-top-color:#EFEFEF; background:#EFEFEF}
-  .p-leg{display:flex; flex-wrap:wrap; gap:3pt 11pt; font-size:6.4pt; margin-top:3pt; color:#333;
+  .p-leg{display:flex; flex-wrap:wrap; gap:2pt 11pt; font-size:6.3pt; margin-top:2.5pt; color:#333;
     align-items:center}
   .p-leg span{display:inline-flex; align-items:center; gap:3pt}
   .p-leg i{width:11pt; height:0; box-sizing:content-box; display:inline-block;
     border:.4pt solid #9A9A9A; border-top:6pt solid #000;
     print-color-adjust:exact; -webkit-print-color-adjust:exact}
-  .p-foot{margin-top:5pt; padding-top:4pt; border-top:1pt solid #000;
-    font-size:6.9pt; color:#333; line-height:1.4; display:flex; flex-wrap:wrap; gap:5pt 14pt;
+  .p-foot{margin-top:4pt; padding-top:3pt; border-top:1pt solid #000;
+    font-size:6.6pt; color:#333; line-height:1.32; display:flex; flex-wrap:wrap; gap:5pt 14pt;
     justify-content:space-between}
   .p-foot div{max-width:64%}
   .p-foot b{color:#000}
@@ -482,8 +482,19 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <dt>Rezyklatanteil</dt>
       <dd>Wie viel Recyclingmaterial schon im Produkt steckt, das du <strong>kaufst</strong>. Aluminium aus
       Altmetall verursacht nach den hier hinterlegten Werten rund ein Zwölftel des CO₂ von neuem Aluminium; je nach
-      Strommix der Hütte liegt das Verhältnis zwischen etwa einem Zehntel und einem Zwanzigstel. Wenn du es nicht weißt, lass 0 stehen —
-      dann rechnet die Seite konservativ mit Neuware.</dd>
+      Strommix der Hütte liegt das Verhältnis zwischen etwa einem Zehntel und einem Zwanzigstel.
+      <p><strong>Warum fast überall 0 steht.</strong> Vorbelegt ist dieses Feld nur beim Karton, weil dort die
+      <em>Sorte</em> den Faserstoff festlegt: Chromoduplex und Triplex (GD/GT) sind rund 80 % Altpapier,
+      Chromo- und Zellstoffkarton (GC/GZ) sind Frischfaser. Bei den übrigen Werkstoffen wäre eine Vorbelegung
+      irreführend, und zwar aus zwei verschiedenen Gründen:</p>
+      <p>Bei <strong>Stahl, Glas, Span-, MDF- und HDF-Platten</strong> steckt der branchenübliche Schrott-,
+      Scherben- und Altholzanteil bereits im Neuware-Faktor der Datenquelle. Trüge man ihn hier noch einmal ein,
+      würde derselbe Vorteil doppelt gezählt und die Bilanz fiele zu gut aus.</p>
+      <p>Bei <strong>Aluminium und den Kunststoffen</strong> gibt es schlicht keinen belastbaren Durchschnitt:
+      der Umweltbericht des europäischen Aluminiumverbands nennt für Walzprodukte bewusst keinen
+      Rezyklatanteil, weil er von Werk zu Werk und Charge zu Charge zwischen praktisch 0 und über 75 % liegt.
+      Hier hilft nur das Datenblatt deines Lieferanten. Solange du es nicht hast, rechnet die Seite mit 0,
+      also konservativ mit Neuware.</p></dd>
     </div>
     <div class="gitem">
       <dt>Recyclingquote am Lebensende</dt>
@@ -583,7 +594,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <div class="src">
       <h3>Treibhauspotenzial</h3>
       <p>Kunststoffe aus den <a href="https://plasticseurope.org/wp-content/uploads/2021/12/PlasticsEurope-Ecoprofiles-program-and-methodology_V3.0.pdf">PlasticsEurope Eco-Profiles</a>, dem europäischen Branchendurchschnitt. PVC zusätzlich aus der <a href="https://www.americanchemistry.com/content/download/10045/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polyvinyl-PVC-Resin.pdf">Cradle-to-Gate-Studie des American Chemistry Council</a>.</p>
-      <p>Metalle, Glas und Holzwerkstoffe aus <a href="https://www.oekobaudat.de/">ÖKOBAUDAT</a> und <a href="https://www.ibo.at/fileadmin/ibo/materialoekologie/OI-Berechnungsleitfaden_V5_Sept2023.pdf">baubook / IBO</a>.</p>
+      <p>Metalle, Glas und Holzwerkstoffe aus <a href="https://www.oekobaudat.de/">ÖKOBAUDAT</a> und <a href="https://www.ibo.at/fileadmin/ibo/materialoekologie/OI-Berechnungsleitfaden_V5_Sept2023.pdf">baubook / IBO</a>. Aluminium abgeglichen mit dem <a href="https://european-aluminium.eu/wp-content/uploads/2025/07/Environmental-Profile-Report_2024-V20.pdf">Environmental Profile Report</a> von European Aluminium: 10,1 kg für in Europa verwendetes Primärmetall plus 0,41 kg fürs Walzen.</p>
+      <p><strong>Karton</strong> aus dem <a href="https://www.procarton.com/wp-content/uploads/2023/03/The-Carbon-Footprint-of-Carton-Packaging-2023_FINAL.pdf">Carbon Footprint of Carton Packaging</a> von Pro Carton (929 kg je Tonne im europäischen Mittel) und der <a href="https://www.papiernetz.de/wp-content/uploads/ifeu-studie_langfassung.pdf">IFEU-Studie zu Büropapieren</a>, die Frischfaser mit 1.116 kg und Recyclingfaser mit 933 kg je Tonne ausweist. Die Dichten stammen aus Lieferantendaten: Chromoduplex GD2 wiegt 400 g/m² bei 545 µm, Chromokarton GC1 dieselben 400 g/m² bei 605 µm — Frischfaserkarton ist voluminöser, also je Millimeter leichter. Wie bei Papier und Holz wird nur fossiles CO₂ gezählt; der biogene Kohlenstoff geht mit null ein.</p>
       <p>Europäische Mittelwerte, typische Streuung <strong>±30 %</strong>.</p>
       <p><strong>Nicht alle Werte sind gleich gut belegt.</strong> Die Neuware-Faktoren stammen aus den
       genannten Quellen. Die Rezyklat-Faktoren sind bei mehreren Materialien Größenordnungs-Schätzungen —
@@ -602,6 +614,12 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <h3>Preise</h3>
       <p>Richtpreise aus <a href="https://kunststoffplattenonline.de/">kunststoffplattenonline.de</a>, <a href="https://www.s-polytec.de/kunststoffplatten/pvc-platten.html">S-Polytec</a>, <a href="https://acrylglas-shop.com/acrylglas-plexiglas">acrylglas-shop.com</a> und <a href="https://stahlog.de/produkt/2mm-aluminiumblech/">stahlog.de</a> — netto ohne Umsatzsteuer.</p>
       <p>Gerechnet für haushaltsübliche Zuschnittmengen. Großmengen liegen darunter, Kleinzuschnitte um ein Vielfaches darüber. <strong>Die Preise sind der unsicherste Teil dieser Seite.</strong></p>
+      <p><strong>Warum Sprit- und Strompreis nicht automatisch aktualisiert werden:</strong> Sie beeinflussen
+      nur die Transportkosten, und die sind bei 10 km ein bis zwei Euro neben 20 bis 150 Euro Material — auf
+      die CO₂-Bilanz wirken sie überhaupt nicht. Die Materialpreise, auf die es ankommt, gibt es nirgends
+      als Schnittstelle. Der Startwert 1,65 €/l ist deshalb ein Richtwert; den Tagespreis findest du beim
+      <a href="https://www.spritpreisrechner.at/">Spritpreisrechner der E-Control</a> und trägst ihn
+      oben ein — die Seite merkt sich deine Eingabe.</p>
     </div>
     <div class="src">
       <h3>Nicht enthalten</h3>
@@ -698,7 +716,11 @@ const BASE = [
   {id:"glas",  n:"Glas (Floatglas)",        d:2.50, p:1.30,  s:1.00, e:0.00, mm:4.00,  pr:5.50,  q:80},
   {id:"hdf",   n:"HDF-Platte",              d:0.90, p:0.85,  s:0.50, e:0.00, mm:6.00,  pr:1.60,  q:20},
   {id:"holz",  n:"Holz (Nadelholz massiv)", d:0.47, p:0.20,  s:0.05, e:0.00, mm:16.00, pr:1.40,  q:20},
-  {id:"kart",  n:"Karton / Vollpappe",      d:0.83, p:0.80,  s:0.60, e:0.00, mm:4.00,  pr:1.50,  q:85},
+  // Zwei Kartonzeilen: Die Sorte legt den Faserstoff fest. GD/GT (Chromoduplex, Triplex, Vollpappe)
+  // ist ueberwiegend Altpapier und dichter; GC/GZ (Chromo-, Zellstoffkarton) ist Frischfaser und
+  // voluminoeser. Deshalb ist rz (Rezyklat-Standard) hier vorbelegt, bei allen anderen nicht.
+  {id:"kartP", n:"Karton Primärfaser (GC)", d:0.63, p:1.10, s:0.80, e:0.00, mm:1.00, pr:2.00, q:85, rz:0},
+  {id:"kartR", n:"Karton Recycling (GD)",   d:0.75, p:1.10, s:0.80, e:0.00, mm:4.00, pr:1.50, q:85, rz:80},
   {id:"mdf",   n:"MDF-Platte",              d:0.75, p:0.75,  s:0.45, e:0.00, mm:16.00, pr:1.10,  q:20},
   {id:"pap",   n:"Papier (Blueback 120 g)", d:0.96, p:1.40,  s:1.00, e:0.00, mm:0.125, pr:6.00,  q:80},
   {id:"pehd",  n:"PE-HD",                   d:0.96, p:2.00,  s:0.60, e:3.14, mm:3.00,  pr:7.00,  q:40},
@@ -725,7 +747,7 @@ const st = {
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
   detail:false, sort:"co2n", nutzSort:true, rows:{}, base:{}
 };
-BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
+BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:(m.rz || 0), quote:m.q, km:KM0, jahre:1, aus:false}; });
 
 function save(){
   try{ localStorage.setItem(STORE, JSON.stringify(st)); }catch(err){ /* ohne Speicher weiterlaufen */ }
@@ -747,6 +769,15 @@ function load(){
       if(st.sort === "preis") st.sort = "preisn";
     }
     st.detail = !!o.detail;
+    // Die fruehere Zeile "kart" ist in zwei Sorten aufgeteilt. Eigene Eingaben werden auf die
+    // Recyclingsorte uebernommen — der alte Wert 0,83 kg/dm³ lag ihr am naechsten. Der
+    // Rezyklatanteil wird bewusst nicht mitgenommen: er ergibt sich jetzt aus der Sorte.
+    if(o.rows && o.rows.kart && !o.rows.kartR){
+      const alt = o.rows.kart, ziel = st.rows.kartR;
+      ["mm","quote","km","jahre"].forEach(k => { if(isFinite(alt[k])) ziel[k] = alt[k]; });
+      ziel.aus = !!alt.aus;
+      ziel.preis = isFinite(alt.preis) ? alt.preis : null;
+    }
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
       ["mm","rez","quote","km","jahre"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
@@ -1129,7 +1160,7 @@ function bind(){
 
   document.getElementById("bDetail").onclick = () => { st.detail = !st.detail; render(); save(); };
   document.getElementById("bResetIn").onclick = () => {
-    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
+    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:(m.rz || 0), quote:m.q, km:KM0, jahre:1, aus:false}; });
     document.querySelectorAll("#tbody input").forEach(el => {
       const f = el.dataset.field;
       if(f === "aus") el.checked = true;

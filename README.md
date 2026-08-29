@@ -1,6 +1,6 @@
 # Werkstoffbilanz
 
-Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 19 Plattenwerkstoffe
+Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 20 Plattenwerkstoffe
 nebeneinander und zeigt für ein konkretes Projekt zwei Zahlen je Material: **Kilogramm CO₂**
 und **Euro**.
 
@@ -65,9 +65,24 @@ Alle Materialdaten stehen im `<script>`-Block ganz unten in der Konstante `BASE`
 | `mm` | voreingestellte Materialstärke |
 | `pr` | Richtpreis netto in €/dm³ |
 | `q`  | voreingestellte Recyclingquote am Lebensende in Prozent |
+| `rz` | optional: voreingestellter Rezyklatanteil in Prozent, fehlt er, gilt 0 |
 
 Ein neues Material ist eine weitere Zeile in dieser Liste — sonst ist nichts anzupassen,
 Tabelle, Diagramm und PDF wachsen automatisch mit.
+
+### Warum `rz` nur beim Karton gesetzt ist
+
+Der Rezyklatanteil ist bewusst fast überall 0. Vorbelegt ist er nur bei den beiden Kartonzeilen,
+weil dort die *Sorte* den Faserstoff festlegt: Chromoduplex und Triplex (GD/GT) bestehen zu rund
+80 % aus Altpapier, Chromo- und Zellstoffkarton (GC/GZ) aus Frischfaser. Bei allen anderen
+Werkstoffen wäre eine Vorbelegung aus einem von zwei Gründen falsch:
+
+- Bei **Stahl, Glas, Span-, MDF- und HDF-Platten** enthält der Neuware-Faktor der Datenquelle
+  den branchenüblichen Schrott-, Scherben- und Altholzanteil bereits. Ein zusätzlicher Eintrag
+  hier würde denselben Vorteil doppelt zählen.
+- Bei **Aluminium und den Kunststoffen** gibt es keinen belastbaren Durchschnitt. Der
+  Environmental Profile Report von European Aluminium nennt für Walzprodukte bewusst keinen
+  Rezyklatanteil, weil er je Werk und Charge zwischen praktisch 0 und über 75 % liegt.
 
 Die Transportkonstanten stehen direkt darunter: `DIESEL` (3,2 kg CO₂ je Liter) und `KM0`
 (voreingestellter Transportweg, 10 km).
@@ -128,6 +143,20 @@ ohne Gutschrift für Energierückgewinnung — also bewusst konservativ. Bei Hol
 steht er auf 0, weil nur fossiles CO₂ bilanziert wird; die geringen Methan- und Lachgasmengen aus
 der Verbrennung sind nicht modelliert (bei Holz rund 0,06 kg CO₂e/kg und damit innerhalb der
 Unsicherheit des Herstellungswerts selbst).
+
+**Karton** ist in zwei Zeilen aufgeteilt, weil sich die Sorten in zwei Kennwerten unterscheiden:
+Recyclingkarton ist dichter (GD2: 400 g/m² bei 545 µm → 0,73 kg/dm³), Frischfaserkarton
+voluminöser (GC1: 400 g/m² bei 605 µm → 0,66; GC2 sogar 700 µm → 0,57) und damit je Millimeter
+leichter. Der Herstellungsfaktor stammt aus dem Carbon Footprint of Carton Packaging von
+Pro Carton (929 kg/t im europäischen Mittel) und der IFEU-Studie zu Büropapieren
+(Frischfaser 1.116 kg/t, Recyclingfaser 933 kg/t).
+
+**Sprit- und Strompreis werden nicht automatisch abgerufen.** Eine Abfrage bei der E-Control
+bräuchte einen Server oder Build-Job — die Seite ist reines statisches HTML und käme im Browser
+nicht an CORS vorbei — und würde am Ergebnis fast nichts ändern: Der Spritpreis wirkt nur auf die
+Transportkosten (bei 10 km ein bis zwei Euro neben 20 bis 150 Euro Material) und überhaupt nicht
+auf die CO₂-Bilanz. Die Materialpreise, auf die es ankommt, gibt es ohnehin nirgends als
+Schnittstelle. Beide Felder sind deshalb Startwerte, die überschrieben und gespeichert werden.
 
 **Aktualitätshinweis:** PlasticsEurope hat die Eco-Profiles für Polyolefine und PVC im März 2026
 an neuere Öl- und Gas-Vorkettendaten angeglichen; für die Polymere gehen die Werte dadurch

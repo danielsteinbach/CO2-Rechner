@@ -57,7 +57,7 @@ Alle Materialdaten stehen im `<script>`-Block ganz unten in der Konstante `BASE`
 Ein neues Material ist eine weitere Zeile in dieser Liste — sonst ist nichts anzupassen,
 Tabelle, Diagramm und PDF wachsen automatisch mit.
 
-Die Transportkonstanten stehen direkt darunter: `DIESEL` (2,64 kg CO₂ je Liter) und `KM0`
+Die Transportkonstanten stehen direkt darunter: `DIESEL` (3,2 kg CO₂ je Liter) und `KM0`
 (voreingestellter Transportweg, 10 km).
 
 ## Wie gerechnet wird
@@ -87,6 +87,11 @@ danebenstehenden Wert entspricht.
 - Metalle, Glas, Holzwerkstoffe: [ÖKOBAUDAT](https://www.oekobaudat.de/) (BBSR) und [baubook / IBO](https://www.ibo.at/)
 - Strommix Österreich: [Umweltbundesamt Österreich](https://www.umweltbundesamt.at/), 152 g CO₂e/kWh
   (123 g direkt plus 29 g vorgelagert, Bezugsjahr 2023, inklusive Importanteil)
+- Diesel: 3,2 kg CO₂ je Liter, Well-to-Wheel — Verbrennung (2,64 kg) plus Förderung und Raffinerie
+
+Strom- und Dieselfaktor liegen damit auf derselben Systemgrenze wie die Materialdaten (A1–A3, ab
+Rohstoffgewinnung). Ein Vergleich mit dem reinen Verbrennungswert des Diesels würde den
+Verbrenner systematisch besserstellen.
 - Preise: deutschsprachige Zuschnitt-Onlineshops, netto ohne Umsatzsteuer, Stand August 2026
 
 Die Emissionsfaktoren sind europäische Mittelwerte mit einer typischen Streuung von ±30 %.

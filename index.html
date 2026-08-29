@@ -285,7 +285,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </div>
     <div class="f">
       <label>Womit wird transportiert?</label>
-      <p class="hint">Ein Diesel-Kleintransporter stößt pro Kilometer rund zehnmal so viel CO₂ aus wie ein elektrischer.</p>
+      <p class="hint">Mit den Startwerten stößt der Diesel-Kleintransporter pro Kilometer rund zehnmal so viel CO₂ aus wie ein elektrischer.</p>
       <div class="toggle" role="group" aria-label="Antriebsart">
         <button type="button" id="bDiesel" aria-pressed="true">Diesel</button>
         <button type="button" id="bElektro" aria-pressed="false">Elektro</button>
@@ -392,7 +392,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <dt>Kilogramm CO₂</dt>
       <dd>Genauer: CO₂-Äquivalent. Neben Kohlendioxid entstehen bei der Produktion auch Methan und Lachgas.
       Deren Wirkung wird in Kohlendioxid umgerechnet, damit alles eine einzige Zahl ergibt.
-      <strong>Zum Gefühl: 100 km mit einem Diesel-Transporter sind rund 32 kg.</strong></dd>
+      <strong>Zum Gefühl: 100 km mit einem Diesel-Transporter sind rund 38 kg.</strong></dd>
     </div>
     <div class="gitem">
       <dt>Herstellung</dt>
@@ -403,7 +403,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <div class="gitem">
       <dt>Rezyklatanteil</dt>
       <dd>Wie viel Recyclingmaterial schon im Produkt steckt, das du <strong>kaufst</strong>. Aluminium aus
-      Altmetall verursacht nur ein Zwölftel des CO₂ von neuem Aluminium. Wenn du es nicht weißt, lass 0 stehen —
+      Altmetall verursacht nach den hier hinterlegten Werten rund ein Zwölftel des CO₂ von neuem Aluminium; je nach
+      Strommix der Hütte liegt das Verhältnis zwischen etwa einem Zehntel und einem Zwanzigstel. Wenn du es nicht weißt, lass 0 stehen —
       dann rechnet die Seite konservativ mit Neuware.</dd>
     </div>
     <div class="gitem">
@@ -421,7 +422,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <div class="gitem">
       <dt>Warum Holz beim Lebensende auf null steht</dt>
       <dd>Der Kohlenstoff im Holz stammt aus der Luft — der Baum hat ihn beim Wachsen aufgenommen. Verbrennt
-      man das Holz, geht er dorthin zurück. In der Standardbilanzierung gilt das als klimaneutral. Bei Erdöl-
+      man das Holz, geht er dorthin zurück. In der Standardbilanzierung gilt das als klimaneutral — vorausgesetzt,
+      es wächst nach, was geerntet wird; in Österreich schreibt das Forstgesetz die Wiederbewaldung verpflichtend
+      vor. Bei Erdöl-
       Kunststoffen ist es anders: dort kommt der Kohlenstoff aus dem Boden und bleibt in der Luft.</dd>
     </div>
     <div class="gitem">
@@ -469,7 +472,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <div class="src">
       <h3>Strom und Diesel</h3>
       <p>152 g CO₂/kWh ist die Stromaufbringung Österreich laut <a href="https://www.umweltbundesamt.at/fileadmin/site/publikationen/rep0989.pdf">Umweltbundesamt Österreich</a> — 123 g direkt plus 29 g vorgelagert, Bezugsjahr 2023, inklusive Importanteil.</p>
-      <p>Diesel mit 2,64 kg CO₂ je Liter, reine Verbrennung. Mit Förderung und Raffinerie wären es rund 3,2 kg.</p>
+      <p>Diesel mit 3,2 kg CO₂ je Liter. Darin steckt nicht nur die Verbrennung (2,64 kg), sondern auch Förderung und Raffinerie.</p>
+      <p><strong>Beide Werte liegen damit auf derselben Systemgrenze:</strong> der Stromfaktor enthält die Vorkette (29 g) ebenso wie der Dieselfaktor — und wie die Materialdaten, die von der Rohstoffgewinnung an rechnen. Ein Vergleich mit dem reinen Verbrennungswert würde den Diesel systematisch besserstellen.</p>
       <p>Der Startwert 25 kWh/100 km orientiert sich am Praxisverbrauch; ein eSprinter kam im TÜV-begleiteten Test auf 21,9 kWh.</p>
     </div>
     <div class="src">
@@ -545,7 +549,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-foot">
     <div><b>Datengrundlage:</b> PlasticsEurope Eco-Profiles, ÖKOBAUDAT, baubook/IBO, American Chemistry
     Council (Treibhauspotenzial, Module A1–A3) · Umweltbundesamt Österreich (Strom, 152 g CO₂/kWh) ·
-    Diesel 2,64 kg CO₂/l · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
+    Diesel 3,2 kg CO₂/l (Well-to-Wheel, inkl. Förderung und Raffinerie – gleiche Systemgrenze wie Strom und
+    Materialdaten) · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
     Mittelwerte mit typisch ±30 % Streuung. Nicht enthalten: Bedruckung, Montage, Nutzungsdauer.</div>
     <div><b>Haftungsausschluss:</b> Für Richtigkeit, Vollständigkeit und Aktualität wird keine
     Gewährleistung und keine Garantie übernommen. Nutzung auf eigene Verantwortung; eine Haftung für
@@ -576,7 +581,9 @@ const BASE = [
   {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:90}
 ];
 const KEYS = ["d","p","s","e","pr"];
-const DIESEL = 2.64;
+// Well-to-Wheel: Verbrennung (2,64) plus Förderung und Raffinerie. Gleiche Systemgrenze wie
+// beim Strom, der die Vorkette ebenfalls enthält, und wie bei den Materialdaten (A1–A3).
+const DIESEL = 3.2;
 const KM0 = 10;
 const STORE = "werkstoffbilanz.v2";
 
@@ -745,7 +752,7 @@ function buildPrint(rows){
   }).join("");
 
   const antrieb = st.antrieb === "diesel"
-    ? "Diesel, " + f1(st.lVerbrauch) + " l/100 km zu " + f2(st.lPreis) + " €/l (2,64 kg CO₂/l)"
+    ? "Diesel, " + f1(st.lVerbrauch) + " l/100 km zu " + f2(st.lPreis) + " €/l (3,2 kg CO₂/l)"
     : "Elektro, " + f1(st.kwhVerbrauch) + " kWh/100 km zu " + f2(st.kwhPreis) + " €/kWh (" +
       f0(st.stromFaktor) + " g CO₂/kWh)";
   document.getElementById("pSet").innerHTML =

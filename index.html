@@ -778,7 +778,9 @@ const STORE = "werkstoffbilanz.v2";
 const st = {
   flaeche:3, verschnitt:10, antrieb:"diesel",
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
-  detail:false, sort:"co2n", nutzSort:true, rows:{}, base:{}
+  // datenV zaehlt hoch, sobald sich die hinterlegten Startwerte inhaltlich aendern. Nur dann werden
+  // gespeicherte Quoten ueberschrieben — siehe load().
+  detail:false, sort:"co2n", nutzSort:true, datenV:3, rows:{}, base:{}
 };
 BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:(m.rz || 0), quote:m.q, km:KM0, jahre:1, aus:false}; });
 
@@ -807,16 +809,25 @@ function load(){
     // Rezyklatanteil wird bewusst nicht mitgenommen: er ergibt sich jetzt aus der Sorte.
     if(o.rows && o.rows.kart && !o.rows.kartR){
       const alt = o.rows.kart, ziel = st.rows.kartR;
-      ["mm","quote","km","jahre"].forEach(k => { if(isFinite(alt[k])) ziel[k] = alt[k]; });
+      ["km","jahre"].forEach(k => { if(isFinite(alt[k])) ziel[k] = alt[k]; });
       ziel.aus = !!alt.aus;
       ziel.preis = isFinite(alt.preis) ? alt.preis : null;
     }
+    // Die Recyclingquoten und Rezyklatanteile wurden auf oesterreichische Durchschnitte korrigiert.
+    // Wer die Seite vorher benutzt hat, haette die alten Startwerte im Browser stehen und saehe die
+    // Korrektur nie. Deshalb werden bei einem Datensprung genau diese beiden Felder neu gesetzt —
+    // Flaeche, Stärke, Transportweg, Nutzungen, eigene Preise und eigene Kennwerte bleiben.
+    const datenAlt = !(o.datenV >= st.datenV);
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
-      ["mm","rez","quote","km","jahre"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
+      const kartonNeu = datenAlt && (m.id === "kartP" || m.id === "kartR");   // Startstaerke jetzt 3 mm
+      const felder = datenAlt ? (kartonNeu ? ["km","jahre"] : ["mm","km","jahre"])
+                              : ["mm","rez","quote","km","jahre"];
+      felder.forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
       t.aus = !!r.aus;
       t.preis = isFinite(r.preis) ? r.preis : null;
     });
+    if(datenAlt && o.rows) st.datenHinweis = true;
     if(o.base) BASE.forEach(m => {
       const b = o.base[m.id]; if(!b) return; const keep = {};
       KEYS.forEach(k => { if(isFinite(b[k])) keep[k] = b[k]; });
@@ -1213,6 +1224,12 @@ buildTable();
 buildBase();
 bind();
 render();
+// Nur wenn beim Laden tatsaechlich Werte ersetzt wurden — sonst bliebe unklar, warum sich
+// Recyclingquoten gegenueber dem letzten Besuch geaendert haben.
+if(st.datenHinweis){
+  sagen('Die Recyclingquoten wurden auf österreichische Durchschnitte umgestellt und dabei neu gesetzt. ' +
+        'Fläche, Stärken, Transportwege und eigene Kennwerte sind unverändert.');
+}
 </script>
 </body>
 </html>

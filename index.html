@@ -174,6 +174,8 @@ tbody tr.aus .own{color:var(--abge) !important}
 .mrow.aus .sg-e{background:var(--abge2)}
 .mrow.aus .sg-t{background:repeating-linear-gradient(120deg,var(--abge) 0 2.5px,transparent 2.5px 6.5px)}
 .own{color:var(--mark) !important; font-weight:600 !important}
+thead th.sk::after{content:" \25B2"; font-size:.8em; vertical-align:1px}
+tbody td.sk{font-weight:700}
 .hide{display:none !important}
 
 /* ---- Diagramm: je Material zwei Balken untereinander ---- */
@@ -254,6 +256,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .p-set{display:flex; flex-wrap:wrap; gap:2pt 15pt; font-size:7.4pt; margin-bottom:5pt;
     padding-bottom:3.5pt; border-bottom:.5pt solid #bbb}
   .p-set b{font-weight:600}
+  .p-set .p-sort{font-weight:700; border:.7pt solid #000; padding:1pt 4pt}
   .printonly{max-width:100%}
   table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.8pt;
     min-width:0; table-layout:fixed}
@@ -269,7 +272,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   table.p-tbl td{padding:1.8pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
   table.p-tbl tr{height:auto}
-  table.p-tbl td.bil{font-weight:700}
+  table.p-tbl th.sk::after{content:" \25B2"; font-size:.85em}
+  table.p-tbl td.sk{font-weight:700}
   table.p-tbl tr.best td{font-weight:700}
   table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
   table.p-tbl th.pb{text-align:left; padding-left:3pt}
@@ -394,6 +398,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <button class="btn" type="button" id="bResetIn">Eingaben zurücksetzen</button>
     <button class="btn" type="button" id="bPrint">Ergebnis als PDF</button>
     <span class="hinweis" id="druckHinweis"></span>
+    <span class="hinweis" id="sortHinweis"></span>
   </div>
   <div class="tscroll">
     <table id="tbl">
@@ -413,10 +418,10 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
         <th>Anzahl<br>Nutzungen</th>
         <th class="on">CO₂ vor<br>Gutschrift</th>
         <th class="on">Recycling-<br>Gutschrift</th>
-        <th class="on b">CO₂-Bilanz<br>kg</th>
-        <th class="on">kg CO₂ je<br>Nutzung</th>
-        <th class="on b">Kosten<br>€</th>
-        <th class="on">€ je<br>Nutzung</th>
+        <th class="on b" data-sk="co2">CO₂-Bilanz<br>kg</th>
+        <th class="on" data-sk="co2n">kg CO₂ je<br>Nutzung</th>
+        <th class="on b" data-sk="preis">Kosten<br>€</th>
+        <th class="on" data-sk="preisn">€ je<br>Nutzung</th>
         <th class="dc">Masse<br>kg</th>
         <th class="dc">Herstel-<br>lung</th>
         <th class="dc">Trans-<br>port</th>
@@ -436,8 +441,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   untereinander, nicht ein oberer mit einem unteren.</p>
   <div class="btnrow">
     <div class="toggle" role="group" aria-label="Sortierung">
-      <button type="button" id="sCo2" aria-pressed="true">nach CO₂</button>
-      <button type="button" id="sCo2n" aria-pressed="false">CO₂ je Nutzung</button>
+      <button type="button" id="sCo2" aria-pressed="false">nach CO₂</button>
+      <button type="button" id="sCo2n" aria-pressed="true">CO₂ je Nutzung</button>
       <button type="button" id="sPreis" aria-pressed="false">nach Preis</button>
       <button type="button" id="sPreisn" aria-pressed="false">Preis je Nutzung</button>
     </div>
@@ -647,7 +652,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </div>
   </div>
   <div class="p-set" id="pSet"></div>
-  <table class="p-tbl">
+  <table class="p-tbl" id="pTbl">
     <colgroup>
       <col style="width:14.5%"><col style="width:5.5%"><col style="width:4.5%"><col style="width:5%">
       <col style="width:3.5%"><col style="width:4.5%"><col style="width:6.5%"><col style="width:6.5%">
@@ -656,9 +661,10 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     </colgroup>
     <thead><tr>
       <th>Material</th><th>Stärke<br>mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
-      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th>
-      <th>CO₂ je<br>Nutz.</th><th class="pb" id="pBarKopf"></th>
-      <th>Kosten<br>€</th><th>€ je<br>Nutz.</th><th class="pb" id="pBarKopf2"></th>
+      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th data-sk="co2">CO₂-<br>Bilanz</th>
+      <th data-sk="co2n">CO₂ je<br>Nutz.</th><th class="pb" id="pBarKopf"></th>
+      <th data-sk="preis">Kosten<br>€</th><th data-sk="preisn">€ je<br>Nutz.</th>
+      <th class="pb" id="pBarKopf2"></th>
     </tr></thead>
     <tbody id="pBody"></tbody>
   </table>
@@ -716,7 +722,7 @@ const STORE = "werkstoffbilanz.v2";
 const st = {
   flaeche:3, verschnitt:10, antrieb:"diesel",
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
-  detail:false, sort:"co2", rows:{}, base:{}
+  detail:false, sort:"co2n", rows:{}, base:{}
 };
 BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
 
@@ -935,9 +941,10 @@ function buildPrint(rows){
     return '<tr' + (kl ? ' class="' + kl + '"' : '') + '><td>' + r.m.n + '</td><td>' + fmm(q.mm) +
       '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
       f0(q.jahre) + '</td><td>' + f1(r.brutto) + '</td><td>' + (r.gut === 0 ? "—" : f1(r.gut)) +
-      '</td><td class="bil">' + f1(r.co2) + '</td><td>' + f1(r.proJahr) + '</td><td class="pb">' +
+      '</td><td data-c="co2">' + f1(r.co2) + '</td><td data-c="co2n">' + f1(r.proJahr) + '</td><td class="pb">' +
       bar(Math.min((p.summe/t)/mc, 1)*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
-      '</td><td>' + f2(r.kost) + '</td><td>' + f2(r.kostN) + '</td><td class="pb">' +
+      '</td><td data-c="preis">' + f2(r.kost) + '</td><td data-c="preisn">' + f2(r.kostN) +
+      '</td><td class="pb">' +
       bar(Math.min((gK/t)/mk, 1)*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
   }).join("");
 
@@ -949,8 +956,9 @@ function buildPrint(rows){
     '<span><b>Projektfläche:</b> ' + f2(st.flaeche) + ' m²</span>' +
     '<span><b>Verschnitt:</b> ' + f0(st.verschnitt) + ' %</span>' +
     '<span><b>Transport:</b> ' + antrieb + '</span>' +
-    '<span><b>Sortierung:</b> ' + ({co2:"nach CO₂-Bilanz", co2n:"nach CO₂ je Nutzung",
-      preis:"nach Kosten", preisn:"nach Kosten je Nutzung"}[st.sort] || "nach CO₂-Bilanz") + '</span>';
+    '<span class="p-sort"><b>Sortiert nach:</b> ' + ({co2:"CO₂-Bilanz gesamt",
+      co2n:"CO₂ je Nutzung", preis:"Kosten gesamt", preisn:"Kosten je Nutzung"}[st.sort]
+      || "CO₂-Bilanz gesamt") + '</span>';
   document.getElementById("pDatum").textContent =
     "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
 }
@@ -987,10 +995,27 @@ function render(){
     el.classList.toggle("own", ch);
     el.title = ch ? "Ausgangswert " + f2(m[k]) + " — Feld leeren zum Zurücksetzen." : "Ausgangswert aus der Quellenlage.";
   }));
+  // Die Spalte, nach der sortiert wird, bekommt einen Pfeil im Kopf und fette Zahlen.
+  // Ohne diese Markierung liest man eine Zeile weit unten und wundert sich, warum sie
+  // trotz gutem Wert je Nutzung dort steht.
+  const spalte = {co2:"[data-bilanz]", co2n:"[data-projahr]", preis:"[data-kost]", preisn:"[data-kostn]"};
+  document.querySelectorAll("#tbl thead th[data-sk], #pTbl thead th[data-sk]").forEach(th =>
+    th.classList.toggle("sk", th.dataset.sk === st.sort));
+  Object.keys(spalte).forEach(k =>
+    document.querySelectorAll("#tbody " + spalte[k]).forEach(td =>
+      td.classList.toggle("sk", k === st.sort)));
   document.querySelectorAll(".dc").forEach(e => e.classList.toggle("hide", !st.detail));
   document.getElementById("bDetail").textContent = st.detail ? "Einzelposten ausblenden" : "Einzelposten zeigen";
+  const modus = {co2:"CO₂-Bilanz gesamt", co2n:"CO₂ je Nutzung",
+                 preis:"Kosten gesamt", preisn:"Kosten je Nutzung"}[st.sort];
+  const sh = document.getElementById("sortHinweis");
+  if(sh) sh.innerHTML = "Das PDF übernimmt die Sortierung der Rangfolge: <b>" + modus + "</b>";
   buildBars(rows);
   buildPrint(rows);
+  // Erst nach buildPrint: die Funktion schreibt den Tabellenkoerper neu und wuerde
+  // vorher gesetzte Klassen wieder verwerfen.
+  document.querySelectorAll("#pBody td[data-c]").forEach(td =>
+    td.classList.toggle("sk", td.dataset.c === st.sort));
 }
 
 /* ---- PDF-Ausgabe ----------------------------------------------------------

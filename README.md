@@ -24,14 +24,14 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
 - **Diesel oder Elektro.** Bei Elektro ist der Strom-Emissionsfaktor frei einstellbar;
   voreingestellt sind 152 g CO₂/kWh, die österreichische Stromaufbringung.
 - **Sechs Eingaben je Material**: Stärke, Preis, Rezyklatanteil, Recyclingquote am Lebensende,
-  Transportweg, erwartete Nutzungsdauer.
+  Transportweg, Anzahl der Nutzungen.
 - **Preisvorschlag**, der sich aus Richtpreis je dm³ mal Materialstärke ergibt und daher
   automatisch mitwächst, wenn die Stärke geändert wird. Jederzeit überschreibbar.
 - **Alle Kennwerte korrigierbar**: Dichte, Treibhauspotenzial für Neuware und Rezyklat,
   Verbrennungsfaktor, Richtpreis.
 - **Getrennte Ergebnisspalten**: CO₂ vor Gutschrift, Recycling-Gutschrift, CO₂-Bilanz, kg CO₂ je
-  Nutzungsjahr und Kosten — die Gutschrift verschwindet nicht in einer Gesamtzahl.
-- **Diagramm** mit zwei Balken je Material, sortierbar nach CO₂, CO₂ je Nutzungsjahr oder Preis.
+  Nutzung und Kosten — die Gutschrift verschwindet nicht in einer Gesamtzahl.
+- **Diagramm** mit zwei Balken je Material, sortierbar nach CO₂, CO₂ je Nutzung oder Preis.
 - **PDF-Export** auf eine A4-Seite quer über den Druckdialog.
 - Alle Eingaben bleiben im Browser des Besuchers gespeichert (`localStorage`), nichts wird
   irgendwohin übertragen. Die Seite lädt keinerlei Daten nach — einzige externe Ressource ist
@@ -73,7 +73,7 @@ Transport    = km × Verbrauch/100 × Emissionsfaktor
 Lebensende   = Masse × (1 − Recyclingquote) × Verbrennungsfaktor
 Gutschrift   = − Masse × max(0, Recyclingquote − Rezyklatanteil) × (Neuware − Rezyklat)
 CO₂-Bilanz   = Herstellung + Transport + Lebensende + Gutschrift
-CO₂ je Jahr  = CO₂-Bilanz / Nutzungsdauer
+CO₂ je Nutz. = CO₂-Bilanz / max(1, Nutzungen)
 Kosten       = Fläche × (1 + Verschnitt) × Preis je m²  +  Transportkosten
 ```
 
@@ -117,9 +117,16 @@ Verarbeitungsaufschlag zu den hinterlegten 2,80 für die Hartplatte passt. Die P
 
 Nicht enthalten sind Bedruckung, Kaschierung, Beschläge, Montage und Reinigung.
 
-Die Nutzungsdauer lässt sich seit der aktuellen Fassung je Material eintragen; voreingestellt
-ist überall 1 Jahr, dann entspricht `CO₂ je Jahr` genau der Bilanz. Sobald realistische
-Standzeiten eingetragen sind, dreht die Sortierung nach Nutzungsjahr die Rangfolge oft um.
+Die Spalte **Nutzungen** zählt, wie oft ein Stück seinen Zweck erfüllt, bevor es weg ist. Bei
+fester Beschilderung sind das die Standjahre, bei Film und Bühne die Einsätze: eine Requisite,
+die einmal acht Stunden im Bild steht, hat eine Nutzung — wird sie zwölfmal wiederverwendet,
+zwölf. Voreingestellt ist 1, dann entspricht `CO₂ je Nutzung` genau der Bilanz.
+
+Der Teiler ist bei **1 nach unten begrenzt**: ein Stück kann nicht weniger als einmal genutzt
+werden, und ein achtstündiger Einsatz darf seinen Fußabdruck nicht auf ein fiktives Jahr
+hochgerechnet vervielfachen. Damit bleibt ein Fall bewusst offen — ein Objekt, das dauerhaft
+gebraucht wird, aber schneller kaputtgeht als der Bedarf endet (ein Aufsteller für zwei Jahre,
+der nur ein halbes hält). Dafür die Projektfläche entsprechend vervielfachen.
 
 Die Seite ist eine Entscheidungshilfe für die Materialwahl, **keine Ökobilanz**. Für eine
 vollständige LCA fehlen detaillierte Entsorgungsszenarien, Recyclingprozesse sowie Qualitäts-

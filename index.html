@@ -362,11 +362,11 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
         <th>Rezyklat<br>%</th>
         <th>Recycling<br>%</th>
         <th>Weg<br>km</th>
-        <th>Nutzung<br>Jahre</th>
+        <th>Nutzun-<br>gen</th>
         <th class="on">CO₂ vor<br>Gutschrift</th>
         <th class="on">Recycling-<br>Gutschrift</th>
         <th class="on b">CO₂-Bilanz<br>kg</th>
-        <th class="on">kg CO₂<br>je Jahr</th>
+        <th class="on">kg CO₂ je<br>Nutzung</th>
         <th class="on b">Kosten<br>€</th>
         <th class="dc">Masse<br>kg</th>
         <th class="dc">Herstel-<br>lung</th>
@@ -388,7 +388,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="btnrow">
     <div class="toggle" role="group" aria-label="Sortierung">
       <button type="button" id="sCo2" aria-pressed="true">nach CO₂</button>
-      <button type="button" id="sJahr" aria-pressed="false">nach CO₂ je Nutzungsjahr</button>
+      <button type="button" id="sJahr" aria-pressed="false">nach CO₂ je Nutzung</button>
       <button type="button" id="sPreis" aria-pressed="false">nach Preis</button>
     </div>
   </div>
@@ -460,12 +460,25 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       Kunststoffen ist es anders: dort kommt der Kohlenstoff aus dem Boden und bleibt in der Luft.</dd>
     </div>
     <div class="gitem">
-      <dt>Nutzungsdauer</dt>
-      <dd>Die wichtigste Spalte, die man leicht übersieht. Ein Blechschild, das fünfzehn Jahre hält, ist pro
-      Nutzungsjahr besser als ein Kartonschild, das dreimal ersetzt werden muss — auch wenn die reine
-      Herstellungszahl das Gegenteil nahelegt. Voreingestellt ist überall <strong>1 Jahr</strong>, dann
-      entspricht die Spalte <em>kg CO₂ je Jahr</em> genau der Bilanz. Trag ein, wie lange das Schild aus dem
-      jeweiligen Material bei dir realistisch hält, und sortiere danach — oft dreht sich die Rangfolge um.</dd>
+      <dt>Nutzungen</dt>
+      <dd>Wie oft <strong>ein Stück</strong> seinen Zweck erfüllt, bevor es weg ist. Bei einer festen
+      Beschilderung sind das die Standjahre: ein Blechschild, das fünfzehn Jahre hält, trägt seinen
+      Fußabdruck durch fünfzehn Nutzungen und ist damit pro Nutzung besser als ein Kartonschild, das dreimal
+      ersetzt werden muss. Bei Film und Bühne zählt man dagegen Einsätze: eine Requisite, die in einer
+      Produktion acht Stunden im Bild steht und danach ins Lager geht, hat <strong>eine</strong> Nutzung —
+      wird sie in zwölf Produktionen wiederverwendet, sind es zwölf.
+      <strong>Weniger als 1 ist nicht möglich</strong>, denn ein Stück kann nicht weniger als einmal
+      genutzt werden. Deshalb rechnet die Seite auch bei kleineren Eingaben mit 1 weiter und bläht kurze
+      Einsätze nicht auf ein fiktives Jahr hoch.
+      Voreingestellt ist überall 1, dann entspricht die Spalte <em>kg CO₂ je Nutzung</em> genau der Bilanz.</dd>
+    </div>
+    <div class="gitem">
+      <dt>Was die Nutzungsspalte nicht abbildet</dt>
+      <dd>Einen Fall deckt sie bewusst nicht ab: ein Objekt, das <strong>dauerhaft gebraucht wird, aber
+      schneller kaputtgeht als der Bedarf endet</strong> — etwa ein Aufsteller, der nur ein halbes Jahr hält,
+      obwohl er zwei Jahre stehen soll. Dann brauchst du vier Stück, und der Jahresfußabdruck ist doppelt so
+      hoch wie der eines Stücks. Rechne das ab, indem du die Projektfläche entsprechend vervielfachst; die
+      Nutzungsspalte allein kann es nicht.</dd>
     </div>
     <div class="gitem">
       <dt>Transport</dt>
@@ -586,9 +599,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <col style="width:16%">
     </colgroup>
     <thead><tr>
-      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Jahre</th>
+      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
       <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb"></th>
-      <th>CO₂/Jahr</th><th>Kosten €</th><th class="pb"></th>
+      <th>CO₂ je<br>Nutzung</th><th>Kosten €</th><th class="pb"></th>
     </tr></thead>
     <tbody id="pBody"></tbody>
   </table>
@@ -696,10 +709,14 @@ function calc(){
     const preisM2 = (r.preis === null) ? vorschlag : nz(r.preis);
     const matK = fl * vs * preisM2, trK = trKost(nz(r.km));
     const co2 = matC + trans;
-    const jahre = Math.max(nz(r.jahre), 0.01);
+    // r.jahre heisst intern weiter so, meint aber die Zahl der Nutzungen bzw. Nutzungsjahre,
+    // die EIN Stueck liefert. Weniger als eine Nutzung kann ein Stueck nicht leisten, deshalb
+    // ist 1 der kleinste Teiler: sonst wuerde eine Requisite, die nur acht Stunden im Einsatz
+    // ist, ihren Fussabdruck auf ein fiktives Jahr hochgerechnet vervielfachen.
+    const nutzungen = Math.max(nz(r.jahre), 1);
     return {m, masse, gwp, herst, trans, eol, gut, matC, co2,
             brutto: herst + trans + Math.max(0, eol),   // vor Abzug der Gutschrift
-            proJahr: co2 / jahre,
+            proJahr: co2 / nutzungen,
             vorschlag, preisM2, matK, trK, kost: matK + trK};
   });
 }
@@ -710,8 +727,8 @@ const f0 = v => Math.round(v).toLocaleString("de-AT");
 // Zahlenfelder verlangen den Punkt als Dezimaltrenner – ein Komma würde das Feld leeren.
 const ns = (v,d) => String(Math.round(v*Math.pow(10,d))/Math.pow(10,d));
 
-function cell(id, field, v, step){
-  return '<td class="in"><input type="number" step="' + step + '" min="0" data-id="' + id +
+function cell(id, field, v, step, min){
+  return '<td class="in"><input type="number" step="' + step + '" min="' + (min === undefined ? 0 : min) + '" data-id="' + id +
          '" data-field="' + field + '" value="' + v + '"></td>';
 }
 function buildTable(){
@@ -722,7 +739,7 @@ function buildTable(){
     tr.innerHTML = '<td class="nm">' + m.n + '</td>' +
       cell(m.id,"mm",r.mm,"0.01") + cell(m.id,"preis","","0.01") +
       cell(m.id,"rez",r.rez,"1") + cell(m.id,"quote",r.quote,"1") + cell(m.id,"km",r.km,"5") +
-      cell(m.id,"jahre",r.jahre,"1") +
+      cell(m.id,"jahre",r.jahre,"1",1) +
       '<td class="dt" data-brutto></td><td class="dt gut" data-gut></td>' +
       '<td class="tot" data-bilanz></td><td class="dt" data-projahr></td><td class="tot" data-kost></td>' +
       '<td class="dt dc" data-masse></td><td class="dt dc" data-herst></td>' +
@@ -776,9 +793,9 @@ const schluessel = r => st.sort === "preis" ? r.kost : st.sort === "jahr" ? r.pr
 function buildBars(rows){
   const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
   const proJahr = st.sort === "jahr";
-  // Die CO₂-Balkenlänge ist immer der Bilanzwert daneben; bei Sortierung nach Nutzungsjahr
-  // sind alle Abschnitte durch dieselbe Jahreszahl geteilt, die Anteile bleiben also gleich.
-  const teiler = r => proJahr ? Math.max(nz(st.rows[r.m.id].jahre), 0.01) : 1;
+  // Die CO₂-Balkenlänge ist immer der Wert daneben; bei Sortierung nach Nutzung sind alle
+  // Abschnitte durch dieselbe Zahl geteilt, die Anteile bleiben also gleich.
+  const teiler = r => proJahr ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
   const mc = Math.max(...rows.map(r => posten(r).summe / teiler(r)), .001);
   const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
   const seg = (v, ganz, cls) => v <= 0 ? "" :
@@ -791,7 +808,7 @@ function buildBars(rows){
       '</div><span class="blab"><b>' + wert + '</b> ' + einheit + '</span></div>';
     return '<div class="mrow"><div class="mname">' + r.m.n + '</div><div class="mbars">' +
       balken((p.summe/t)/mc*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
-             f1(proJahr ? r.proJahr : r.co2), proJahr ? "kg CO₂ je Jahr" : "kg CO₂") +
+             f1(proJahr ? r.proJahr : r.co2), proJahr ? "kg CO₂ je Nutzung" : "kg CO₂") +
       balken(gK/mk*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
              f2(r.kost), "€") +
       '</div></div>';
@@ -827,7 +844,7 @@ function buildPrint(rows){
     '<span><b>Verschnitt:</b> ' + f0(st.verschnitt) + ' %</span>' +
     '<span><b>Transport:</b> ' + antrieb + '</span>' +
     '<span><b>Sortierung:</b> ' + (st.sort === "co2" ? "nach CO₂-Bilanz"
-      : st.sort === "jahr" ? "nach CO₂ je Nutzungsjahr" : "nach Preis") + '</span>';
+      : st.sort === "jahr" ? "nach CO₂ je Nutzung" : "nach Preis") + '</span>';
   document.getElementById("pDatum").textContent =
     "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
 }

@@ -1,6 +1,6 @@
 # Werkstoffbilanz
 
-Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 17 Plattenwerkstoffe
+Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 19 Plattenwerkstoffe
 nebeneinander und zeigt für ein konkretes Projekt zwei Zahlen je Material: **Kilogramm CO₂**
 und **Euro**.
 
@@ -25,6 +25,9 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
   voreingestellt sind 152 g CO₂/kWh, die österreichische Stromaufbringung.
 - **Sechs Eingaben je Material**: Stärke, Preis, Rezyklatanteil, Recyclingquote am Lebensende,
   Transportweg, Anzahl Nutzungen. Jedes Feld hat einen erklärenden Tooltip.
+- **Materialien abwählen**: Was für ein Projekt nicht infrage kommt, wird über das Kästchen vor dem
+  Namen abgewählt — es bleibt hellgrau sichtbar, fällt aber aus dem Maßstab des Diagramms heraus,
+  damit die verbleibenden Balken die volle Breite nutzen.
 - **Preisvorschlag**, der sich aus Richtpreis je dm³ mal Materialstärke ergibt und daher
   automatisch mitwächst, wenn die Stärke geändert wird. Jederzeit überschreibbar.
 - **Alle Kennwerte korrigierbar**: Dichte, Treibhauspotenzial für Neuware und Rezyklat,
@@ -32,7 +35,8 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
 - **Getrennte Ergebnisspalten**: CO₂ vor Gutschrift, Recycling-Gutschrift, CO₂-Bilanz, kg CO₂ je
   Nutzung und Kosten — die Gutschrift verschwindet nicht in einer Gesamtzahl.
 - **Diagramm** mit zwei Balken je Material, sortierbar nach CO₂, CO₂ je Nutzung oder Preis.
-- **PDF-Export** auf eine A4-Seite quer über den Druckdialog.
+- **PDF-Export** auf eine A4-Seite hoch über den Druckdialog. Hochformat bewusst gewählt, weil
+  mobile Druckdialoge eine Querformat-Angabe häufig ignorieren und dann rechts abschneiden.
 - Alle Eingaben bleiben im Browser des Besuchers gespeichert (`localStorage`), nichts wird
   irgendwohin übertragen. Die Seite lädt keinerlei Daten nach — einzige externe Ressource ist
   die Schrift *Schibsted Grotesk* von Google Fonts.
@@ -95,6 +99,8 @@ danebenstehenden Wert entspricht.
 - Kunststoffe: [PlasticsEurope Eco-Profiles](https://plasticseurope.org/), europäischer Branchendurchschnitt
 - PVC: [American Chemistry Council, Cradle-to-Gate LCA of PVC Resin](https://www.americanchemistry.com/)
 - Metalle, Glas, Holzwerkstoffe: [ÖKOBAUDAT](https://www.oekobaudat.de/) (BBSR) und [baubook / IBO](https://www.ibo.at/)
+- MDF und HDF: rund 540 kg CO₂e/m³ für MDF laut [nachhaltiges-bauen.de](https://nachhaltiges-bauen.de/baustoffe/MDF-Platten),
+  bei 750 kg/m³ Rohdichte also etwa 0,75 kg CO₂e/kg; HDF anteilig höher wegen Dichte und Bindemittel
 - Strommix Österreich: [Umweltbundesamt Österreich](https://www.umweltbundesamt.at/), 152 g CO₂e/kWh
   (123 g direkt plus 29 g vorgelagert, Bezugsjahr 2023, inklusive Importanteil)
 - Diesel: 3,2 kg CO₂ je Liter, Well-to-Wheel — Verbrennung (2,64 kg) plus Förderung und Raffinerie

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 17 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
+<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 19 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
 <meta name="author" content="Daniel Steinbach">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F6F4E7'/%3E%3Crect x='6' y='18' width='52' height='28' fill='none' stroke='%23000' stroke-width='4'/%3E%3Ctext x='32' y='39' font-family='Helvetica,Arial' font-size='17' font-weight='bold' text-anchor='middle' fill='%23000'%3ECO2%3C/text%3E%3C/svg%3E">
@@ -17,6 +17,7 @@
   --rule:#000000; --rule-thin:#C9C7B6;
   --co2:#000000; --preis:#85868A;
   --mark:#8C6A12;
+  --abge:#B4B5AC; --abge2:#D3D4CB;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -25,6 +26,7 @@
     --rule:#F6F4E7; --rule-thin:#3A392F;
     --co2:#F6F4E7; --preis:#8B8C82;
     --mark:#D9AE4A;
+    --abge:#5B5C54; --abge2:#42433C;
   }
 }
 :root[data-theme="dark"]{
@@ -33,6 +35,7 @@
   --rule:#F6F4E7; --rule-thin:#3A392F;
   --co2:#F6F4E7; --preis:#8B8C82;
   --mark:#D9AE4A;
+  --abge:#5B5C54; --abge2:#42433C;
 }
 
 *{box-sizing:border-box}
@@ -151,6 +154,25 @@ td.in input:focus{background:var(--sunk); outline:2px solid var(--mark); outline
 .tot{font-weight:700; font-variant-numeric:tabular-nums; font-size:15.5px}
 .dt{font-variant-numeric:tabular-nums; color:var(--muted); font-size:13.5px}
 .dt.gut{font-style:italic}
+
+/* ---- Material abwählen ---- */
+.wahl{display:flex; align-items:center; gap:9px; cursor:pointer}
+.wahl input{width:15px; height:15px; accent-color:var(--ink); cursor:pointer; flex:none; margin:0}
+.wahl input:focus-visible{outline:2px solid var(--mark); outline-offset:2px}
+tbody tr.aus td,
+tbody tr.aus td.nm{color:var(--abge)}
+tbody tr.aus .tot,
+tbody tr.aus .dt{color:var(--abge)}
+tbody tr.aus input[type=number]{color:var(--abge); opacity:.8}
+tbody tr.aus .own{color:var(--abge) !important}
+.mrow.aus .mname,
+.mrow.aus .blab,
+.mrow.aus .blab b{color:var(--abge)}
+.mrow.aus .bfill{border-color:var(--abge)}
+.mrow.aus .bfill i{border-right-color:var(--abge)}
+.mrow.aus .sg-h{background:var(--abge)}
+.mrow.aus .sg-e{background:var(--abge2)}
+.mrow.aus .sg-t{background:repeating-linear-gradient(120deg,var(--abge) 0 2.5px,transparent 2.5px 6.5px)}
 .own{color:var(--mark) !important; font-weight:600 !important}
 .hide{display:none !important}
 
@@ -214,7 +236,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 /* ---- Druck: eine Seite ---- */
 .printonly{display:none}
 @media print{
-  @page{size:A4 landscape; margin:10mm 12mm}
+  /* Hochformat, weil mobile Druckdialoge eine Landscape-Angabe oft ignorieren und dann rechts
+     abschneiden. Die Tabelle ist so bemessen, dass sie in Portrait vollstaendig passt. */
+  @page{size:A4 portrait; margin:10mm 9mm}
   :root{--cream:#fff; --ink:#000; --muted:#555; --rule:#000; --rule-thin:#bbb;
         --paper:#fff; --sunk:#fff; --co2:#000; --preis:#999; --bar:#fff; --mark:#000}
   body{background:#fff; color:#000; font-size:8pt; line-height:1.22}
@@ -241,16 +265,22 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   table.p-tbl tr.best td{font-weight:700}
   table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
   .pwrap{display:block; width:100%}
-  .pbar{display:flex; height:5.5pt; border:.5pt solid #000; min-width:1pt}
+  .pbar{display:flex; height:7pt; border:.6pt solid #000; min-width:1.5pt}
   .pbar i{display:block; height:100%; border-right:.4pt solid #000}
   .pbar i:last-child{border-right:0}
   .ps-h{background:#000}
-  .ps-t{background:repeating-linear-gradient(120deg,#000 0 1pt,#fff 1pt 2.6pt)}
-  .ps-e{background:#999}
+  .ps-t{background:#7A7A7A}
+  .ps-e{background:#C4C4C4}
   .ps-g{background:#fff}
+  table.p-tbl tr.aus td{color:#A8A8A8}
+  table.p-tbl tr.aus .pbar{border-color:#B8B8B8}
+  table.p-tbl tr.aus .pbar i{border-right-color:#B8B8B8}
+  table.p-tbl tr.aus .ps-h{background:#C0C0C0}
+  table.p-tbl tr.aus .ps-t{background:#D8D8D8}
+  table.p-tbl tr.aus .ps-e{background:#EAEAEA}
   .p-leg{display:flex; gap:11pt; font-size:6.4pt; margin-top:3pt; color:#333; align-items:center}
   .p-leg span{display:inline-flex; align-items:center; gap:3pt}
-  .p-leg i{width:9pt; height:5pt; border:.5pt solid #000; display:inline-block}
+  .p-leg i{width:11pt; height:6pt; border:.5pt solid #000; display:inline-block}
   .p-foot{margin-top:5pt; padding-top:4pt; border-top:1pt solid #000;
     font-size:6.9pt; color:#333; line-height:1.4; display:flex; gap:14pt; justify-content:space-between}
   .p-foot div{max-width:64%}
@@ -340,7 +370,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   alles rechnet sofort mit. <strong>CO₂ vor Gutschrift</strong> ist die Last aus Herstellung, Transport und
   Lebensende; die <strong>CO₂-Bilanz</strong> zieht davon die Recycling-Gutschrift ab. Bei Metallen liegen
   zwischen beiden Zahlen Welten — deshalb stehen sie nebeneinander. Was die Spalten bedeuten, steht weiter
-  unten unter „Die Begriffe“.</p>
+  unten unter „Die Begriffe“. Materialien, die für dein Projekt nicht infrage kommen, kannst du über das Kästchen vor dem Namen <strong>abwählen</strong> — sie bleiben hellgrau sichtbar, fallen aber aus dem Maßstab des Diagramms heraus.</p>
   <div class="btnrow">
     <button class="btn" type="button" id="bDetail">Einzelposten zeigen</button>
     <button class="btn" type="button" id="bResetIn">Eingaben zurücksetzen</button>
@@ -599,22 +629,22 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-set" id="pSet"></div>
   <table class="p-tbl">
     <colgroup>
-      <col style="width:16.5%"><col style="width:5%"><col style="width:4.5%"><col style="width:5%">
-      <col style="width:3.5%"><col style="width:4%"><col style="width:7%"><col style="width:6.5%">
-      <col style="width:6.5%"><col style="width:13%"><col style="width:6%"><col style="width:6.5%">
-      <col style="width:16%">
+      <col style="width:22%"><col style="width:6.5%"><col style="width:5%"><col style="width:6%">
+      <col style="width:4%"><col style="width:5%"><col style="width:7.5%"><col style="width:7.5%">
+      <col style="width:7.5%"><col style="width:12%"><col style="width:7.5%"><col style="width:7.5%">
     </colgroup>
     <thead><tr>
-      <th>Material</th><th>Stärke mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
+      <th>Material</th><th>Stärke<br>mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
       <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb" id="pBarKopf"></th>
-      <th>CO₂ je<br>Nutzung</th><th>Kosten €</th><th class="pb"></th>
+      <th>CO₂ je<br>Nutzung</th><th>Kosten €</th>
     </tr></thead>
     <tbody id="pBody"></tbody>
   </table>
   <div class="p-leg">
-    <span><i class="ps-h"></i>Herstellung abzüglich Recycling-Gutschrift, bzw. Materialkosten</span>
+    <span><i class="ps-h"></i>Herstellung abzüglich Recycling-Gutschrift</span>
     <span><i class="ps-t"></i>Transport</span>
     <span><i class="ps-e"></i>Lebensende</span>
+    <span>Hellgrau gesetzte Zeilen wurden für dieses Projekt abgewählt.</span>
   </div>
   <div class="p-foot">
     <div><b>Datengrundlage:</b> PlasticsEurope Eco-Profiles, ÖKOBAUDAT, baubook/IBO, American Chemistry
@@ -637,9 +667,11 @@ const BASE = [
   {id:"acryl", n:"Acrylglas (PMMA)",        d:1.19, p:7.00,  s:2.50, e:2.20, mm:4.00,  pr:8.50,  q:20},
   {id:"alu",   n:"Aluminiumblech",          d:2.70, p:10.70, s:0.90, e:0.00, mm:2.00,  pr:23.00, q:90},
   {id:"glas",  n:"Glas (Floatglas)",        d:2.50, p:1.30,  s:1.00, e:0.00, mm:4.00,  pr:5.50,  q:80},
+  {id:"hdf",   n:"HDF-Platte",              d:0.90, p:0.85,  s:0.50, e:0.00, mm:6.00,  pr:1.60,  q:20},
   {id:"holz",  n:"Holz (Nadelholz massiv)", d:0.47, p:0.20,  s:0.05, e:0.00, mm:16.00, pr:1.40,  q:20},
-  {id:"kart",  n:"Karton / Vollpappe",      d:0.83, p:0.80,  s:0.60, e:0.00, mm:2.00,  pr:1.50,  q:85},
-  {id:"pap",   n:"Papier",                  d:0.80, p:1.40,  s:1.00, e:0.00, mm:0.20,  pr:2.25,  q:80},
+  {id:"kart",  n:"Karton / Vollpappe",      d:0.83, p:0.80,  s:0.60, e:0.00, mm:4.00,  pr:1.50,  q:85},
+  {id:"mdf",   n:"MDF-Platte",              d:0.75, p:0.75,  s:0.45, e:0.00, mm:16.00, pr:1.10,  q:20},
+  {id:"pap",   n:"Papier (Blueback 120 g)", d:0.96, p:1.40,  s:1.00, e:0.00, mm:0.125, pr:6.00,  q:80},
   {id:"pehd",  n:"PE-HD",                   d:0.96, p:2.00,  s:0.60, e:3.14, mm:3.00,  pr:7.00,  q:40},
   {id:"peld",  n:"PE-LD",                   d:0.92, p:2.10,  s:0.60, e:3.14, mm:3.00,  pr:6.50,  q:30},
   {id:"pet",   n:"PET",                     d:1.34, p:3.00,  s:1.20, e:2.29, mm:2.00,  pr:9.50,  q:60},
@@ -664,7 +696,7 @@ const st = {
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
   detail:false, sort:"co2", rows:{}, base:{}
 };
-BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1}; });
+BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
 
 function save(){
   try{ localStorage.setItem(STORE, JSON.stringify(st)); }catch(err){ /* ohne Speicher weiterlaufen */ }
@@ -681,6 +713,7 @@ function load(){
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
       ["mm","rez","quote","km","jahre"].forEach(k => { if(isFinite(r[k])) t[k] = r[k]; });
+      t.aus = !!r.aus;
       t.preis = isFinite(r.preis) ? r.preis : null;
     });
     if(o.base) BASE.forEach(m => {
@@ -730,6 +763,10 @@ function calc(){
 const f1 = v => v.toLocaleString("de-AT",{minimumFractionDigits:1,maximumFractionDigits:1});
 const f2 = v => v.toLocaleString("de-AT",{minimumFractionDigits:2,maximumFractionDigits:2});
 const f0 = v => Math.round(v).toLocaleString("de-AT");
+// Folien und Papiere brauchen die dritte Stelle, Platten nicht
+const fmm = v => v < 1
+  ? v.toLocaleString("de-AT",{minimumFractionDigits:3, maximumFractionDigits:3})
+  : v.toLocaleString("de-AT",{minimumFractionDigits:2, maximumFractionDigits:2});
 // Zahlenfelder verlangen den Punkt als Dezimaltrenner – ein Komma würde das Feld leeren.
 const ns = (v,d) => String(Math.round(v*Math.pow(10,d))/Math.pow(10,d));
 
@@ -742,7 +779,8 @@ function buildTable(){
   BASE.forEach(m => {
     const r = st.rows[m.id], tr = document.createElement("tr");
     tr.dataset.id = m.id;
-    tr.innerHTML = '<td class="nm">' + m.n + '</td>' +
+    tr.innerHTML = '<td class="nm"><label class="wahl"><input type="checkbox" data-id="' + m.id +
+      '" data-field="aus"' + (r.aus ? '' : ' checked') + '><span>' + m.n + '</span></label></td>' +
       cell(m.id,"mm",r.mm,"0.01") + cell(m.id,"preis","","0.01") +
       cell(m.id,"rez",r.rez,"1") + cell(m.id,"quote",r.quote,"1") + cell(m.id,"km",r.km,"5") +
       cell(m.id,"jahre",r.jahre,"1",1) +
@@ -755,6 +793,7 @@ function buildTable(){
   tb.addEventListener("input", ev => {
     const el = ev.target; if(el.tagName !== "INPUT") return;
     const {id, field} = el.dataset; if(!id) return;
+    if(field === "aus"){ st.rows[id].aus = !el.checked; render(); save(); return; }
     const v = parseFloat(el.value);
     if(field === "preis") st.rows[id].preis = (el.value.trim() === "" || !isFinite(v)) ? null : v;
     else if(isFinite(v)) st.rows[id][field] = v;
@@ -815,8 +854,12 @@ function buildBars(rows){
   // Die CO₂-Balkenlänge ist immer der Wert daneben; bei Sortierung nach Nutzung sind alle
   // Abschnitte durch dieselbe Zahl geteilt, die Anteile bleiben also gleich.
   const teiler = r => proJahr ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
-  const mc = Math.max(...rows.map(r => posten(r).summe / teiler(r)), .001);
-  const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
+  // Der Maßstab richtet sich nur nach den ausgewählten Materialien, damit abgewählte
+  // Ausreißer den Vergleich nicht zusammenstauchen. Ihre Balken werden bei 100 % gekappt.
+  const aktiv = rows.filter(r => !st.rows[r.m.id].aus);
+  const mass = aktiv.length ? aktiv : rows;
+  const mc = Math.max(...mass.map(r => posten(r).summe / teiler(r)), .001);
+  const mk = Math.max(...mass.map(r => r.matK + r.trK), .001);
   const seg = (v, ganz, cls) => v <= 0 ? "" :
     '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
   document.getElementById("bars").innerHTML = sorted.map(r => {
@@ -825,10 +868,11 @@ function buildBars(rows){
     const balken = (breite, inhalt, wert, einheit) =>
       '<div class="brow"><div class="bfill" style="width:' + breite.toFixed(2) + '%">' + inhalt +
       '</div><span class="blab"><b>' + wert + '</b> ' + einheit + '</span></div>';
-    return '<div class="mrow"><div class="mname">' + r.m.n + '</div><div class="mbars">' +
-      balken((p.summe/t)/mc*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
+    return '<div class="mrow' + (st.rows[r.m.id].aus ? ' aus' : '') + '"><div class="mname">' +
+      r.m.n + '</div><div class="mbars">' +
+      balken(Math.min((p.summe/t)/mc, 1)*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
              f1(proJahr ? r.proJahr : r.co2), proJahr ? "kg CO₂ je Nutzung" : "kg CO₂") +
-      balken(gK/mk*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
+      balken(Math.min(gK/mk, 1)*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
              f2(r.kost), "€") +
       '</div></div>';
   }).join("");
@@ -840,8 +884,10 @@ function buildPrint(rows){
   // eine nach Nutzung sortierte Liste neben Balken, die die ungeteilte Bilanz abbilden.
   const proNutz = st.sort === "jahr";
   const teiler = r => proNutz ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
-  const mc = Math.max(...rows.map(r => posten(r).summe / teiler(r)), .001);
-  const mk = Math.max(...rows.map(r => r.matK + r.trK), .001);
+  const aktiv = rows.filter(r => !st.rows[r.m.id].aus);
+  const mass = aktiv.length ? aktiv : rows;
+  const mc = Math.max(...mass.map(r => posten(r).summe / teiler(r)), .001);
+  const mk = Math.max(...mass.map(r => r.matK + r.trK), .001);
   const kopf = document.getElementById("pBarKopf");
   if(kopf) kopf.textContent = proNutz ? "CO₂ je Nutzung" : "CO₂-Bilanz";
   const sg = (v, ganz, cls) => v <= 0 ? "" :
@@ -851,13 +897,13 @@ function buildPrint(rows){
   document.getElementById("pBody").innerHTML = sorted.map((r,i) => {
     const p = posten(r), gC = Math.max(p.summe, .0001), t = teiler(r);
     const gK = Math.max(r.matK + r.trK, .0001), q = st.rows[r.m.id];
-    return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + r.m.n + '</td><td>' + f2(q.mm) +
+    const kl = [i === 0 && !q.aus ? "best" : "", q.aus ? "aus" : ""].filter(Boolean).join(" ");
+    return '<tr' + (kl ? ' class="' + kl + '"' : '') + '><td>' + r.m.n + '</td><td>' + fmm(q.mm) +
       '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
       f0(q.jahre) + '</td><td>' + f1(r.brutto) + '</td><td>' + (r.gut === 0 ? "—" : f1(r.gut)) +
       '</td><td class="bil">' + f1(r.co2) + '</td><td class="pb">' +
-      bar((p.summe/t)/mc*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
-      '</td><td>' + f1(r.proJahr) + '</td><td>' + f2(r.kost) + '</td><td class="pb">' +
-      bar(gK/mk*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
+      bar(Math.min((p.summe/t)/mc, 1)*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
+      '</td><td>' + f1(r.proJahr) + '</td><td>' + f2(r.kost) + '</td></tr>';
   }).join("");
 
   const antrieb = st.antrieb === "diesel"
@@ -888,6 +934,7 @@ function render(){
     set("[data-herst]", f1(r.herst));
     set("[data-trans]", f1(r.trans));
     set("[data-eol]", f1(r.eol));
+    tr.classList.toggle("aus", !!st.rows[r.m.id].aus);
     const pi = tr.querySelector("input[data-field=preis]");
     const own = st.rows[r.m.id].preis !== null;
     if(document.activeElement !== pi) pi.value = ns(own ? st.rows[r.m.id].preis : r.vorschlag, 2);
@@ -934,8 +981,8 @@ function druckDokument(){
     '.p-tbl td{padding:3px 4px;border-bottom:1px solid #ddd;text-align:right}' +
     '.pwrap{display:block;width:100%}.pbar{display:flex;height:9px;border:1px solid #000}' +
     '.pbar i{display:block;height:100%;border-right:1px solid #000}' +
-    '.ps-h{background:#000}.ps-e{background:#999}.ps-g{background:#fff}' +
-    '.ps-t{background:repeating-linear-gradient(120deg,#000 0 2px,#fff 2px 5px)}' +
+    '.ps-h{background:#000}.ps-e{background:#C4C4C4}.ps-g{background:#fff}' +
+    '.ps-t{background:#7A7A7A}' +
     '.p-head{display:flex;justify-content:space-between;align-items:flex-end;' +
     'border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:10px}' +
     '.p-head h2{margin:0;font-size:22px}.p-set,.p-leg,.p-foot{display:flex;flex-wrap:wrap;' +
@@ -949,7 +996,13 @@ function drucken(){
   render();
   sagen("");
   if(!imRahmen){
-    setTimeout(() => window.print(), 80);
+    // Der Dateinamensvorschlag im Druckdialog stammt aus dem Dokumenttitel. Ohne diesen
+    // Umweg schlagen mobile Browser Namen wie "temp1.pdf" vor.
+    const alt = document.title;
+    document.title = "Werkstoffbilanz";
+    const zurueck = () => { document.title = alt; window.removeEventListener("afterprint", zurueck); };
+    window.addEventListener("afterprint", zurueck);
+    setTimeout(() => { window.print(); setTimeout(zurueck, 3000); }, 80);
     return;
   }
   let w = null;
@@ -958,6 +1011,7 @@ function drucken(){
     w.document.open();
     w.document.write(druckDokument());
     w.document.close();
+    try{ w.document.title = "Werkstoffbilanz"; }catch(err){ /* Titel bleibt wie geschrieben */ }
     setTimeout(() => { try{ w.focus(); w.print(); }catch(err){ /* Nutzer druckt selbst */ } }, 450);
     sagen("Das Ergebnis öffnet sich in einem neuen Tab. Dort im Druckdialog <b>„Als PDF sichern“</b> wählen.");
     return;
@@ -1003,10 +1057,11 @@ function bind(){
 
   document.getElementById("bDetail").onclick = () => { st.detail = !st.detail; render(); save(); };
   document.getElementById("bResetIn").onclick = () => {
-    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1}; });
+    BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
     document.querySelectorAll("#tbody input").forEach(el => {
       const f = el.dataset.field;
-      if(f !== "preis") el.value = st.rows[el.dataset.id][f];
+      if(f === "aus") el.checked = true;
+      else if(f !== "preis") el.value = st.rows[el.dataset.id][f];
     });
     render(); save();
   };

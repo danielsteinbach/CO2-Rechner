@@ -79,7 +79,10 @@ Werkstoffen wäre eine Vorbelegung aus einem von zwei Gründen falsch:
 
 - Bei **Stahl, Glas, Span-, MDF- und HDF-Platten** enthält der Neuware-Faktor der Datenquelle
   den branchenüblichen Schrott-, Scherben- und Altholzanteil bereits. Ein zusätzlicher Eintrag
-  hier würde denselben Vorteil doppelt zählen.
+  hier würde denselben Vorteil doppelt zählen. Die Umweltdeklarationen weisen die Mischung
+  ausdrücklich aus: Spanplatte 67 % Nadel-Frischholz, 13 % Laub-Frischholz, **20 % Altholz**
+  (einzelne Werke bis 50 %); MDF und HDF **„kein Altholz enthalten"** — Altholzfasern lassen sich
+  bisher nicht zu neuen Faserplatten verarbeiten. Daher liegt Spanplatte im GWP deutlich unter MDF.
 - Bei **Aluminium und den Kunststoffen** gibt es keinen belastbaren Durchschnitt. Der
   Environmental Profile Report von European Aluminium nennt für Walzprodukte bewusst keinen
   Rezyklatanteil, weil er je Werk und Charge zwischen praktisch 0 und über 75 % liegt.
@@ -144,12 +147,42 @@ steht er auf 0, weil nur fossiles CO₂ bilanziert wird; die geringen Methan- un
 der Verbrennung sind nicht modelliert (bei Holz rund 0,06 kg CO₂e/kg und damit innerhalb der
 Unsicherheit des Herstellungswerts selbst).
 
+**Holzwerkstoffe** stammen aus den generischen ÖKOBAUDAT-Datensätzen „Durchschnitt DE" nach EN 15804+A2,
+bei denen der fossile Anteil getrennt ausgewiesen ist: Spanplatte 171,2 kg CO₂e/m³ bei 633 kg/m³
+(0,270 kg/kg), MDF 323,1 bei 738 (0,438), HDF 345,8 bei 850 (0,407), Nadelschnittholz 57,2 bei 485
+(0,118). Ältere Datensätze verrechnen die biogene CO₂-Aufnahme negativ in Modul A1 und ergeben in Summe
+Minuswerte — die sind bewusst nicht verwendet. Die Spanne ist beträchtlich: zwei Hersteller-EPDs für
+Spanplatte (Egger 0,224, Pfleiderer ≈0,196) liegen 20–25 % unter dem Branchenschnitt, baubook nennt für
+MDF mit 0,641 kg/kg rund 46 % mehr als ÖKOBAUDAT.
+
 **Karton** ist in zwei Zeilen aufgeteilt, weil sich die Sorten in zwei Kennwerten unterscheiden:
 Recyclingkarton ist dichter (GD2: 400 g/m² bei 545 µm → 0,73 kg/dm³), Frischfaserkarton
 voluminöser (GC1: 400 g/m² bei 605 µm → 0,66; GC2 sogar 700 µm → 0,57) und damit je Millimeter
 leichter. Der Herstellungsfaktor stammt aus dem Carbon Footprint of Carton Packaging von
 Pro Carton (929 kg/t im europäischen Mittel) und der IFEU-Studie zu Büropapieren
 (Frischfaser 1.116 kg/t, Recyclingfaser 933 kg/t).
+
+### Recyclingquoten am Lebensende (`q`)
+
+Die Startwerte sind österreichische Durchschnitte der **stofflichen** Verwertung, nicht der Verwertung
+insgesamt. Österreich hat ein Deponieverbot für unbehandelte Abfälle: Was nicht stofflich verwertet wird,
+wird verbrannt — genau so rechnet die Seite.
+
+| Gruppe | Startwert | Beleg |
+|---|---|---|
+| Papier, Karton | 80 % | ARA-Sammelbilanz 2024, Verpackungen |
+| Holz, Spanplatte | 65 % | Altholzaufkommen Austria 2022: 989.000 t von 1,14 Mio. t an Recyclinganlagen |
+| MDF, HDF | 50 % | dito, aber Faserplatten sind der schwierigste Altholzstrom |
+| Stahlblech | 85 % | Näherung; Verpackungsquote 75 %, sauberes Blech liegt darüber |
+| Aluminiumblech | 80 % | Näherung; Verpackungsquote 50 %, EU-End-of-Life 69 %, Bauprodukte höher |
+| Flachglas | 10 % | Glass for Europe: rund 5 % werden wieder zu Flachglas |
+| Kunststoffe | 10–20 % | Umweltbundesamt REP-0744: 26 % aller Kunststoffabfälle stofflich, Plattenware darunter |
+
+Zwei Werte überraschen und sind trotzdem richtig. **Flachglas** steht niedrig, weil die bekannten 86 %
+für *Behälterglas* gelten; Fensterglas und Glasplatten kommen beschichtet und gerahmt im Bauschutt an.
+**Altholz** steht hoch, weil Österreich sein Altholz überwiegend der Span- und Faserplattenindustrie
+zuführt statt dem Heizkraftwerk — anders als Deutschland. Für Bau- und Gewerbeschrott aus Stahl und
+Aluminium gibt es keine belastbare österreichische Quote; diese beiden Werte sind Näherungen.
 
 **Sprit- und Strompreis werden nicht automatisch abgerufen.** Eine Abfrage bei der E-Control
 bräuchte einen Server oder Build-Job — die Seite ist reines statisches HTML und käme im Browser

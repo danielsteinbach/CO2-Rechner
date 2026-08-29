@@ -245,18 +245,24 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .noprint{display:none !important}
   .printonly{display:block}
   .wrap{max-width:none; padding:0}
-  .p-head{display:flex; justify-content:space-between; align-items:flex-end;
+  .p-head{display:flex; flex-wrap:wrap; gap:4pt 12pt; justify-content:space-between; align-items:flex-end;
     border-bottom:1.6pt solid #000; padding-bottom:3pt; margin-bottom:5pt}
   .p-head h2{font-size:16pt; margin:0; font-weight:700; letter-spacing:-.02em}
   .p-head .p-meta{font-size:7.4pt; text-align:right; color:#333; line-height:1.35}
   .p-set{display:flex; flex-wrap:wrap; gap:2pt 15pt; font-size:7.4pt; margin-bottom:5pt;
     padding-bottom:3.5pt; border-bottom:.5pt solid #bbb}
   .p-set b{font-weight:600}
-  table.p-tbl{width:100%; border-collapse:collapse; font-size:7.5pt; min-width:0; table-layout:fixed}
-  table.p-tbl th{font-size:6.6pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
-    border-bottom:1pt solid #000; padding:2pt 3pt; text-align:right; color:#000; font-weight:600;
+  .printonly{max-width:100%}
+  table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.2pt;
+    min-width:0; table-layout:fixed}
+  /* Ohne diese Zeile erbt die Drucktabelle das nowrap der Bildschirmtabelle. Bei fester
+     Spaltenbreite laeuft zu breiter Inhalt dann ueber den Seitenrand hinaus – Firefox
+     schneidet dadurch rechts ab. */
+  table.p-tbl th,table.p-tbl td{white-space:normal; overflow-wrap:anywhere}
+  table.p-tbl th{font-size:6.4pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
+    border-bottom:1pt solid #000; padding:2pt 2.5pt; text-align:right; color:#000; font-weight:600;
     vertical-align:bottom}
-  table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left; white-space:normal}
+  table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left}
   /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
   table.p-tbl td{padding:1.5pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
@@ -265,24 +271,32 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   table.p-tbl tr.best td{font-weight:700}
   table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
   .pwrap{display:block; width:100%}
-  .pbar{display:flex; height:7pt; border:.6pt solid #000; min-width:1.5pt}
-  .pbar i{display:block; height:100%; border-right:.4pt solid #000}
+  /* Die Balkenfuellung liegt in einem border-top, nicht in einem background: Firefox druckt
+     Hintergrundfarben in der Voreinstellung nicht, Rahmen dagegen immer. background bleibt
+     zusaetzlich stehen, wo der Hintergrunddruck aktiv ist. */
+  .pbar{display:flex; align-items:flex-start; border:.6pt solid #000; min-width:2pt; line-height:0;
+    print-color-adjust:exact; -webkit-print-color-adjust:exact}
+  .pbar i{display:block; box-sizing:content-box; height:0; border-top:6.5pt solid #000;
+    border-right:.5pt solid #fff; print-color-adjust:exact; -webkit-print-color-adjust:exact}
   .pbar i:last-child{border-right:0}
-  .ps-h{background:#000}
-  .ps-t{background:#7A7A7A}
-  .ps-e{background:#C4C4C4}
-  .ps-g{background:#fff}
+  .pbar i.ps-h,.p-leg i.ps-h{border-top-color:#000; background:#000}
+  .pbar i.ps-t,.p-leg i.ps-t{border-top-color:#767676; background:#767676}
+  .pbar i.ps-e,.p-leg i.ps-e{border-top-color:#C0C0C0; background:#C0C0C0}
+  .pbar i.ps-g{border-top-color:#fff; background:#fff}
   table.p-tbl tr.aus td{color:#A8A8A8}
   table.p-tbl tr.aus .pbar{border-color:#B8B8B8}
-  table.p-tbl tr.aus .pbar i{border-right-color:#B8B8B8}
-  table.p-tbl tr.aus .ps-h{background:#C0C0C0}
-  table.p-tbl tr.aus .ps-t{background:#D8D8D8}
-  table.p-tbl tr.aus .ps-e{background:#EAEAEA}
-  .p-leg{display:flex; gap:11pt; font-size:6.4pt; margin-top:3pt; color:#333; align-items:center}
+  table.p-tbl tr.aus .pbar i.ps-h{border-top-color:#BFBFBF; background:#BFBFBF}
+  table.p-tbl tr.aus .pbar i.ps-t{border-top-color:#D6D6D6; background:#D6D6D6}
+  table.p-tbl tr.aus .pbar i.ps-e{border-top-color:#E8E8E8; background:#E8E8E8}
+  .p-leg{display:flex; flex-wrap:wrap; gap:3pt 11pt; font-size:6.4pt; margin-top:3pt; color:#333;
+    align-items:center}
   .p-leg span{display:inline-flex; align-items:center; gap:3pt}
-  .p-leg i{width:11pt; height:6pt; border:.5pt solid #000; display:inline-block}
+  .p-leg i{width:11pt; height:0; box-sizing:content-box; display:inline-block;
+    border:.4pt solid #9A9A9A; border-top:6pt solid #000;
+    print-color-adjust:exact; -webkit-print-color-adjust:exact}
   .p-foot{margin-top:5pt; padding-top:4pt; border-top:1pt solid #000;
-    font-size:6.9pt; color:#333; line-height:1.4; display:flex; gap:14pt; justify-content:space-between}
+    font-size:6.9pt; color:#333; line-height:1.4; display:flex; flex-wrap:wrap; gap:5pt 14pt;
+    justify-content:space-between}
   .p-foot div{max-width:64%}
   .p-foot b{color:#000}
 }
@@ -979,10 +993,16 @@ function druckDokument(){
     'text-transform:uppercase;letter-spacing:.04em}' +
     '.p-tbl th:first-child,.p-tbl td:first-child{text-align:left}' +
     '.p-tbl td{padding:3px 4px;border-bottom:1px solid #ddd;text-align:right}' +
-    '.pwrap{display:block;width:100%}.pbar{display:flex;height:9px;border:1px solid #000}' +
-    '.pbar i{display:block;height:100%;border-right:1px solid #000}' +
-    '.ps-h{background:#000}.ps-e{background:#C4C4C4}.ps-g{background:#fff}' +
-    '.ps-t{background:#7A7A7A}' +
+    '.pwrap{display:block;width:100%}' +
+    '.pbar{display:flex;align-items:flex-start;border:1px solid #000;line-height:0}' +
+    '.pbar i{display:block;box-sizing:content-box;height:0;border-top:9px solid #000;' +
+    'border-right:1px solid #fff;print-color-adjust:exact}' +
+    '.pbar i:last-child{border-right:0}' +
+    '.pbar i.ps-h{border-top-color:#000}.pbar i.ps-t{border-top-color:#767676}' +
+    '.pbar i.ps-e{border-top-color:#C0C0C0}.pbar i.ps-g{border-top-color:#fff}' +
+    'tr.aus td{color:#A8A8A8}tr.aus .pbar{border-color:#B8B8B8}' +
+    'tr.aus .pbar i.ps-h{border-top-color:#BFBFBF}tr.aus .pbar i.ps-t{border-top-color:#D6D6D6}' +
+    'tr.aus .pbar i.ps-e{border-top-color:#E8E8E8}' +
     '.p-head{display:flex;justify-content:space-between;align-items:flex-end;' +
     'border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:10px}' +
     '.p-head h2{margin:0;font-size:22px}.p-set,.p-leg,.p-foot{display:flex;flex-wrap:wrap;' +

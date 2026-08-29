@@ -1,6 +1,6 @@
 # Werkstoffbilanz
 
-Materialvergleichsrechner für Schilder und Plattenzuschnitte. Stellt 24 Plattenwerkstoffe
+Materialvergleichsrechner für Schilder und Plattenzuschnitte. **Version V1.001.** Stellt 25 Plattenwerkstoffe
 nebeneinander und zeigt für ein konkretes Projekt zwei Zahlen je Material: **Kilogramm CO₂**
 und **Euro**.
 
@@ -37,14 +37,15 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
 - **Diagramm** mit zwei Balken je Material, sortierbar nach CO₂, CO₂ je Nutzung oder Preis.
 - **PDF-Export** auf eine A4-Seite quer über den Druckdialog. Ignoriert ein Druckdialog die
   Querformat-Angabe — auf Mobilgeräten kommt das vor —, fällt die Ausgabe auf Hochformat
-  zurück und bleibt trotzdem vollständig: die Spalten sind in Prozent bemessen und die Zellen
-  dürfen umbrechen, die Tabelle passt sich also jeder Seitenbreite an.
+  zurück und bleibt trotzdem vollständig: die Spalten sind in Prozent bemessen, die Tabelle passt
+  sich also jeder Seitenbreite an. Datenzeilen sind auf eine Zeile Höhe gezwungen, damit alle
+  25 Materialien auf eine Seite passen.
   Die Balken sind über `border-top` gezeichnet statt über `background`, damit sie auch dort
   gefüllt erscheinen, wo der Hintergrunddruck abgeschaltet ist — in Firefox ist das die
   Voreinstellung.
 - Alle Eingaben bleiben im Browser des Besuchers gespeichert (`localStorage`), nichts wird
-  irgendwohin übertragen. Die Seite lädt keinerlei Daten nach — einzige externe Ressource ist
-  die Schrift *Schibsted Grotesk* von Google Fonts.
+  irgendwohin übertragen. Die Seite lädt **überhaupt nichts** von fremden Servern nach — keine
+  Schriften, keine Skripte, keine Bilder. Siehe *Rechtliches*.
 
 ## Werte ändern
 
@@ -71,16 +72,18 @@ Ein neues Material ist eine weitere Zeile in dieser Liste — sonst ist nichts a
 Tabelle, Diagramm und PDF wachsen automatisch mit. Für das PDF gilt allerdings eine Grenze: Die
 Drucktabelle erzwingt Einzeiler (`white-space:nowrap` plus `overflow:hidden` bei `table-layout:fixed`),
 damit alles auf eine Seite passt. Ein zu langer Materialname wird dadurch mit Auslassungspunkten
-abgeschnitten statt umgebrochen — bei 24 Zeilen liegt die Grenze bei rund 22 Zeichen. Wer weitere
+abgeschnitten statt umgebrochen — bei 25 Zeilen liegt die Grenze bei rund 22 Zeichen. Wer weitere
 Materialien ergänzt, sollte danach `td:first-child` in der Druckansicht auf `scrollWidth > clientWidth`
 prüfen und notfalls die Schriftgröße in `table.p-tbl` senken.
 
-### Warum `rz` nur beim Karton gesetzt ist
+### Wo `rz` gesetzt ist und wo nicht
 
-Der Rezyklatanteil ist bewusst fast überall 0. Vorbelegt ist er nur bei den beiden Kartonzeilen,
-weil dort die *Sorte* den Faserstoff festlegt: Chromoduplex und Triplex (GD/GT) bestehen zu rund
-80 % aus Altpapier, Chromo- und Zellstoffkarton (GC/GZ) aus Frischfaser. Bei allen anderen
-Werkstoffen wäre eine Vorbelegung aus einem von zwei Gründen falsch:
+Der Rezyklatanteil ist bewusst fast überall 0. Vorbelegt ist er dort, wo der Faserstoff feststeht
+oder die Datenquelle ihn offenlegt: bei **Karton Recycling (GD/GT)** und **Wabenkarton** mit je 80 %
+— Chromoduplex und Triplex bestehen zu rund 80 % aus Altpapier, die Wabe aus Testliner und
+Schrenzpapier —, und bei **Spanplatte** mit 20 % (Rückrechnung, siehe unten). Karton Primärfaser
+(GC/GZ) steht auf 0, weil Frischfaser drin ist. Bei allen anderen Werkstoffen wäre eine Vorbelegung
+aus einem von zwei Gründen falsch:
 
 - Bei **Stahl, Glas, Span-, MDF- und HDF-Platten** enthält der Neuware-Faktor der Datenquelle
   den branchenüblichen Schrott-, Scherben- und Altholzanteil bereits. Ein zusätzlicher Eintrag
@@ -171,7 +174,9 @@ MDF mit 0,641 kg/kg rund 46 % mehr als ÖKOBAUDAT.
 
 **Sperrholz** stammt aus dem ÖKOBAUDAT-Datensatz Furniersperrholz (362 kg CO₂e/m³ bei 700 kg/m³ →
 0,52 kg/kg); die Deklaration von Latvijas Finieris für rohes Birkensperrholz liegt mit 310 kg/m³ darunter.
-Sperrholz wird aus geschältem Rundholz gefertigt, `rz` bleibt also auf 0.
+Zwei Zeilen, weil sich die Dichten stark unterscheiden: Birke 700 kg/m³, Pappel 450. Der Faktor je Kilogramm
+ist derselbe — der Unterschied im Ergebnis kommt allein aus dem Gewicht. Sperrholz wird aus geschältem
+Rundholz gefertigt, `rz` bleibt bei beiden auf 0.
 
 **Wabenkarton** ist der einzige Werkstoff **ohne eigenes Umweltdatenblatt**. Der Rezyklatfaktor 0,55 ist
 zwischen zwei Quellen eingeordnet: FEFCO nennt für Wellpappe 0,35 kg CO₂e/kg (reine Altfaser, weitgehend
@@ -247,6 +252,26 @@ Die Seite ist eine Entscheidungshilfe für die Materialwahl, **keine Ökobilanz*
 vollständige LCA fehlen detaillierte Entsorgungsszenarien, Recyclingprozesse sowie Qualitäts-
 und Substitutionsfaktoren; außerdem zieht die Bilanz Herstellung, Lebensende und Modul-D-
 Gutschrift zu einer Zahl zusammen, die eine EPD getrennt ausweisen würde.
+
+## Rechtliches
+
+Die Seite trägt ein Impressum mit Offenlegung nach § 25 Mediengesetz („kleine Website": Name, Wohnort,
+Gegenstand), eine kurze Datenschutzerklärung und einen Haftungshinweis — alles im Abschnitt `#impressum`,
+verlinkt aus dem Footer.
+
+Zwei bewusste technische Entscheidungen stehen dahinter:
+
+- **Keine externen Ressourcen.** Die früher eingebundene Google-Schriftart wurde entfernt, weil jeder
+  Seitenaufruf die IP-Adresse des Besuchers an Google übertragen hätte (vgl. LG München I, 3 O 17493/20 —
+  deutsches Urteil, aber dieselbe DSGVO-Grundlage). Die Seite lädt jetzt nichts von fremden Servern; das
+  lässt sich mit den Netzwerk-Werkzeugen des Browsers nachprüfen und ist Teil der Datenschutzaussage.
+  Wer die Originalschrift zurück will, muss die Schriftdatei mit ins Repository legen.
+- **Kein Cookie-Banner.** `localStorage` speichert ausschließlich die Eingaben des Nutzers, rein lokal,
+  ohne Übertragung. Das fällt unter die Ausnahme „unbedingt erforderlich" in § 165 TKG 2021.
+
+**Vor der Weitergabe zu ergänzen:** Im Impressum steht `[Wohnort ergänzen]` — § 25 Abs 5 Mediengesetz
+verlangt den Wohnort des Medieninhabers. Der Platzhalter ist farblich markiert, damit er nicht übersehen
+wird.
 
 ## Haftungsausschluss
 

@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 24 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
+<meta name="description" content="Materialvergleichsrechner für Schilder und Platten: CO2-Fußabdruck und Preis von 25 Plattenwerkstoffen, mit Diesel- oder Elektrotransport.">
 <meta name="author" content="Daniel Steinbach">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F6F4E7'/%3E%3Crect x='6' y='18' width='52' height='28' fill='none' stroke='%23000' stroke-width='4'/%3E%3Ctext x='32' y='39' font-family='Helvetica,Arial' font-size='17' font-weight='bold' text-anchor='middle' fill='%23000'%3ECO2%3C/text%3E%3C/svg%3E">
 <title>Werkstoffbilanz</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 
 <style>
 :root{
@@ -41,7 +40,7 @@
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--cream); color:var(--ink);
-  font-family:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",system-ui,sans-serif;
   font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
 }
 .num{font-variant-numeric:tabular-nums}
@@ -234,6 +233,10 @@ tbody td.sk{font-weight:700}
 footer.bar{background:var(--bar); margin-top:44px}
 footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   padding-top:11px; padding-bottom:11px; font-size:13px; color:var(--ink)}
+footer.bar a{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink)}
+footer.bar a:hover{color:var(--mark); border-bottom-color:var(--mark)}
+/* Der Wohnort fehlt noch — auffaellig markiert, damit er vor der Weitergabe nicht uebersehen wird. */
+.tbd{background:var(--mark); color:#fff; padding:1px 6px; font-weight:600}
 
 /* ---- Druck: eine Seite ---- */
 .printonly{display:none}
@@ -273,7 +276,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     vertical-align:bottom}
   table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left}
   /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
-  table.p-tbl td{padding:0.7pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+  table.p-tbl td{padding:0.4pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
   table.p-tbl tr{height:auto}
   table.p-tbl th.sk::after{content:" \25B2"; font-size:.85em}
@@ -306,8 +309,8 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .p-leg i{width:11pt; height:0; box-sizing:content-box; display:inline-block;
     border:.4pt solid #9A9A9A; border-top:6pt solid #000;
     print-color-adjust:exact; -webkit-print-color-adjust:exact}
-  .p-foot{margin-top:4pt; padding-top:3pt; border-top:1pt solid #000;
-    font-size:6.4pt; color:#333; line-height:1.3; display:flex; flex-wrap:wrap; gap:5pt 14pt;
+  .p-foot{margin-top:3pt; padding-top:2.5pt; border-top:1pt solid #000;
+    font-size:6.2pt; color:#333; line-height:1.28; display:flex; flex-wrap:wrap; gap:5pt 14pt;
     justify-content:space-between}
   .p-foot div{max-width:64%}
   .p-foot b{color:#000}
@@ -699,10 +702,58 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   </div>
 </section>
 
+<section id="impressum">
+  <h2 class="shead">Impressum, Offenlegung und Datenschutz</h2>
+  <p class="snote">Offenlegung nach § 25 Mediengesetz. Diese Seite ist eine private, unentgeltliche
+  Initiative — kein Unternehmen, keine Werbung, keine Einnahmen.</p>
+  <div class="srcs">
+    <div class="src">
+      <h3>Medieninhaber und Verantwortlicher</h3>
+      <p><strong>Daniel Steinbach</strong><br>
+      <span class="tbd">[Wohnort ergänzen]</span>, Österreich<br>
+      <a href="mailto:danielsteinbach@gmx.net">danielsteinbach@gmx.net</a><br>
+      <a href="tel:+436644217082">+43 664 421 70 82</a></p>
+      <p><strong>Gegenstand der Website:</strong> Kostenloser Vergleichsrechner für den CO₂-Fußabdruck und
+      die Materialkosten von Plattenwerkstoffen im Schilder-, Messe- und Dekorationsbau. Private Initiative
+      ohne Erwerbsabsicht, nicht im Namen eines Unternehmens.</p>
+    </div>
+    <div class="src">
+      <h3>Datenschutz</h3>
+      <p>Die Seite <strong>erhebt keine personenbezogenen Daten</strong>. Es gibt kein Kontaktformular,
+      keine Anmeldung, keine Cookies, keine Statistik, keine Werbung und keine eingebundenen Dienste
+      Dritter — auch keine externen Schriftarten. Alles, was die Seite braucht, steckt in dieser einen
+      HTML-Datei.</p>
+      <p>Deine Eingaben speichert die Seite ausschließlich <strong>lokal in deinem Browser</strong>
+      (localStorage), damit sie beim nächsten Besuch noch da sind. Sie verlassen dein Gerät nicht und sind
+      für mich nicht einsehbar. Löschen kannst du sie über die Browsereinstellungen oder den Knopf
+      <em>Eingaben zurücksetzen</em>.</p>
+      <p>Gehostet wird die Seite auf <strong>GitHub Pages</strong> (GitHub Inc., USA). Wie jeder Webserver
+      verarbeitet GitHub dabei technische Zugriffsdaten samt IP-Adresse, um die Seite ausliefern zu können.
+      GitHub ist nach dem EU-U.S. Data Privacy Framework zertifiziert; Näheres in der
+      <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">Datenschutzerklärung
+      von GitHub</a>.</p>
+    </div>
+    <div class="src">
+      <h3>Haftung und Weitergabe</h3>
+      <p>Für Richtigkeit, Vollständigkeit und Aktualität der berechneten Werte wird <strong>keine
+      Gewährleistung und keine Garantie</strong> übernommen. Die Ergebnisse sind eine Orientierungshilfe für
+      die Materialwahl, keine Ökobilanz und keine fachliche Beratung. Wer sie für eine Ausschreibung, eine
+      Förderung oder eine Nachhaltigkeitsberichterstattung braucht, muss die Zahlen gegen die dort geltenden
+      Vorgaben prüfen lassen.</p>
+      <p>Die Nutzung erfolgt auf eigene Verantwortung; eine Haftung für Entscheidungen auf Grundlage dieser
+      Ergebnisse ist ausgeschlossen.</p>
+      <p><strong>Weitergabe ist erwünscht.</strong> Die Seite darf für eigene Projekte genutzt, weitergegeben
+      und ausgedruckt werden. Wer sie verändert weitergibt, sollte kenntlich machen, dass die Zahlen dann
+      nicht mehr die hier belegten sind.</p>
+    </div>
+  </div>
+</section>
+
 </div>
 
 <footer class="bar"><div class="wrap">
-  <span>Werkstoffbilanz · Stand August 2026</span>
+  <span>Werkstoffbilanz <b>V1.001</b> · Stand August 2026</span>
+  <span><a href="#impressum">Impressum und Datenschutz</a></span>
   <span>Eingaben bleiben in diesem Browser gespeichert</span>
 </div></footer>
 
@@ -744,15 +795,14 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     <span>Hellgrau gesetzte Zeilen wurden für dieses Projekt abgewählt.</span>
   </div>
   <div class="p-foot">
-    <div><b>Datengrundlage:</b> PlasticsEurope Eco-Profiles, ÖKOBAUDAT, baubook/IBO, American Chemistry
-    Council (Treibhauspotenzial, Module A1–A3) · Umweltbundesamt Österreich (Strom, 152 g CO₂/kWh) ·
-    Diesel 3,2 kg CO₂/l (Well-to-Wheel, inkl. Förderung und Raffinerie – gleich abgegrenzt wie der Stromfaktor;
-    bei den Materialdaten ist die Energievorkette ebenfalls enthalten) · Preise aus deutschsprachigen Zuschnitt-Onlineshops, netto. Europäische
-    Mittelwerte mit typisch ±30 % Streuung. Gutschrift = vereinfachter Ansatz in Anlehnung an Modul D nach
-    EN 15804. Nicht stofflich recycelter Anteil wird als Verbrennung gerechnet. Recyclingquoten:
-    österreichische Durchschnitte der stofflichen Verwertung (ARA, Umweltbundesamt, Holzindustrie,
-    Glass for Europe). Transport je Material als eigene Fahrt. Nicht enthalten: Bedruckung, Montage. Keine vollständige Ökobilanz.</div>
-    <div><b>Haftungsausschluss:</b> Für Richtigkeit, Vollständigkeit und Aktualität wird keine
+    <div><b>Datengrundlage:</b> Treibhauspotenzial A1–A3 aus PlasticsEurope, ÖKOBAUDAT, baubook/IBO und
+    ACC; Strom 152 g CO₂/kWh und Diesel 3,2 kg CO₂/l jeweils inklusive Vorkette (Umweltbundesamt).
+    Recyclingquoten als österreichische Durchschnitte der stofflichen Verwertung (ARA, Umweltbundesamt,
+    Holzindustrie, Glass for Europe). Preise netto aus Zuschnitt-Onlineshops. Europäische Mittelwerte,
+    Streuung typisch ±30 %. Gutschrift in Anlehnung an Modul D nach EN 15804; nicht stofflich verwerteter
+    Anteil gilt als verbrannt. Transport je Material als eigene Fahrt. Ohne Bedruckung und Montage,
+    keine vollständige Ökobilanz.</div>
+    <div><b>Haftungsausschluss und Offenlegung:</b> Medieninhaber Daniel Steinbach, Österreich · danielsteinbach@gmx.net · private, unentgeltliche Initiative ohne Erwerbsabsicht. Für Richtigkeit, Vollständigkeit und Aktualität wird keine
     Gewährleistung und keine Garantie übernommen. Nutzung auf eigene Verantwortung; eine Haftung für
     Entscheidungen auf Grundlage dieser Ergebnisse ist ausgeschlossen.</div>
   </div>
@@ -764,7 +814,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 const BASE = [
   {id:"acryl", n:"Acrylglas (PMMA)",        d:1.19, p:7.00,  s:2.50, e:2.20, mm:4.00,  pr:8.50,  q:10},
   {id:"alu",   n:"Aluminiumblech",          d:2.70, p:10.70, s:0.90, e:0.00, mm:2.00,  pr:23.00, q:80},
-  {id:"eps",   n:"EPS-Hartschaum",          d:0.018,p:3.12,  s:1.40, e:3.38, mm:30.00, pr:0.12,  q:10},
+  {id:"eps",   n:"EPS-Hartschaum",          d:0.018,p:3.12,  s:1.40, e:3.38, mm:20.00, pr:0.12,  q:10},
   {id:"glas",  n:"Glas (Floatglas)",        d:2.50, p:1.30,  s:1.00, e:0.00, mm:4.00,  pr:5.50,  q:10},
   {id:"hdf",   n:"HDF-Platte",              d:0.85, p:0.41,  s:0.24, e:0.00, mm:6.00,  pr:1.60,  q:50},
   {id:"holz",  n:"Holz (Nadelholz massiv)", d:0.48, p:0.12,  s:0.04, e:0.00, mm:16.00, pr:1.40,  q:65},
@@ -788,13 +838,14 @@ const BASE = [
   // Marktmix mit 20 % Altholz. 0,30 mal 80 % plus 0,15 mal 20 % ergibt wieder exakt 0,27 —
   // die Anzeige aendert sich also nicht, aber die Gutschrift wird nicht mehr doppelt gezaehlt.
   {id:"span",  n:"Spanplatten",             d:0.63, p:0.30,  s:0.15, e:0.00, mm:16.00, pr:0.70,  q:65, rz:20},
-  {id:"sperr", n:"Sperrholz (Birke)",       d:0.70, p:0.52,  s:0.30, e:0.00, mm:12.00, pr:2.30,  q:50},
+  {id:"sperr", n:"Sperrholz (Birke)",       d:0.70, p:0.52,  s:0.30, e:0.00, mm:4.00,  pr:2.30,  q:50},
+  {id:"sperp", n:"Sperrholz (Pappel)",      d:0.45, p:0.52,  s:0.30, e:0.00, mm:4.00,  pr:2.00,  q:50},
   {id:"stahl", n:"Stahlblech",              d:7.85, p:2.40,  s:0.90, e:0.00, mm:0.75,  pr:20.00, q:85},
   // Kein eigenes Umweltdatenblatt fuer Wabenkarton auffindbar. Der Rezyklatfaktor 0,55 liegt
   // zwischen dem Wellpappenwert von FEFCO (0,35) und dem Kartonwert (0,80) — Wellpappenwerke
   // arbeiten mit reiner Altfaser und weitgehend biogener Energie.
   {id:"wabe",  n:"Wabenkarton",             d:0.15, p:1.10,  s:0.55, e:0.00, mm:10.00, pr:3.60,  q:80, rz:80},
-  {id:"xps",   n:"XPS-Hartschaum",          d:0.034,p:3.40,  s:1.50, e:3.38, mm:30.00, pr:0.17,  q:10}
+  {id:"xps",   n:"XPS-Hartschaum",          d:0.034,p:3.40,  s:1.50, e:3.38, mm:20.00, pr:0.17,  q:10}
 ];
 const KEYS = ["d","p","s","e","pr"];
 // Well-to-Wheel: Verbrennung (2,64) plus Förderung und Raffinerie – gleich abgegrenzt wie der
@@ -802,13 +853,14 @@ const KEYS = ["d","p","s","e","pr"];
 const DIESEL = 3.2;
 const KM0 = 10;
 const STORE = "werkstoffbilanz.v2";
+const VERSION = "V1.001";
 
 const st = {
   flaeche:3, verschnitt:10, antrieb:"diesel",
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
   // datenV zaehlt hoch, sobald sich die hinterlegten Startwerte inhaltlich aendern. Nur dann werden
   // gespeicherte Quoten ueberschrieben — siehe load().
-  detail:false, sort:"co2n", nutzSort:true, datenV:5, rows:{}, base:{}
+  detail:false, sort:"co2n", nutzSort:true, datenV:6, rows:{}, base:{}
 };
 BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:(m.rz || 0), quote:m.q, km:KM0, jahre:1, aus:false}; });
 
@@ -1071,7 +1123,7 @@ function buildPrint(rows){
       co2n:"CO₂ je Nutzung", preis:"Kosten gesamt", preisn:"Kosten je Nutzung"}[st.sort]
       || "CO₂-Bilanz gesamt") + '</span>';
   document.getElementById("pDatum").textContent =
-    "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
+    VERSION + " · Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
 }
 
 function render(){
@@ -1142,7 +1194,6 @@ function druckDokument(){
   return '<!doctype html><html lang="de"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>Werkstoffbilanz</title>' +
-    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">' +
     '<style>' + css + '</style>' +
     '<style>body{background:#fff;color:#000;font-size:8.4pt;line-height:1.32;padding:14px}' +
     '.printonly{display:block}.noprint{display:none}' +

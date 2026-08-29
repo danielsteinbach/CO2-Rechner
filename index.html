@@ -17,7 +17,7 @@
   --rule:#000000; --rule-thin:#C9C7B6;
   --co2:#000000; --preis:#85868A;
   --mark:#8C6A12;
-  --abge:#B4B5AC; --abge2:#D3D4CB;
+  --abge:#C8C9C1; --abge2:#E0E1D8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -106,7 +106,7 @@ input[type=number]:focus{outline:none}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
 
-.toggle{display:flex; border:2px solid var(--ink); width:fit-content}
+.toggle{display:flex; flex-wrap:wrap; border:2px solid var(--ink); width:fit-content; max-width:100%}
 .toggle button{
   font:inherit; font-size:15px; font-weight:500; background:transparent; color:var(--ink);
   border:0; padding:8px 20px; cursor:pointer
@@ -272,6 +272,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   table.p-tbl td.bil{font-weight:700}
   table.p-tbl tr.best td{font-weight:700}
   table.p-tbl td.pb{padding-left:2pt; padding-right:4pt}
+  table.p-tbl th.pb{text-align:left; padding-left:3pt}
   .pwrap{display:block; width:100%}
   /* Die Balkenfuellung liegt in einem border-top, nicht in einem background: Firefox druckt
      Hintergrundfarben in der Voreinstellung nicht, Rahmen dagegen immer. background bleibt
@@ -285,11 +286,12 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   .pbar i.ps-t,.p-leg i.ps-t{border-top-color:#767676; background:#767676}
   .pbar i.ps-e,.p-leg i.ps-e{border-top-color:#C0C0C0; background:#C0C0C0}
   .pbar i.ps-g{border-top-color:#fff; background:#fff}
-  table.p-tbl tr.aus td{color:#A8A8A8}
-  table.p-tbl tr.aus .pbar{border-color:#B8B8B8}
-  table.p-tbl tr.aus .pbar i.ps-h{border-top-color:#BFBFBF; background:#BFBFBF}
-  table.p-tbl tr.aus .pbar i.ps-t{border-top-color:#D6D6D6; background:#D6D6D6}
-  table.p-tbl tr.aus .pbar i.ps-e{border-top-color:#E8E8E8; background:#E8E8E8}
+  table.p-tbl tr.aus td{color:#C2C2C2}
+  table.p-tbl tr.aus .pbar{border-color:#D2D2D2}
+  table.p-tbl tr.aus .pbar i{border-right-color:#fff}
+  table.p-tbl tr.aus .pbar i.ps-h{border-top-color:#D2D2D2; background:#D2D2D2}
+  table.p-tbl tr.aus .pbar i.ps-t{border-top-color:#E2E2E2; background:#E2E2E2}
+  table.p-tbl tr.aus .pbar i.ps-e{border-top-color:#EFEFEF; background:#EFEFEF}
   .p-leg{display:flex; flex-wrap:wrap; gap:3pt 11pt; font-size:6.4pt; margin-top:3pt; color:#333;
     align-items:center}
   .p-leg span{display:inline-flex; align-items:center; gap:3pt}
@@ -399,7 +401,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
       <tr class="grp">
         <th class="nm" rowspan="2">Material</th>
         <th colspan="6" class="g-in">Eingaben</th>
-        <th colspan="5" class="g-res">Ergebnis</th>
+        <th colspan="6" class="g-res">Ergebnis</th>
         <th colspan="4" class="dc g-det">Einzelposten CO₂ (kg)</th>
       </tr>
       <tr>
@@ -414,6 +416,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
         <th class="on b">CO₂-Bilanz<br>kg</th>
         <th class="on">kg CO₂ je<br>Nutzung</th>
         <th class="on b">Kosten<br>€</th>
+        <th class="on">€ je<br>Nutzung</th>
         <th class="dc">Masse<br>kg</th>
         <th class="dc">Herstel-<br>lung</th>
         <th class="dc">Trans-<br>port</th>
@@ -434,8 +437,9 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="btnrow">
     <div class="toggle" role="group" aria-label="Sortierung">
       <button type="button" id="sCo2" aria-pressed="true">nach CO₂</button>
-      <button type="button" id="sJahr" aria-pressed="false">nach CO₂ je Nutzung</button>
+      <button type="button" id="sCo2n" aria-pressed="false">CO₂ je Nutzung</button>
       <button type="button" id="sPreis" aria-pressed="false">nach Preis</button>
+      <button type="button" id="sPreisn" aria-pressed="false">Preis je Nutzung</button>
     </div>
   </div>
   <div id="bars"></div>
@@ -645,19 +649,21 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
   <div class="p-set" id="pSet"></div>
   <table class="p-tbl">
     <colgroup>
-      <col style="width:22%"><col style="width:6.5%"><col style="width:5%"><col style="width:6%">
-      <col style="width:4%"><col style="width:5%"><col style="width:7.5%"><col style="width:7.5%">
-      <col style="width:7.5%"><col style="width:12%"><col style="width:7.5%"><col style="width:7.5%">
+      <col style="width:14.5%"><col style="width:5.5%"><col style="width:4.5%"><col style="width:5%">
+      <col style="width:3.5%"><col style="width:4.5%"><col style="width:6.5%"><col style="width:6.5%">
+      <col style="width:6%"><col style="width:6%"><col style="width:11%"><col style="width:6.5%">
+      <col style="width:6.5%"><col style="width:13.5%">
     </colgroup>
     <thead><tr>
       <th>Material</th><th>Stärke<br>mm</th><th>Rez.</th><th>Recyc.</th><th>km</th><th>Nutz.</th>
-      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th><th class="pb" id="pBarKopf"></th>
-      <th>CO₂ je<br>Nutzung</th><th>Kosten €</th>
+      <th>CO₂ vor<br>Gutschr.</th><th>Gut-<br>schrift</th><th>CO₂-<br>Bilanz</th>
+      <th>CO₂ je<br>Nutz.</th><th class="pb" id="pBarKopf"></th>
+      <th>Kosten<br>€</th><th>€ je<br>Nutz.</th><th class="pb" id="pBarKopf2"></th>
     </tr></thead>
     <tbody id="pBody"></tbody>
   </table>
   <div class="p-leg">
-    <span><i class="ps-h"></i>Herstellung abzüglich Recycling-Gutschrift</span>
+    <span><i class="ps-h"></i>Herstellung abzüglich Gutschrift, im Kostenbalken das Material</span>
     <span><i class="ps-t"></i>Transport</span>
     <span><i class="ps-e"></i>Lebensende</span>
     <span>Hellgrau gesetzte Zeilen wurden für dieses Projekt abgewählt.</span>
@@ -724,7 +730,8 @@ function load(){
     ["flaeche","verschnitt","lVerbrauch","lPreis","kwhVerbrauch","kwhPreis","stromFaktor"]
       .forEach(k => { if(typeof o[k] === "number" && isFinite(o[k])) st[k] = o[k]; });
     if(o.antrieb === "elektro" || o.antrieb === "diesel") st.antrieb = o.antrieb;
-    if(o.sort === "preis" || o.sort === "co2" || o.sort === "jahr") st.sort = o.sort;
+    if(["co2","co2n","preis","preisn"].indexOf(o.sort) >= 0) st.sort = o.sort;
+    if(o.sort === "jahr") st.sort = "co2n";   // Bezeichnung aus einer frueheren Fassung
     st.detail = !!o.detail;
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
@@ -769,10 +776,12 @@ function calc(){
     // ist 1 der kleinste Teiler: sonst wuerde eine Requisite, die nur acht Stunden im Einsatz
     // ist, ihren Fussabdruck auf ein fiktives Jahr hochgerechnet vervielfachen.
     const nutzungen = Math.max(nz(r.jahre), 1);
-    return {m, masse, gwp, herst, trans, eol, gut, matC, co2,
+    const kost = matK + trK;
+    return {m, masse, gwp, herst, trans, eol, gut, matC, co2, kost,
             brutto: herst + trans + Math.max(0, eol),   // vor Abzug der Gutschrift
             proJahr: co2 / nutzungen,
-            vorschlag, preisM2, matK, trK, kost: matK + trK};
+            kostN: kost / nutzungen,
+            vorschlag, preisM2, matK, trK};
   });
 }
 
@@ -801,7 +810,8 @@ function buildTable(){
       cell(m.id,"rez",r.rez,"1") + cell(m.id,"quote",r.quote,"1") + cell(m.id,"km",r.km,"5") +
       cell(m.id,"jahre",r.jahre,"1",1) +
       '<td class="dt" data-brutto></td><td class="dt gut" data-gut></td>' +
-      '<td class="tot" data-bilanz></td><td class="dt" data-projahr></td><td class="tot" data-kost></td>' +
+      '<td class="tot" data-bilanz></td><td class="dt" data-projahr></td>' +
+      '<td class="tot" data-kost></td><td class="dt" data-kostn></td>' +
       '<td class="dt dc" data-masse></td><td class="dt dc" data-herst></td>' +
       '<td class="dt dc" data-trans></td><td class="dt dc" data-eol></td>';
     tb.appendChild(tr);
@@ -862,12 +872,18 @@ function posten(r){
   return {h:h, t:Math.max(0, r.trans), e:e, summe:h + Math.max(0, r.trans) + e};
 }
 
-const schluessel = r => st.sort === "preis" ? r.kost : st.sort === "jahr" ? r.proJahr : r.co2;
+// „je Nutzung“ ist ein Modus, der BEIDE Balken umstellt; die Sortierung waehlt nur,
+// welche der beiden Groessen die Reihenfolge bestimmt.
+const jeNutzung = () => st.sort === "co2n" || st.sort === "preisn";
+const schluessel = r => st.sort === "co2"   ? r.co2
+                      : st.sort === "co2n"  ? r.proJahr
+                      : st.sort === "preis" ? r.kost
+                      : r.kostN;
 
 function buildBars(rows){
   const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
-  const proJahr = st.sort === "jahr";
-  // Die CO₂-Balkenlänge ist immer der Wert daneben; bei Sortierung nach Nutzung sind alle
+  const proJahr = jeNutzung();
+  // Beide Balkenlängen entsprechen immer dem Wert daneben; im Modus „je Nutzung“ sind alle
   // Abschnitte durch dieselbe Zahl geteilt, die Anteile bleiben also gleich.
   const teiler = r => proJahr ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
   // Der Maßstab richtet sich nur nach den ausgewählten Materialien, damit abgewählte
@@ -875,7 +891,7 @@ function buildBars(rows){
   const aktiv = rows.filter(r => !st.rows[r.m.id].aus);
   const mass = aktiv.length ? aktiv : rows;
   const mc = Math.max(...mass.map(r => posten(r).summe / teiler(r)), .001);
-  const mk = Math.max(...mass.map(r => r.matK + r.trK), .001);
+  const mk = Math.max(...mass.map(r => (r.matK + r.trK) / teiler(r)), .001);
   const seg = (v, ganz, cls) => v <= 0 ? "" :
     '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
   document.getElementById("bars").innerHTML = sorted.map(r => {
@@ -888,8 +904,8 @@ function buildBars(rows){
       r.m.n + '</div><div class="mbars">' +
       balken(Math.min((p.summe/t)/mc, 1)*MAXW, seg(p.h,gC,"sg-h") + seg(p.t,gC,"sg-t") + seg(p.e,gC,"sg-e"),
              f1(proJahr ? r.proJahr : r.co2), proJahr ? "kg CO₂ je Nutzung" : "kg CO₂") +
-      balken(Math.min(gK/mk, 1)*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
-             f2(r.kost), "€") +
+      balken(Math.min((gK/t)/mk, 1)*MAXW, seg(r.matK,gK,"sg-h") + seg(r.trK,gK,"sg-t"),
+             f2(proJahr ? r.kostN : r.kost), proJahr ? "€ je Nutzung" : "€") +
       '</div></div>';
   }).join("");
 }
@@ -898,14 +914,16 @@ function buildPrint(rows){
   const sorted = rows.slice().sort((a,b) => schluessel(a) - schluessel(b));
   // Der CO₂-Balken muss dieselbe Größe zeigen, nach der sortiert wird — sonst steht im Druck
   // eine nach Nutzung sortierte Liste neben Balken, die die ungeteilte Bilanz abbilden.
-  const proNutz = st.sort === "jahr";
+  const proNutz = jeNutzung();
   const teiler = r => proNutz ? Math.max(nz(st.rows[r.m.id].jahre), 1) : 1;
   const aktiv = rows.filter(r => !st.rows[r.m.id].aus);
   const mass = aktiv.length ? aktiv : rows;
   const mc = Math.max(...mass.map(r => posten(r).summe / teiler(r)), .001);
-  const mk = Math.max(...mass.map(r => r.matK + r.trK), .001);
+  const mk = Math.max(...mass.map(r => (r.matK + r.trK) / teiler(r)), .001);
   const kopf = document.getElementById("pBarKopf");
-  if(kopf) kopf.textContent = proNutz ? "CO₂ je Nutzung" : "CO₂-Bilanz";
+  const kopf2 = document.getElementById("pBarKopf2");
+  if(kopf)  kopf.textContent  = proNutz ? "CO₂ je Nutz." : "CO₂-Bilanz";
+  if(kopf2) kopf2.textContent = proNutz ? "€ je Nutz." : "Kosten";
   const sg = (v, ganz, cls) => v <= 0 ? "" :
     '<i class="' + cls + '" style="width:' + (v/ganz*100).toFixed(2) + '%"></i>';
   const bar = (breite, inhalt) => '<span class="pwrap"><span class="pbar" style="width:' +
@@ -917,9 +935,10 @@ function buildPrint(rows){
     return '<tr' + (kl ? ' class="' + kl + '"' : '') + '><td>' + r.m.n + '</td><td>' + fmm(q.mm) +
       '</td><td>' + q.rez + ' %</td><td>' + q.quote + ' %</td><td>' + f0(q.km) + '</td><td>' +
       f0(q.jahre) + '</td><td>' + f1(r.brutto) + '</td><td>' + (r.gut === 0 ? "—" : f1(r.gut)) +
-      '</td><td class="bil">' + f1(r.co2) + '</td><td class="pb">' +
+      '</td><td class="bil">' + f1(r.co2) + '</td><td>' + f1(r.proJahr) + '</td><td class="pb">' +
       bar(Math.min((p.summe/t)/mc, 1)*100, sg(p.h,gC,"ps-h") + sg(p.t,gC,"ps-t") + sg(p.e,gC,"ps-e")) +
-      '</td><td>' + f1(r.proJahr) + '</td><td>' + f2(r.kost) + '</td></tr>';
+      '</td><td>' + f2(r.kost) + '</td><td>' + f2(r.kostN) + '</td><td class="pb">' +
+      bar(Math.min((gK/t)/mk, 1)*100, sg(r.matK,gK,"ps-h") + sg(r.trK,gK,"ps-t")) + '</td></tr>';
   }).join("");
 
   const antrieb = st.antrieb === "diesel"
@@ -930,8 +949,8 @@ function buildPrint(rows){
     '<span><b>Projektfläche:</b> ' + f2(st.flaeche) + ' m²</span>' +
     '<span><b>Verschnitt:</b> ' + f0(st.verschnitt) + ' %</span>' +
     '<span><b>Transport:</b> ' + antrieb + '</span>' +
-    '<span><b>Sortierung:</b> ' + (st.sort === "co2" ? "nach CO₂-Bilanz"
-      : st.sort === "jahr" ? "nach CO₂ je Nutzung" : "nach Preis") + '</span>';
+    '<span><b>Sortierung:</b> ' + ({co2:"nach CO₂-Bilanz", co2n:"nach CO₂ je Nutzung",
+      preis:"nach Kosten", preisn:"nach Kosten je Nutzung"}[st.sort] || "nach CO₂-Bilanz") + '</span>';
   document.getElementById("pDatum").textContent =
     "Erstellt am " + new Date().toLocaleDateString("de-AT",{day:"2-digit",month:"long",year:"numeric"});
 }
@@ -946,6 +965,7 @@ function render(){
     set("[data-bilanz]", f1(r.co2));
     set("[data-projahr]", f1(r.proJahr));
     set("[data-kost]", f2(r.kost));
+    set("[data-kostn]", f2(r.kostN));
     set("[data-masse]", f1(r.masse));
     set("[data-herst]", f1(r.herst));
     set("[data-trans]", f1(r.trans));
@@ -1064,18 +1084,15 @@ function bind(){
   bd.onclick = () => setAntrieb("diesel");
   be.onclick = () => setAntrieb("elektro");
 
-  const sc = document.getElementById("sCo2"), sj = document.getElementById("sJahr"),
-        sp = document.getElementById("sPreis");
+  const knoepfe = {co2:"sCo2", co2n:"sCo2n", preis:"sPreis", preisn:"sPreisn"};
   const setSort = s => {
     st.sort = s;
-    sc.setAttribute("aria-pressed", s === "co2");
-    sj.setAttribute("aria-pressed", s === "jahr");
-    sp.setAttribute("aria-pressed", s === "preis");
+    Object.keys(knoepfe).forEach(k =>
+      document.getElementById(knoepfe[k]).setAttribute("aria-pressed", k === s));
     render(); save();
   };
-  sc.onclick = () => setSort("co2");
-  sj.onclick = () => setSort("jahr");
-  sp.onclick = () => setSort("preis");
+  Object.keys(knoepfe).forEach(k =>
+    { document.getElementById(knoepfe[k]).onclick = () => setSort(k); });
 
   document.getElementById("bDetail").onclick = () => { st.detail = !st.detail; render(); save(); };
   document.getElementById("bResetIn").onclick = () => {

@@ -236,9 +236,11 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 /* ---- Druck: eine Seite ---- */
 .printonly{display:none}
 @media print{
-  /* Hochformat, weil mobile Druckdialoge eine Landscape-Angabe oft ignorieren und dann rechts
-     abschneiden. Die Tabelle ist so bemessen, dass sie in Portrait vollstaendig passt. */
-  @page{size:A4 portrait; margin:10mm 9mm}
+  /* Querformat, weil die Tabelle dort deutlich luftiger steht. Ignoriert ein Druckdialog die
+     Angabe – auf Mobilgeraeten kommt das vor – faellt die Ausgabe auf Hochformat zurueck und
+     bleibt trotzdem vollstaendig: die Spalten sind in Prozent bemessen und die Zellen duerfen
+     umbrechen, die Tabelle passt sich also jeder Seitenbreite an. */
+  @page{size:A4 landscape; margin:9mm 10mm}
   :root{--cream:#fff; --ink:#000; --muted:#555; --rule:#000; --rule-thin:#bbb;
         --paper:#fff; --sunk:#fff; --co2:#000; --preis:#999; --bar:#fff; --mark:#000}
   body{background:#fff; color:#000; font-size:8pt; line-height:1.22}
@@ -253,18 +255,18 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
     padding-bottom:3.5pt; border-bottom:.5pt solid #bbb}
   .p-set b{font-weight:600}
   .printonly{max-width:100%}
-  table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.2pt;
+  table.p-tbl{width:100%; max-width:100%; border-collapse:collapse; font-size:7.8pt;
     min-width:0; table-layout:fixed}
   /* Ohne diese Zeile erbt die Drucktabelle das nowrap der Bildschirmtabelle. Bei fester
      Spaltenbreite laeuft zu breiter Inhalt dann ueber den Seitenrand hinaus – Firefox
      schneidet dadurch rechts ab. */
   table.p-tbl th,table.p-tbl td{white-space:normal; overflow-wrap:anywhere}
-  table.p-tbl th{font-size:6.4pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
+  table.p-tbl th{font-size:6.7pt; text-transform:uppercase; letter-spacing:.02em; line-height:1.15;
     border-bottom:1pt solid #000; padding:2pt 2.5pt; text-align:right; color:#000; font-weight:600;
     vertical-align:bottom}
   table.p-tbl th:first-child,table.p-tbl td:first-child{text-align:left}
   /* height:auto hebt die feste Zeilenhöhe der Bildschirmtabelle auf, die sonst auch hier greift */
-  table.p-tbl td{padding:1.5pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
+  table.p-tbl td{padding:1.8pt 3pt; border-bottom:.4pt solid #ddd; text-align:right;
     font-variant-numeric:tabular-nums; height:auto; line-height:1.2}
   table.p-tbl tr{height:auto}
   table.p-tbl td.bil{font-weight:700}

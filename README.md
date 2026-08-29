@@ -35,12 +35,13 @@ einen CNAME auf `danielsteinbach.github.io` setzen.
 - **Getrennte Ergebnisspalten**: CO₂ vor Gutschrift, Recycling-Gutschrift, CO₂-Bilanz, kg CO₂ je
   Nutzung und Kosten — die Gutschrift verschwindet nicht in einer Gesamtzahl.
 - **Diagramm** mit zwei Balken je Material, sortierbar nach CO₂, CO₂ je Nutzung oder Preis.
-- **PDF-Export** auf eine A4-Seite hoch über den Druckdialog. Hochformat bewusst gewählt, weil
-  mobile Druckdialoge eine Querformat-Angabe häufig ignorieren und dann rechts abschneiden.
+- **PDF-Export** auf eine A4-Seite quer über den Druckdialog. Ignoriert ein Druckdialog die
+  Querformat-Angabe — auf Mobilgeräten kommt das vor —, fällt die Ausgabe auf Hochformat
+  zurück und bleibt trotzdem vollständig: die Spalten sind in Prozent bemessen und die Zellen
+  dürfen umbrechen, die Tabelle passt sich also jeder Seitenbreite an.
   Die Balken sind über `border-top` gezeichnet statt über `background`, damit sie auch dort
   gefüllt erscheinen, wo der Hintergrunddruck abgeschaltet ist — in Firefox ist das die
-  Voreinstellung. Die Zellen der Drucktabelle dürfen umbrechen, sonst läuft zu breiter Inhalt
-  bei fester Spaltenbreite über den Seitenrand hinaus.
+  Voreinstellung.
 - Alle Eingaben bleiben im Browser des Besuchers gespeichert (`localStorage`), nichts wird
   irgendwohin übertragen. Die Seite lädt keinerlei Daten nach — einzige externe Ressource ist
   die Schrift *Schibsted Grotesk* von Google Fonts.

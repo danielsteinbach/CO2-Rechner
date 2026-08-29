@@ -322,6 +322,7 @@ footer.bar .wrap{display:flex; justify-content:space-between; gap:16px; flex-wra
 </style>
 </head>
 <body>
+
 <div class="noprint">
 
 <div class="wrap hero">
@@ -722,7 +723,7 @@ const STORE = "werkstoffbilanz.v2";
 const st = {
   flaeche:3, verschnitt:10, antrieb:"diesel",
   lVerbrauch:12, lPreis:1.65, kwhVerbrauch:25, kwhPreis:0.25, stromFaktor:152,
-  detail:false, sort:"co2n", rows:{}, base:{}
+  detail:false, sort:"co2n", nutzSort:true, rows:{}, base:{}
 };
 BASE.forEach(m => { st.rows[m.id] = {mm:m.mm, preis:null, rez:0, quote:m.q, km:KM0, jahre:1, aus:false}; });
 
@@ -738,6 +739,13 @@ function load(){
     if(o.antrieb === "elektro" || o.antrieb === "diesel") st.antrieb = o.antrieb;
     if(["co2","co2n","preis","preisn"].indexOf(o.sort) >= 0) st.sort = o.sort;
     if(o.sort === "jahr") st.sort = "co2n";   // Bezeichnung aus einer frueheren Fassung
+    // Einmalige Umstellung: Wer die Seite vor der Umstellung auf "je Nutzung" benutzt hat, hat
+    // noch die Gesamtsortierung gespeichert und saehe die Mehrfachnutzung sonst nie in der
+    // Rangfolge. Eigene Materialwerte bleiben dabei erhalten.
+    if(!o.nutzSort){
+      if(st.sort === "co2")   st.sort = "co2n";
+      if(st.sort === "preis") st.sort = "preisn";
+    }
     st.detail = !!o.detail;
     if(o.rows) BASE.forEach(m => {
       const r = o.rows[m.id]; if(!r) return; const t = st.rows[m.id];
